@@ -10,6 +10,13 @@ typedef int Shape;
 class Tile
 {
     public:
+        Tile(Colour colour, Shape shape);
+        Tile(Tile& other);
+    
+        // Getters for testing purposes
+        Colour getColour();
+        Shape getShape();
+    
         Colour colour;
         Shape  shape;
 };
