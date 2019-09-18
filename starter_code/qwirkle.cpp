@@ -13,11 +13,16 @@ void newGame();
 void loadGame();
 void stuInfo();
 void quit();
-void loopMenu(int input);
+void choiceMenu(int input);
+
+// Testing purposes
+void testList(LinkedList* list);
 
 int main(void)
 {
-//    LinkedList* list = new LinkedList();
+    LinkedList* list = new LinkedList();
+    
+    testList(list);
     
     startMessage();
     menu();
@@ -42,9 +47,10 @@ void menu() {
     
     std::cin >> input;
     
-    loopMenu(input);
+    choiceMenu(input);
 }
 
+// Names should only be in uppercase
 void newGame() {
     std::string player1;
     std::string player2;
@@ -56,10 +62,6 @@ void newGame() {
     
     std::cout << "Enter a name for player 2 (Uppercase Chars only)" << std::endl;
     std::cin >> player2;
-
-    // For testing purposes
-    std::cout << "Player1: " << player1 << std::endl;
-    std::cout << "Player2: " << player2 << std::endl;
     
     std::cout << "Let's Play!" << std::endl;
     std::cout << "----------------------------------" << std::endl;
@@ -100,7 +102,7 @@ void quit() {
     std::cout << "Goodbye" << std::endl;
 }
 
-void loopMenu(int input) {
+void choiceMenu(int input) {
     if (input == 1) {
         newGame();
     } else if (input == 2) {
@@ -111,3 +113,38 @@ void loopMenu(int input) {
         quit();
     }
 }
+
+// Testing if methods within linkedlist work
+void testList(LinkedList* list) {
+    Tile* tile1 = new Tile('R', 1);
+    Tile* tile2 = new Tile('G', 2);
+    Tile* tile3 = new Tile('B', 3);
+    Tile* tile4 = new Tile('Y', 4);
+
+    list->addEnd(tile1);
+    list->addEnd(tile2);
+    list->addFront(tile3);
+    list->addFront(tile4);
+
+    for (int i = 0; i < list->size(); i++) {
+        std::cout << list->get(i)->getColour();
+        std::cout << list->get(i)->getShape() << std::endl;
+    }
+    
+//    try {
+//        list->deleteAtIndex(2);
+//    }
+//    catch (std::runtime_error e) {
+//        std::cout << e.what() << std::endl;
+//    } catch (std::out_of_range e) {
+//        std::cout << e.what() << std::endl;
+//    }
+//
+//    std::cout << "----" << std::endl;
+//
+//    for (int i = 0; i < list->size(); i++) {
+//        std::cout << list->get(i)->getColour();
+//        std::cout << list->get(i)->getShape() << std::endl;
+//    }
+}
+
