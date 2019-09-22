@@ -1,6 +1,8 @@
 #include "LinkedList.h"
 #include <iostream>
 
+#define PART_LENGTH 6
+
 LinkedList::LinkedList()
 {
     head = nullptr;
@@ -89,7 +91,7 @@ void LinkedList::deleteFront() {
     }
 }
 
-// In process of implementing
+// Can change to be more efficient/less complex
 void LinkedList::deleteAtIndex(int i) {
     if (i > -1 && i < numTiles) {
         Node* curr = head;

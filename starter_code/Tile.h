@@ -1,6 +1,8 @@
 #ifndef ASSIGN2_TILE_H
 #define ASSIGN2_TILE_H
 
+#include "TileCodes.h"
+
 // Define a Colour type
 typedef char Colour;
 
@@ -18,7 +20,7 @@ class Tile
         Shape getShape();
     
         Colour colour;
-        Shape  shape;
+        Shape shape;
 };
 
 #endif // ASSIGN2_TILE_H

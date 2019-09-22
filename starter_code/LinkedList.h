@@ -1,8 +1,11 @@
 #ifndef ASSIGN2_LINKEDLIST_H
 #define ASSIGN2_LINKEDLIST_H
 
+#include <vector>
 #include "Node.h"
 #include "Tile.h"
+
+#define PART_LENGTH 6
 
 class LinkedList
 {
