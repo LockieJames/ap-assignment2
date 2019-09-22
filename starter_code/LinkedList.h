@@ -18,6 +18,7 @@ class LinkedList
         Tile* get(int i);
         void addFront(Tile* tile);
         void addEnd(Tile* tile);
+        void addMid(Tile* tile);
         void deleteFront();
         void deleteAtIndex(int i);
 

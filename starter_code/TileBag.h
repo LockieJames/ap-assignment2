@@ -19,8 +19,8 @@ class TileBag {
         ~TileBag();
         void createTiles();
         void makeBag();
-        void sortBag();
-        void sortMethod();
+        void sortMethod(Tile* tile);
+        void shuffleBag();
     
     private:
         Colour colours[PART_LENGTH] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};

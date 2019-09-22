@@ -79,6 +79,38 @@ void LinkedList::addEnd(Tile* tile) {
     numTiles++;
 }
 
+void LinkedList::addMid(Tile* tile) {
+    Node* nNode = new Node(tile, nullptr, nullptr);
+    int counter = 0;
+
+    if (head == nullptr) {
+        head = nNode;
+    } else if (numTiles < 4) {
+        addEnd(tile);
+        numTiles--;
+    } else {
+        int middle = numTiles / 2;
+        
+        Node* currNode = head;
+        
+        while (currNode->next != nullptr && counter != middle) {
+            currNode = currNode->next;
+            counter++;
+        }
+        
+        nNode->prev = currNode;
+        nNode->next = currNode->next;
+        
+        if (currNode->next->next != nullptr) {
+            currNode->next = nNode;
+            currNode->next->next->prev = nNode;
+        } else {
+            currNode->next = nNode;
+        }
+    }
+    numTiles++;
+}
+
 void LinkedList::deleteFront() {
     if (head != nullptr) {
         Node* nNode = head;
