@@ -31,8 +31,8 @@ class Menu {
     // Hardcoded for the time being; can change into another method/class
     // Dummy values in place for testing
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lockie Boughton", "Peter Bui"};
-    std::string stu_id[NUM_STUDENTS] = {"s1234567", "s3748189", "s1234567", "s3786794"};
-    std::string email[NUM_STUDENTS] = {"s1234567@student.rmit.edu.au", "s3748189@student.rmit.edu.au",
+    std::string stu_id[NUM_STUDENTS] = {"s3668025", "s3748189", "s1234567", "s3786794"};
+    std::string email[NUM_STUDENTS] = {"s3668025@student.rmit.edu.au", "s3748189@student.rmit.edu.au",
         "s1234567@student.rmit.edu.au", "s3786794@student.rmit.edu.au"};
 };
 
