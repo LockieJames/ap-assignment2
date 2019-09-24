@@ -1,13 +1,25 @@
-//
-//  Player.hpp
-//  
-//
-//  Created by Peter Bui on 18/9/19.
-//
+#ifndef Player_h
+#define Player_h
 
-#ifndef Player_hpp
-#define Player_hpp
+#include "LinkedList.h"
+#include "Tile.h"
+#include <iostream>
 
-#include <stdio.h>
+class Player
+{
+    private:
+        std::string name;
+        LinkedList* hand;
+        int score;
+    
+    public:
+        Player();
+        ~Player();
+        std::string getName();
+        void setName(std::string name);
+        int getScore();
+        void addScore(int num);
+        LinkedList* getHand();
+};
 
-#endif /* Player_hpp */
+#endif

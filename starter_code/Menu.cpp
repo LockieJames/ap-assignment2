@@ -47,10 +47,10 @@ void Menu::newGame() {
     
     std::cout << "----------------------------------" << std::endl;
     std::cout << "Starting a New Game" << std::endl;
-    std::cout << "Enter a name for player 1 (Uppercase Chars only)" << std::endl;
+    std::cout << "Enter a name for player 1 (uppercase characters only)" << std::endl;
     std::cin >> player1;
     
-    std::cout << "Enter a name for player 2 (Uppercase Chars only)" << std::endl;
+    std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl;
     std::cin >> player2;
     
     std::cout << "Let's Play!" << std::endl;
