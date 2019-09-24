@@ -16,6 +16,7 @@
 TileBag::TileBag() {
     tileBag = new LinkedList();
     srand(time(0));
+    makeBag();
 }
 
 TileBag::~TileBag() {
@@ -79,6 +80,7 @@ void TileBag::shuffleBag() {
     }
 }
 
+// For testing purposes
 void TileBag::showBag() {
     std::cout << "--------" << std::endl;
     std::cout << "Tiles currently in bag:" << std::endl;
@@ -92,7 +94,7 @@ void TileBag::showBag() {
         }
     }
     
-    std::cout << "--------" << std::endl;
+    std::cout << std::endl << "--------" << std::endl;
 }
 
 LinkedList* TileBag::getTileBag() {

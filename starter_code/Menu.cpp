@@ -34,6 +34,8 @@ void Menu::menuOptions() {
         std::cout << "3. Show Student Information" << std::endl;
         std::cout << "4. Quit" << std::endl << std::endl;
         
+        std::cout << "> ";
+        
         std::cin >> input;
         
         check = choiceMenu(input);

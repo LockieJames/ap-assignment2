@@ -13,7 +13,7 @@ int main(void)
     TileBag* baggage = new TileBag();
     Menu* menu = new Menu();
 
-    baggage->makeBag();
+    baggage->showBag();
 
     menu->startMessage();
     menu->menuOptions();
