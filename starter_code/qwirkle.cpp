@@ -1,6 +1,4 @@
-#include "LinkedList.h"
-#include "Menu.h"
-#include "TileBag.h"
+#include "GameEngine.h"
 
 #include <iostream>
 #include <string>
@@ -10,13 +8,8 @@
 
 int main(void)
 {
-    TileBag* baggage = new TileBag();
-    Menu* menu = new Menu();
+    GameEngine gameEngine;
+    gameEngine.gameStart();
 
-    baggage->showBag();
-
-    menu->startMessage();
-    menu->menuOptions();
-    
     return EXIT_SUCCESS;
 }
