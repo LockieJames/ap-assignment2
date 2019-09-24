@@ -24,3 +24,8 @@ GameEngine::GameEngine(){
 GameEngine::~GameEngine(){
 
 }
+
+// todo: implement methods for game states and player turns
+void GameEngine::gameStart(){
+
+}

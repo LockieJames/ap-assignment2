@@ -20,6 +20,9 @@ class GameEngine {
     GameEngine();
     ~GameEngine();
 
+    // todo: implement methods for game states and player turns
+    void gameStart();
+
     private:
     Board gameBoard;
     TileBag tileBag;

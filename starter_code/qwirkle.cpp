@@ -9,6 +9,7 @@
 int main(void)
 {
     GameEngine gameEngine;
+    gameEngine.gameStart();
     
     return EXIT_SUCCESS;
 }
