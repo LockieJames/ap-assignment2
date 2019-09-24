@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_SHUFFLE 3
+#define MAX_SHUFFLE 2
 #define MAX_ADD 3
 
 TileBag::TileBag() {
@@ -79,6 +79,25 @@ void TileBag::shuffleBag() {
     }
 }
 
+void TileBag::showBag() {
+    std::cout << "--------" << std::endl;
+    std::cout << "Tiles currently in bag:" << std::endl;
+    
+    for (int i = 0; i < tileBag->size(); i++) {
+        std::cout << tileBag->get(i)->getColour();
+        std::cout << tileBag->get(i)->getShape() << " ";
+    
+        if ((i % 8) == 7) {
+            std::cout << std::endl;
+        }
+    }
+    
+    std::cout << "--------" << std::endl;
+}
+
+LinkedList* TileBag::getTileBag() {
+    return tileBag;
+}
 
 //std::cout << "--------" << std::endl;
 //

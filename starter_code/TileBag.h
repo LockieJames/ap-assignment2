@@ -21,6 +21,8 @@ class TileBag {
         void makeBag();
         void sortMethod(Tile* tile);
         void shuffleBag();
+        void showBag();
+        LinkedList* getTileBag();
     
     private:
         Colour colours[PART_LENGTH] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
