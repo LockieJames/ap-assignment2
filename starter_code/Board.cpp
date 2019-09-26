@@ -1,22 +1,22 @@
 #include <iostream>
-#include "Board.h"
-#include "TileCodes.h"
 #include <vector>
 
+#include "Board.h"
+#include "Tile.h"
+
 Board::Board() {
+    grid = std::vector<std::vector<Tile* > > (ROWS);
     for (int i = 0; i < ROWS; ++i) {
-        for (int j = 0; j < COLS; ++j) {
-            grid[j][i] = nullptr;
-        }
+        grid.at(i) = std::vector<Tile*> (COLS);
     }
 }
 
 Board::~Board() {
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLS; ++j) {
-            if (grid[j][i] != nullptr) {
+            if (grid[i][j] != nullptr) {
                 delete grid[i][j];
-                grid[j][i] = nullptr;
+                grid[i][j] = nullptr;
             }
         }
     }
@@ -25,75 +25,76 @@ Board::~Board() {
 bool Board::placeTile(Tile &tile, char rowInput, int col) {
     bool validPlace = false;
     int row = rowInput - A_VALUE;
+
+    bool validInput = false;
+    if ((row + col) % 2 == 0)
+        validInput = true;
+
     col = col / 2;
 
-    if (row <= ROWS && col <= COLS) {
-        std::vector<Tile*> surroundings;
-        bool odd = false;
-        if (row % 2 == 1) {
-            odd = true;
-        }
-        int length;
+    if (grid[row][col] != nullptr)
+        validInput = false;
 
-        if (row == 0 && col == COLS - 1) {
-            surroundings.push_back(grid[col][row - 1]);
-            length = 1;
-        } else if (row == ROWS - 1 && col == COLS - 1) {
-            surroundings.push_back(grid[col][row + 1]);
-            length = 1;
-        } else if (row == 0) {
-            surroundings.push_back(grid[col][row + 1]);
-            surroundings.push_back(grid[col - 1][row + 1]);
-            length = 2;
-        } else if (row == ROWS - 1) {
-            surroundings.push_back(grid[col][row - 1]);
-            surroundings.push_back(grid[col + 1][row - 1]);
-            length = 2;
+
+    if (row <= ROWS && col <= COLS && validInput) {
+        if (emptyBoard) {
+            emptyBoard = isEmpty();
+            if (emptyBoard) {
+                grid[row][col] = &tile;
+                validPlace = true;
+                emptyBoard = isEmpty();
+            }
         } else {
-            if (odd) {
-                surroundings.push_back(grid[col + 1][row - 1]);
-                surroundings.push_back(grid[col + 1][row + 1]);
-            } else {
-                surroundings.push_back(grid[col - 1][row - 1]);
-                surroundings.push_back(grid[col - 1][row + 1]);
-            }
+            // TODO put in array / map nicely
+            int topRightColour = validateRow(tile.getColour(), row, col, 1, true);
+            int topLeftColour = validateRow(tile.getColour(), row, col, 1, false);
+            int bottomLeftColour = validateRow(tile.getColour(), row, col, -1, false);
+            int bottomRightColour = validateRow(tile.getColour(), row, col, -1, true);
 
-            surroundings.push_back(grid[col][row - 1]);
-            surroundings.push_back(grid[col][row + 1]);
-            length = 4;
-        }
+            int colours[] = { topRightColour, topLeftColour, bottomLeftColour, bottomRightColour };
 
-        int emptySurroundings[length];
+            int topRightShape = validateRow(tile.getShape(), row, col, 1, true);
+            int topLeftShape = validateRow(tile.getShape(), row, col, 1, false);
+            int bottomLeftShape = validateRow(tile.getShape(), row, col, -1, false);
+            int bottomRightShape = validateRow(tile.getShape(), row, col, -1, true);
 
-        int filledSpaces = 0;
-        for (int i = 0; i < surroundings.size(); ++i) {
-            emptySurroundings[i] = (surroundings.at(i) == nullptr);
-            if (!emptySurroundings[i]) {
-                filledSpaces++;
-            }
-        }
+            int shapes[] = { topRightShape, topLeftShape, bottomLeftShape, bottomRightShape };
 
-        if (filledSpaces < 3 && filledSpaces != 0 && !(filledSpaces == 2 && col == 0)) {
-            if (filledSpaces == 2) {
-                if (surroundings.size() == 2) {
-                    validPlace = placeTwo(tile, *surroundings.at(0), *surroundings.at(1), row, col);
-                } else {
-                    if ((emptySurroundings[0] || emptySurroundings[3]) && (emptySurroundings[2] || emptySurroundings[1])) {
-                        if (!(emptySurroundings[0] && emptySurroundings[2])) {
-                            validPlace = placeTwo(tile, *surroundings.at(0), *surroundings.at(2), row, col);
-                        } else {
-                            validPlace = placeTwo(tile, *surroundings.at(1), *surroundings.at(3), row, col);
-                        }
-                    }
+            int shapesColours[] = { topRightShape + topRightColour, topLeftShape + topLeftColour,
+                                    bottomLeftShape + bottomLeftColour, bottomRightShape + bottomRightColour};
+            bool offDiagonal = topRightColour == bottomLeftColour || topRightShape == bottomRightShape;
+            bool mainDiagonal = topLeftColour == bottomRightColour || topLeftShape == bottomRightShape;
+
+            int positions = 0;
+            for (int j = 0; j < 4; ++j) {
+                if ((colours[j] || shapes[j]) != 0) {
+                    positions++;
                 }
-            } else {
-                for (int i = 0; i < surroundings.size(); ++i) {
-                    if (!emptySurroundings[i]){
-                        if (validateField(tile,*surroundings.at(i))) {
-                            grid[col][row] = &tile;
-                            validPlace = true;
-                        }
+            }
+
+            if (positions == 1 ) {
+                grid[row][col] = &tile;
+                validPlace = true;
+            } else if (positions == 2) {
+                if((shapesColours[0] != 0 && shapesColours[2] != 0)
+                   || (shapesColours[1] != 0 && shapesColours[3] !=0)) {
+                    if (offDiagonal || mainDiagonal) {
+                        grid[row][col] = &tile;
+                        validPlace = true;
                     }
+                } else {
+                    grid[row][col] = &tile;
+                    validPlace = true;
+                }
+            } else if (positions == 3) {
+                if (offDiagonal || mainDiagonal) {
+                    grid[row][col] = &tile;
+                    validPlace = true;
+                }
+            } else if (positions == 4){
+                if (offDiagonal && mainDiagonal) {
+                    grid[row][col] = &tile;
+                    validPlace = true;
                 }
             }
         }
@@ -101,25 +102,77 @@ bool Board::placeTile(Tile &tile, char rowInput, int col) {
     return validPlace;
 }
 
-bool Board::placeTwo(Tile &currentTile, Tile &check1Tile, Tile &check2Tile, int row, int col) {
-    bool valid = false;
-    if (validateField(check1Tile, currentTile) && validateField(check2Tile, currentTile)){
-        grid[col][row] = &currentTile;
-        valid = true;
+int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool right) {
+    // TODO reduce code repetition
+    int inputColourShape = 0;
+    bool odd = row % 2 == 1;
+    bool notBorder = true;
+    if ((row == 0 && rowDirection == -1) || (row == ROWS - 1 && rowDirection == 1))
+        notBorder = false;
+
+    if ((col == 0 && !odd && !right) || (col == COLS - 1 && odd && right))
+        notBorder = false;
+
+    if (odd) {
+        if (right)
+            col++;
+    } else {
+        if (!right)
+            col--;
     }
-    return valid;
+    row = row + rowDirection;
+    odd = !odd;
+
+    while (notBorder && grid[row][col] != nullptr) {
+        if ((row == 0 && rowDirection == -1) || (row == ROWS - 1 && rowDirection == 1))
+            notBorder = false;
+
+        if ((col == 0 && !odd && !right) || (col == COLS - 1 && odd && right))
+            notBorder = false;
+
+        int positionValue = 0;
+
+        if (colourShape < 6) {
+            positionValue = grid[row][col]->getShape();
+        } else {
+            positionValue = grid[row][col]->getColour();
+        }
+
+        if (colourShape != positionValue){
+            inputColourShape = 0;
+        } else {
+            inputColourShape = colourShape;
+        }
+
+        if (odd) {
+            if (right) {
+                col++;
+            }
+        } else {
+            if (!right) {
+                col--;
+            }
+        }
+        row = row + rowDirection;
+        odd = !odd;
+    }
+    if (inputColourShape != 0) {
+        inputColourShape = colourShape;
+    }
+
+    return inputColourShape;
 }
 
-bool Board::validateField(Tile& tile, Tile& otherTile) {
-    return equalShape(otherTile, tile) || equalColour(otherTile, tile);
-}
-
-bool Board::equalColour(Tile& tile, Tile& otherTile) {
-    return  otherTile.getColour() == tile.getColour();
-}
-
-bool Board::equalShape(Tile& tile, Tile& otherTile) {
-    return  otherTile.getShape() == tile.getShape();
+bool Board::isEmpty() {
+    bool isEmpty = true;
+    for (int i = 0; i < ROWS; ++i) {
+        for (int j = 0; j < COLS; ++j) {
+            if (grid[i][j] != nullptr) {
+                isEmpty = false;
+            }
+        }
+    }
+    return isEmpty;
 }
 
 bool Board::printBoard() {
@@ -138,8 +191,8 @@ bool Board::printBoard() {
                 letter++;
             } else {
                 std::cout << PATTERN;
-                if (grid[j - 1][i] != nullptr) {
-                    std::cout << grid[j - 1][i]->getColour() << grid[j - 1][i]->getShape();
+                if (grid[i][j - 1] != nullptr) {
+                    std::cout << grid[i][j - 1]->getColour() << grid[i][j - 1]->getShape();
                 } else {
                     std::cout << "  ";
                 }

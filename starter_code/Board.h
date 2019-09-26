@@ -2,7 +2,8 @@
 #ifndef ASSIGN2_BOARD_H
 #define ASSIGN2_BOARD_H
 
-#include "Tile.h"
+#include <vector>
+#include "TileCodes.h"
 
 #define ROWS    6
 #define COLS    8 / 2
@@ -10,6 +11,8 @@
 #define BORDER_PATTERN  "-----"
 #define SPACE   "   "
 #define A_VALUE 65
+
+class Tile;
 
 class Board {
 public:
@@ -22,12 +25,11 @@ private:
     void printBorder();
     void printCoord(int startNumber);
 
-    bool equalColour(Tile& tile, Tile& otherTile);
-    bool equalShape(Tile& tile, Tile& otherTile);
-    bool validateField(Tile& tile, Tile& otherTile);
-    bool placeTwo(Tile& currentTile, Tile& check1Tile, Tile& check2Tile, int row, int col);
+    int validateRow(int colourShape, int row, int col, int rowDirection, bool right);
+    bool isEmpty();
 
-    Tile* grid[COLS][ROWS];
+    std::vector<std::vector<Tile*> > grid;
+    bool emptyBoard = true;
 };
 
 
