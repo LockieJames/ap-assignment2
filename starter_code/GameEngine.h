@@ -17,18 +17,24 @@
 
 class GameEngine {
     public:
-    GameEngine();
+    GameEngine(int numPlayers);
     ~GameEngine();
 
     // todo: implement methods for game states and player turns
-    void gameStart();
+    void gameInit();
 
     private:
     Board gameBoard;
     TileBag tileBag;
     Menu menu;
-    Player p1;
-    Player p2;
+    std::vector<Player> players;
+
+    void gameLoop();
+    void GameEngine::gameFinish();
+    std::vector<int> calcMaxTileSeq(LinkedList* hand);
+    void openingHelper(std::vector<int> openingPlay, int PlayerIndex);
+    bool GameEngine::gameEndCheck();
+
 };
 
 #endif /* GameEngine_h */
