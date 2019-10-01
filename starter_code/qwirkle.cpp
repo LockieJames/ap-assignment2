@@ -10,7 +10,6 @@ int main(void)
 {
     int numPlayers = 2;
     GameEngine gameEngine(numPlayers);
-    gameEngine.gameInit();
 
     return EXIT_SUCCESS;
 }
