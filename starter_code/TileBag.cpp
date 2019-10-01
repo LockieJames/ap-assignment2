@@ -25,6 +25,8 @@ TileBag::~TileBag() {
     
 }
 
+// TODO: A method that returns the size of the tile bag
+
 void TileBag::createTiles() {
     for (int i = 0; i < PART_LENGTH; i++) {
         for (int j = 0; j < PART_LENGTH; j++) {
