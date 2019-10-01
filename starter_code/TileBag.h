@@ -21,6 +21,7 @@ class TileBag {
         void makeBag();
         void sortMethod(Tile* tile);
         void shuffleBag();
+        void addTile(int random, Tile* tile);
         void showBag();
         LinkedList* getTileBag();
     
@@ -28,6 +29,7 @@ class TileBag {
         Colour colours[PART_LENGTH] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
         Shape shapes[PART_LENGTH] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
         LinkedList* tileBag;
+        int random;
 };
 
 #endif /* TileBag_h */

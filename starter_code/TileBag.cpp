@@ -11,10 +11,12 @@
 #include <time.h>
 
 #define MAX_SHUFFLE 2
-#define MAX_ADD 3
+#define MAX_CHOICE 3
 
 TileBag::TileBag() {
     tileBag = new LinkedList();
+    random = 0;
+    // Seed used for randomness
     srand(time(0));
     makeBag();
 }
@@ -47,9 +49,29 @@ void TileBag::makeBag() {
     }
 }
 
+// Not the most efficient, but does allow for code reusability
 void TileBag::sortMethod(Tile* tile) {
-    int random = rand() % MAX_ADD;
+    random = rand() % MAX_CHOICE;
+    addTile(random, tile);
+}
 
+// Not the most efficient, but does allow for code reusability
+void TileBag::shuffleBag() {
+    int counter = 0;
+    
+    while (counter < tileBag->size()) {
+        random = rand() % MAX_CHOICE;
+        Tile* getTile = tileBag->get(counter);
+        
+        addTile(random, getTile);
+        
+        tileBag->deleteAtIndex(counter);
+        
+        counter++;
+    }
+}
+
+void TileBag::addTile(int random, Tile* tile) {
     if (random == 0) {
         tileBag->addFront(tile);
     } else if (random == 1) {
@@ -59,38 +81,19 @@ void TileBag::sortMethod(Tile* tile) {
     }
 }
 
-void TileBag::shuffleBag() {
-    int counter = 0;
-    int random = rand() % MAX_ADD;
-    
-    while (counter < tileBag->size()) {
-        Tile* getTile = tileBag->get(counter);
-        
-        if (random == 0) {
-            tileBag->addFront(getTile);
-        } else if (random == 1) {
-            tileBag->addEnd(getTile);
-        } else if (random == 2) {
-            tileBag->addMid(getTile);
-        }
-        
-        tileBag->deleteAtIndex(counter);
-        
-        counter++;
-    }
-}
-
 // For testing purposes
 void TileBag::showBag() {
     std::cout << "--------" << std::endl;
-    std::cout << "Tiles currently in bag:" << std::endl;
+    std::cout << "Tiles currently in bag:" << "\n" << std::endl;
     
     for (int i = 0; i < tileBag->size(); i++) {
         std::cout << tileBag->get(i)->getColour();
-        std::cout << tileBag->get(i)->getShape() << " ";
+        std::cout << tileBag->get(i)->getShape();
     
         if ((i % 8) == 7) {
             std::cout << std::endl;
+        } else {
+            std::cout << " ";
         }
     }
     
@@ -100,16 +103,3 @@ void TileBag::showBag() {
 LinkedList* TileBag::getTileBag() {
     return tileBag;
 }
-
-//std::cout << "--------" << std::endl;
-//
-//for (int i = 0; i < tileBag->size(); i++) {
-//    std::cout << tileBag->get(i)->getColour();
-//    std::cout << tileBag->get(i)->getShape() << ", ";
-//
-//    if (i == 35 || i == 71 || i == 107) {
-//        std::cout << std::endl;
-//    }
-//}
-//
-//std::cout << "--------" << std::endl;

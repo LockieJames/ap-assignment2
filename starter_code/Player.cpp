@@ -6,6 +6,10 @@ Player::Player()
     score = 0;
 }
 
+Player::~Player() {
+    
+}
+
 std::string Player::getName()
 {
     return name;
