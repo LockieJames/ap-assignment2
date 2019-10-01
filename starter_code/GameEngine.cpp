@@ -38,18 +38,37 @@ void GameEngine::gameInit(){
 
 void GameEngine::gameLoop(){
     bool gameFinished = false;
+    bool quit = false;
 
-    while (!gameFinished){
+    while (!gameFinished && !quit){
         for(int i = 0; i < players.size(); i++){
             bool turnComplete = false;
             while (!turnComplete){
-                // TODO: action - place tile
+                
+                switch (playerAction){
+                    case 0:
+                        // TODO: action - place tile
+                        placeTile(i, );
+                        break;
+                    case 1:
+                        // TODO: action - replace tile
+                        placeTile(i, );
+                        break;
+                    case 2:
+                        // TODO: action - save game
+                        saveGame();
+                        break;
+                    case 3:
+                        // action - quit game
+                        quit = true;
+                        // print exit statement
+                        break;
+                    
+                }
+            }
 
-                // TODO: action - replace tile
-
-                // TODO: action - save game
-
-                // TODO: action - quit game
+            if (quit){
+                break;
             }
 
             // check if game end conditions are fulfilled
@@ -72,13 +91,25 @@ bool GameEngine::gameEndCheck(){
 
     // TODO: tileBag.size() -- size() isn't a method in tileBag
     // check current size of tileBag
-//    if (this->tileBag.size() == 0){
-//        for (auto i : this->players){
-//            if (i.getHandSize() == 0){
-//                returnVal = true;
-//            }
-//        }
-//    }
+    // if (this->tileBag.size() == 0){
+    //     for (auto i : this->players){
+    //         if (i.getHandSize() == 0){
+    //              returnVal = true;
+    //         }
+    //     }
+    // }
 
     return returnVal;
+}
+
+void GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int col){
+
+}
+
+void GameEngine::replaceTile(Player player, Colour colour, Shape shape){
+    
+}
+
+void GameEngine::saveGame(){
+    
 }
