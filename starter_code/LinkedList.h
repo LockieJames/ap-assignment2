@@ -21,6 +21,8 @@ class LinkedList
         void addMid(Tile* tile);
         void deleteFront();
         void deleteAtIndex(int i);
+        bool findNodeByTile(Tile* tile);
+        int getIndexByTile(Tile* tile);
 
     private:
         Node* head;

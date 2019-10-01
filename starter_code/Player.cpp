@@ -44,7 +44,11 @@ int Player::getHandSize()
 // TODO: The player placing a tile
 
 // TODO: Replacing a tile in the players hand
-void Player::replaceTile(Tile tile)
+void Player::replaceTile(Tile* tile)
 {
-    
+    // Validate that tile is in hand
+    if(hand->findNodeByTile(tile))
+    {
+        hand->deleteAtIndex(hand->getIndexByTile(tile));
+    }
 }

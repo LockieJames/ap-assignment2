@@ -153,3 +153,50 @@ void LinkedList::deleteAtIndex(int i) {
         throw std::out_of_range("Not Deleted: Provided index not acceptable");
     }
 }
+
+// Returns true if the tile exists in the linked list, else false
+bool LinkedList::findNodeByTile(Tile* tile)
+{
+    bool found = false;
+    
+    Node* curr = head;
+    
+    if(head != nullptr)
+    {
+        while(curr != nullptr && !found)
+        {
+            if(curr->tile == tile)
+            {
+                found = true;
+            }
+            
+            curr = curr->next;
+        }
+    }
+    
+    return found;
+}
+
+int LinkedList::getIndexByTile(Tile* tile)
+{
+    bool found = false;
+    int index = 0;
+    
+    Node* curr = head;
+    
+    if(head != nullptr)
+    {
+        while(curr != nullptr && !found)
+        {
+            if(curr->tile == tile)
+            {
+                found = true;
+            }
+            
+            curr = curr->next;
+            index++;
+        }
+    }
+    
+    return index;
+}
