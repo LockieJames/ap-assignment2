@@ -100,6 +100,10 @@ void TileBag::showBag() {
     std::cout << std::endl << "--------" << std::endl;
 }
 
+int TileBag::size() {
+    return getTileBag()->size();
+}
+
 LinkedList* TileBag::getTileBag() {
     return tileBag;
 }

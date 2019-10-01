@@ -23,6 +23,7 @@ class TileBag {
         void shuffleBag();
         void addTile(int random, Tile* tile);
         void showBag();
+        int size();
         LinkedList* getTileBag();
     
     private:
