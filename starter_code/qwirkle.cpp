@@ -8,8 +8,9 @@
 
 int main(void)
 {
-    GameEngine gameEngine;
-    gameEngine.gameStart();
+    int numPlayers = 2;
+    GameEngine gameEngine(numPlayers);
+    gameEngine.gameInit();
 
     return EXIT_SUCCESS;
 }
