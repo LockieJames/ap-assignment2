@@ -6,6 +6,11 @@ Player::Player()
     score = 0;
 }
 
+Player::~Player()
+{
+    delete hand;
+}
+
 std::string Player::getName()
 {
     return name;
@@ -30,3 +35,10 @@ LinkedList* Player::getHand()
 {
     return hand;
 }
+
+int Player::getHandSize()
+{
+    return hand.size();
+}
+
+// TODO: The player placing a tile
