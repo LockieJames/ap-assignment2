@@ -30,10 +30,10 @@ class GameEngine {
     std::vector<Player> players;
 
     void gameLoop();
-    void GameEngine::gameFinish();
+    void gameFinish();
     std::vector<int> calcMaxTileSeq(LinkedList* hand);
     void openingHelper(std::vector<int> openingPlay, int PlayerIndex);
-    bool GameEngine::gameEndCheck();
+    bool gameEndCheck();
 
 };
 

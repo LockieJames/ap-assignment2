@@ -38,7 +38,13 @@ LinkedList* Player::getHand()
 
 int Player::getHandSize()
 {
-    return hand.size();
+    return hand->size();
 }
 
 // TODO: The player placing a tile
+
+// TODO: Replacing a tile in the players hand
+void Player::replaceTile(Tile tile)
+{
+    
+}

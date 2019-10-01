@@ -21,6 +21,7 @@ class Player
         void addScore(int num);
         LinkedList* getHand();
         int getHandSize();
+        void replaceTile(Tile);
 };
 
 #endif

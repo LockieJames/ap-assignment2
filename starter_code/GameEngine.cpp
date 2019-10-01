@@ -130,14 +130,15 @@ void GameEngine::openingHelper(std::vector<int> openingPlay, int playerIndex){
 bool GameEngine::gameEndCheck(){
     bool returnVal = false;
 
+    // TODO: tileBag.size() -- size() isn't a method in tileBag
     // check current size of tileBag
-    if (this->tileBag.size() == 0){
-        for (auto i : this->players){
-            if (i.getHandSize() == 0){
-                returnVal = true;
-            }
-        }
-    }
+//    if (this->tileBag.size() == 0){
+//        for (auto i : this->players){
+//            if (i.getHandSize() == 0){
+//                returnVal = true;
+//            }
+//        }
+//    }
 
     return returnVal;
 }
