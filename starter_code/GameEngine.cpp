@@ -48,11 +48,11 @@ void GameEngine::gameLoop(){
                 switch (playerAction){
                     case 0:
                         // TODO: action - place tile
-                        placeTile(i, );
+                        placeTile(players.at(i), );
                         break;
                     case 1:
                         // TODO: action - replace tile
-                        placeTile(i, );
+                        placeTile(players.at(i), );
                         break;
                     case 2:
                         // TODO: action - save game
