@@ -20,6 +20,7 @@ class Player
         int getScore();
         void addScore(int num);
         LinkedList* getHand();
+        int getHandSize();
 };
 
 #endif
