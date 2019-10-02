@@ -193,6 +193,27 @@ bool LinkedList::findNodeByTile(Tile* tile)
     return found;
 }
 
+Tile* LinkedList::removeTile(char colour, int shape)
+{
+    Tile* requiredNode = nullptr;
+    Node* curr = head;
+
+    if(head != nullptr)
+    {
+        while(curr != nullptr && requiredNode == nullptr)
+        {
+            if(curr->tile->getShape() == shape && curr->tile->getColour() == colour)
+            {
+                requiredNode = curr->tile;
+                curr->prev->next = curr->next;
+                delete curr;
+            }
+            curr = curr->next;
+        }
+    }
+    return requiredNode;
+}
+
 int LinkedList::getIndexByTile(Tile* tile)
 {
     bool found = false;
@@ -215,4 +236,16 @@ int LinkedList::getIndexByTile(Tile* tile)
     }
     
     return index;
+}
+
+std::string LinkedList::getTiles() {
+    std::string allTiles = "";
+    Node* curr = head;
+    while (curr != nullptr) {
+        allTiles += curr->tile->getColour() << curr->tile->getShape();
+        if (curr->next != nullptr)
+            allTiles += ",";
+        curr = curr->next;
+    }
+    return allTiles;
 }

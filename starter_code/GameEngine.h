@@ -1,6 +1,6 @@
 //
 //  GameEngine.h
-//  
+//
 //
 //  Created by Louis Baudinette on 24/09/2019
 //
@@ -34,6 +34,11 @@ class GameEngine {
     std::vector<int> calcMaxTileSeq(LinkedList* hand);
     void openingHelper(std::vector<int> openingPlay, int PlayerIndex);
     bool gameEndCheck();
+    bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
+    bool replaceTile(Player player, Colour colour, Shape shape);
+    bool saveGame();
+    void printGameInfo(int playerIndex);
+    void drawTile(Player player);
 
 };
 

@@ -2,6 +2,7 @@
 #define ASSIGN2_LINKEDLIST_H
 
 #include <vector>
+#include <string>
 #include "Node.h"
 #include "Tile.h"
 
@@ -23,6 +24,8 @@ class LinkedList
         void deleteAtIndex(int i);
         bool findNodeByTile(Tile* tile);
         int getIndexByTile(Tile* tile);
+        std::string getTiles();
+        Tile* removeTile(char colour, int shape);
 
     private:
         Node* head;
