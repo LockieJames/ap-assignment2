@@ -40,35 +40,28 @@ void GameEngine::gameLoop(){
     bool gameFinished = false;
     bool quit = false;
 
-    while (!gameFinished && !quit){
+    while (!gameFinished){
         for(int i = 0; i < players.size(); i++){
             bool turnComplete = false;
             while (!turnComplete){
                 
-                switch (playerAction){
-                    case 0:
-                        // TODO: action - place tile
-                        placeTile(players.at(i), );
-                        break;
-                    case 1:
-                        // TODO: action - replace tile
-                        placeTile(players.at(i), );
-                        break;
-                    case 2:
-                        // TODO: action - save game
-                        saveGame();
-                        break;
-                    case 3:
-                        // action - quit game
-                        quit = true;
-                        // print exit statement
-                        break;
-                    
+                if (playerAction == 0){
+                    // TODO: action - place tile
+                    placeTile(players.at(i), );
+                } else if (playerAction == 1){
+                    // TODO: action - replace tile
+                    replaceTile(players.at(i), );
+                } else if (playerAction == 2){
+                    // TODO: action - save game
+                    saveGame();
+                } else if (playerAction == 3){
+                    // action - quit game
+                    quit = true;
+                    turnComplete = true;
+                    gameFinished = true;
+                    // print exit statement
                 }
-            }
 
-            if (quit){
-                break;
             }
 
             // check if game end conditions are fulfilled
@@ -78,7 +71,12 @@ void GameEngine::gameLoop(){
         }
     }
 
-    gameFinish();
+    if (quit){
+        // TODO: quit game
+    } else (
+        // TODO: finish game
+        gameFinish();
+    )
 
 }
 
