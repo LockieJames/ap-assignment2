@@ -25,8 +25,6 @@ TileBag::~TileBag() {
     
 }
 
-// TODO: A method that returns the size of the tile bag
-
 void TileBag::createTiles() {
     for (int i = 0; i < PART_LENGTH; i++) {
         for (int j = 0; j < PART_LENGTH; j++) {
@@ -54,7 +52,7 @@ void TileBag::makeBag() {
 // Not the most efficient, but does allow for code reusability
 void TileBag::sortMethod(Tile* tile) {
     random = rand() % MAX_CHOICE;
-    addTile(random, tile);
+    addRandomTile(random, tile);
 }
 
 // Not the most efficient, but does allow for code reusability
@@ -65,7 +63,7 @@ void TileBag::shuffleBag() {
         random = rand() % MAX_CHOICE;
         Tile* getTile = tileBag->get(counter);
         
-        addTile(random, getTile);
+        addRandomTile(random, getTile);
         
         tileBag->deleteAtIndex(counter);
         
@@ -73,7 +71,7 @@ void TileBag::shuffleBag() {
     }
 }
 
-void TileBag::addTile(int random, Tile* tile) {
+void TileBag::addRandomTile(int random, Tile* tile) {
     if (random == 0) {
         tileBag->addFront(tile);
     } else if (random == 1) {

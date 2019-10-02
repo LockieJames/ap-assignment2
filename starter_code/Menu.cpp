@@ -100,3 +100,22 @@ bool Menu::choiceMenu(int input) {
     
     return check;
 }
+
+//int Menu::returnInput() {
+//    std::string input;
+//    std::string place ("Place");
+//    std::string replace ("Replace");
+//    int out = 0;
+//
+//    std::cout << "> ";
+//    std::cin >> input;
+//
+//    // place
+//    if (input.find(place)) {
+//        out = 1;
+//    } else if (input.find(replace)) { // replace
+//        out = 2;
+//    }
+//
+//    return out;
+//}

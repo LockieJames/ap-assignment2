@@ -21,7 +21,7 @@ class TileBag {
         void makeBag();
         void sortMethod(Tile* tile);
         void shuffleBag();
-        void addTile(int random, Tile* tile);
+        void addRandomTile(int random, Tile* tile);
         void showBag();
         int size();
         LinkedList* getTileBag();

@@ -14,6 +14,7 @@ class Tile
     public:
         Tile(Colour colour, Shape shape);
         Tile(Tile& other);
+        ~Tile();
     
         // Getters for testing purposes
         Colour getColour();

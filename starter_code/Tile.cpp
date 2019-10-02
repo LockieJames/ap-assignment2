@@ -12,6 +12,10 @@ shape(other.shape)
 {
 }
 
+Tile::~Tile() {
+    
+}
+
 Colour Tile::getColour() {
     return colour;
 }

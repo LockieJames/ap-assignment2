@@ -2,6 +2,7 @@
 #include <iostream>
 
 #define PART_LENGTH 6
+#define BEFORE_MID 4
 
 LinkedList::LinkedList()
 {
@@ -20,10 +21,25 @@ int LinkedList::size() {
 }
 
 void LinkedList::clear() {
-    while (numTiles > 0) {
-        deleteFront();
+//    while (numTiles != 0) {
+//        deleteFront();
+//    }
+//    delete head;
+//    delete tail;
+    
+    while (head != nullptr) {
+        Node* nNode = head;
+        head = head->next;
+        delete nNode;
     }
+    numTiles = 0;
+    
     tail = nullptr;
+    
+    delete head;
+    delete tail;
+    
+    std::cout << "Got to clear nodes" << std::endl;
 }
 
 Tile* LinkedList::get(int i) {
@@ -85,7 +101,7 @@ void LinkedList::addMid(Tile* tile) {
 
     if (head == nullptr) {
         head = nNode;
-    } else if (numTiles < 4) {
+    } else if (numTiles < BEFORE_MID) {
         addEnd(tile);
         numTiles--;
     } else {

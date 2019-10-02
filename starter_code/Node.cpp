@@ -1,4 +1,5 @@
 #include "Node.h"
+#include <iostream>
 
 Node::Node(Tile* tile, Node* next, Node* prev) :
     tile(tile),
@@ -15,7 +16,6 @@ Node::Node(Node& other) :
 }
 
 Node::~Node() {
-    next = nullptr;
-    prev = nullptr;
+
 }
 
