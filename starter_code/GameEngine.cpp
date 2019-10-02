@@ -5,6 +5,7 @@
 //  Created by Louis Baudinette on 24/09/2019
 //
 
+#include <regex>
 #include "GameEngine.h"
 
 GameEngine::GameEngine(int numPlayers){
@@ -40,44 +41,55 @@ void GameEngine::gameLoop(){
     bool gameFinished = false;
     bool quit = false;
 
-    while (!gameFinished){
-        for(int i = 0; i < players.size(); i++){
+    while (!gameFinished) {
+        for (int i = 0; i < players.size(); i++) {
+            printGameInfo(i);
             bool turnComplete = false;
-            while (!turnComplete){
-                
-                if (playerAction == 0){
-                    // TODO: action - place tile
-                    placeTile(players.at(i), );
-                } else if (playerAction == 1){
-                    // TODO: action - replace tile
-                    replaceTile(players.at(i), );
-                } else if (playerAction == 2){
+            while (!turnComplete) {
+
+                // TODO: Ask for input in menu and pass string userInput
+                quit = true;
+                turnComplete = true;
+                gameFinished = true;
+                // print exit statement
+                std::string userInput;
+                std::smatch field;
+                std::cout << "> ";
+                std::getline(std::cin, userInput);
+
+                if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
+                    turnComplete = placeTile(players.at(i), field[0].str()[6], field[0].str()[7],
+                                             field[0].str()[12], field[0].str()[13]);
+                    if (tileBag.size() == 0 && players.at(i).getHand()->size() == 0) {
+                        gameFinished = true;
+                    }
+                } else if (std::regex_match(userInput, field, std::regex(R"(replace\s[ROYGBP][1-6])"))) {
+                    turnComplete = replaceTile(players.at(i), field[0].str()[8], field[0].str()[9]);
+                // }  else if (playerAction == 2) {
                     // TODO: action - save game
-                    saveGame();
-                } else if (playerAction == 3){
+                    // saveGame();
+                // } else if (playerAction == 3) {
                     // action - quit game
-                    quit = true;
-                    turnComplete = true;
-                    gameFinished = true;
-                    // print exit statement
+                } else {
+                    std::cout << "Invalid input!" << std::endl;
                 }
 
-            }
-
-            // check if game end conditions are fulfilled
-            if(gameEndCheck()){
-                gameFinished = true;
+                if (!turnComplete)
+                    std::cout << "Couldn't place tile or replace tile!" << std::endl;
             }
         }
     }
+    gameFinish();
+}
 
-    if (quit){
-        // TODO: quit game
-    } else (
-        // TODO: finish game
-        gameFinish();
-    )
-
+void GameEngine::printGameInfo(int playerIndex) {
+    std::cout << players[playerIndex].getName() << ", it's your turn" << std::endl;
+    for (Player player : players) {
+        std::cout << "Score for " << player.getName() << " is: " << player.getScore() << std::endl;
+    }
+    gameBoard.printBoard(std::cout) ;
+    std::cout << "Your hand is " << std::endl;
+    std::cout << players[playerIndex].getHand()->getTiles() << std::endl;
 }
 
 void GameEngine::gameFinish(){
@@ -100,61 +112,64 @@ bool GameEngine::gameEndCheck(){
     return returnVal;
 }
 
-bool GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int colInput){
-    // placeholder logic/functions/exceptions
+bool GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int col) {
     // TODO: add appropriate menu callbacks to print info to console if need be
-    try {
-        // get tile to be placed from player's hand
-        Tile fromPlayer = player.getTileFromHand(colour, shape);
 
-        // place tile on board, getting points from tile placement for player
-        int points = gameBoard.placeTile(fromPlayer, rowInput, colInput);
+    bool placed = false;
+    Tile* tile = player.getHand()->removeTile(colour, shape);
+    if (tile != nullptr) {
+        int score = gameBoard.placeTile(*tile, rowInput, col);
+        if (score != 0) {
+            player.addScore(score);
+            drawTile(player);
+            placed = true;
+        } else {
+            player.getHand()->addFront(tile);
+            // IF throw an exception that tile wasnt placed then goes HERE
+            /*
+             * catch (exception& invalidTilePlacement){
+             * if tile cannot be placed on board in given position
+             * print appropriate error message
+             */
 
-        // add points to player's score
-        player.addScore(points);
-
-        // get new tile from tilebag for player
-        Tile forPlayer = tileBag.getTile();
-
-        // add new tile to player's hand
-        player.addTileToHand(forPlayer);
-
-    } catch (exception& tileNotInHand){
-        // if tile does not exist in player's hand
-        // print appropriate error message
-
-    } catch (exception& invalidTilePlacement){
-        // if tile cannot be placed on board in given position
-        // add tile back to hand
-        player.addTileToHand(fromPlayer);
-        // print appropriate error message
+        }
     }
+    // If throw exeption that tile wasnt found then else statement and goes HERE
+    /*
+     * catch (exception& tileNotInHand){
+          if tile does not exist in player's hand
+          print appropriate error message
+     */
 
+    return  placed;
+}
+
+void GameEngine::drawTile(Player player) {
+    if (tileBag.size() != 0) {
+        player.getHand()->addEnd(tileBag.getTileBag()->get(0));
+        tileBag.getTileBag()->deleteFront();
+    }
 }
 
 bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
-    // placeholder logic/functions/exceptions
     // TODO: add appropriate menu callbacks to print info to console if need be
-    try{
-        // get tile from player's hand
-        Tile fromPlayer = player.getTileFromHand(colour, shape);
+    bool placed = false;
+    // remove a tile from players  hand
+    Tile* tile = player.getHand()->removeTile(colour, shape);
+    if (tile != nullptr) {
+        // draw a tile from bag
+        player.getHand()->addEnd(tileBag.getTileBag()->get(0));
 
-        // get tile for player from tilebag
-        Tile forPlayer = tileBag.getTile();
+        // add player's tile to the bag
+        tileBag.getTileBag()->addEnd(tile);
 
-        // add tile from player to tilebag
-        tileBag.addTile(fromPlayer);
-
-        // add tile from tilebag to player's had
-        player.addTileToHand(forPlayer);
-
-    } catch (exception& tileNotInHand){
-        // if tile does not exist in player's hand
-        // print appropriate error message
-
+        // delete drawn node from tile bag
+        tileBag.getTileBag()->deleteFront();
+        placed = true;
     }
+    return placed;
 }
 
-bool GameEngine::saveGame(){
-    
+bool GameEngine::saveGame() {
+    return false;
 }

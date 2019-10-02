@@ -7,6 +7,9 @@
 #include <string>
 #include "TileCodes.h"
 
+#define ONE_ROW 1
+#define TWO_ROWS 2
+#define QWIRKLE 6
 #define ROWS    6
 #define COLS    8 / 2
 #define PATTERN " | "
@@ -20,12 +23,12 @@ class Board {
 public:
     Board();
     ~Board();
-    bool printBoard();
-    bool placeTile(Tile &tile, char row, int col);
+    bool printBoard(std::ostream &destination);
+    int placeTile(Tile &tile, char row, int col);
 
 private:
-    void printBorder();
-    void printCoord(int startNumber);
+    void printBorder(std::ostream &destination);
+    void printCoord(std::ostream &destination, int startNumber);
 
     int validateRow(int colourShape, int row, int col, int rowDirection, bool right);
     bool isEmpty();
@@ -36,6 +39,7 @@ private:
 
     std::vector<std::vector<Tile*> > grid;
     bool emptyBoard = true;
+    int scoreTurn;
 };
 
 

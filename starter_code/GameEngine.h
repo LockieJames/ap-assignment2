@@ -37,6 +37,8 @@ class GameEngine {
     bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
     bool replaceTile(Player player, Colour colour, Shape shape);
     bool saveGame();
+    void printGameInfo(int playerIndex);
+    void drawTile(Player player);
 
 };
 

@@ -23,8 +23,10 @@ Board::~Board() {
     }
 }
 
-bool Board::placeTile(Tile &tile, char rowInput, int col) {
-    bool validPlace = false;
+// Returns number of points earned in this turn
+int Board::placeTile(Tile &tile, char rowInput, int col) {
+    // TODO: scoring system
+    scoreTurn = 0;
     int row = rowInput - A_VALUE;
 
     bool validInput = false;
@@ -42,8 +44,8 @@ bool Board::placeTile(Tile &tile, char rowInput, int col) {
             emptyBoard = isEmpty();
             if (emptyBoard) {
                 grid[row][col] = &tile;
-                validPlace = true;
                 emptyBoard = isEmpty();
+                scoreTurn = 1;
             }
         } else {
             auto colours = getMap(tile.getColour(), row, col);
@@ -66,32 +68,32 @@ bool Board::placeTile(Tile &tile, char rowInput, int col) {
 
             if (positions == 1) {
                 grid[row][col] = &tile;
-                validPlace = true;
+                scoreTurn += ONE_ROW;
             } else if (positions == 2) {
                 if((shapesColours[0] != 0 && shapesColours[2] != 0)
                    || (shapesColours[1] != 0 && shapesColours[3] !=0)) {
                     if (offDiagonal || mainDiagonal) {
                         grid[row][col] = &tile;
-                        validPlace = true;
+                        scoreTurn += ONE_ROW;
                     }
                 } else {
                     grid[row][col] = &tile;
-                    validPlace = true;
+                    scoreTurn += TWO_ROWS;
                 }
             } else if (positions == 3) {
                 if (offDiagonal || mainDiagonal) {
                     grid[row][col] = &tile;
-                    validPlace = true;
+                    scoreTurn += TWO_ROWS;
                 }
             } else if (positions == 4){
                 if (offDiagonal && mainDiagonal) {
                     grid[row][col] = &tile;
-                    validPlace = true;
+                    scoreTurn += TWO_ROWS;
                 }
             }
         }
     }
-    return validPlace;
+    return scoreTurn;
 }
 
 int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool right) {
@@ -101,8 +103,9 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
     col = calculateCol(odd, right, col);
     row = row + rowDirection;
     odd = !odd;
+    int numberOfCheckedTiles = 0;
 
-    while (!border && grid[row][col] != nullptr) {
+    while (!border && grid[row][col] != nullptr && numberOfCheckedTiles <= QWIRKLE) {
         int positionValue = 0;
 
         if (colourShape < 6) {
@@ -115,6 +118,7 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
             inputColourShape = 0;
         } else {
             inputColourShape = colourShape;
+            numberOfCheckedTiles++;
         }
 
         border = edgeRow(row, rowDirection) || edgeCol(col, odd, right);
@@ -126,6 +130,11 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
     if (inputColourShape != 0) {
         inputColourShape = colourShape;
     }
+
+    if (numberOfCheckedTiles == QWIRKLE) {
+        std::cout << "QWIRKLE!!!";
+    }
+    scoreTurn += numberOfCheckedTiles;
 
     return inputColourShape;
 }
@@ -172,57 +181,57 @@ bool Board::isEmpty() {
     return isEmpty;
 }
 
-bool Board::printBoard() {
+bool Board::printBoard(std::ostream &destination) {
     char letter = 'A';
-    printCoord(0);
-    printBorder();
+    printCoord(destination, 0);
+    printBorder(destination);
     bool odd = false;
 
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < (COLS + 1); ++j) {
             if (j == 0) {
-                std::cout << letter << " ";
+                destination << letter << " ";
                 if (odd) {
-                    std::cout << SPACE;
+                    destination << SPACE;
                 }
                 letter++;
             } else {
-                std::cout << PATTERN;
+                destination << PATTERN;
                 if (grid[i][j - 1] != nullptr) {
-                    std::cout << grid[i][j - 1]->getColour() << grid[i][j - 1]->getShape();
+                    destination << grid[i][j - 1]->getColour() << grid[i][j - 1]->getShape();
                 } else {
-                    std::cout << "  ";
+                    destination << "  ";
                 }
             }
         }
-        std::cout << "  |";
+        destination << "  |";
         odd = !odd;
-        std::cout << std::endl;
+        destination << std::endl;
     }
 
-    printBorder();
-    printCoord(1);
+    printBorder(destination);
+    printCoord(destination, 1);
     return true;
 }
 
-void Board::printBorder() {
-    std::cout << SPACE;
+void Board::printBorder(std::ostream &destination) {
+    destination << SPACE;
     for (int k = 0; k < COLS + 1; ++k) {
-        std::cout << BORDER_PATTERN;
+        destination << BORDER_PATTERN;
     }
-    std::cout << std::endl;
+    destination << std::endl;
 }
 
-void Board::printCoord(int startNumber) {
-    std::cout << " " << SPACE;
+void Board::printCoord(std::ostream &destination, int startNumber) {
+    destination << " " << SPACE;
     if(startNumber % 2 == 1) {
-        std::cout << SPACE;
+        destination << SPACE;
     }
     for (int i = 0; i < COLS; ++i) {
-        std::cout << "  " << startNumber << "  ";
+        destination << "  " << startNumber << "  ";
         startNumber += 2;
     }
-    std::cout << std::endl;
+    destination << std::endl;
 }
 
 
