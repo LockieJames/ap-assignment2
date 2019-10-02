@@ -100,14 +100,61 @@ bool GameEngine::gameEndCheck(){
     return returnVal;
 }
 
-void GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int col){
+bool GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int colInput){
+    // placeholder logic/functions/exceptions
+    // TODO: add appropriate menu callbacks to print info to console if need be
+    try {
+        // get tile to be placed from player's hand
+        Tile fromPlayer = player.getTileFromHand(colour, shape);
+
+        // place tile on board, getting points from tile placement for player
+        int points = gameBoard.placeTile(fromPlayer, rowInput, colInput);
+
+        // add points to player's score
+        player.addScore(points);
+
+        // get new tile from tilebag for player
+        Tile forPlayer = tileBag.getTile();
+
+        // add new tile to player's hand
+        player.addTileToHand(forPlayer);
+
+    } catch (exception& tileNotInHand){
+        // if tile does not exist in player's hand
+        // print appropriate error message
+
+    } catch (exception& invalidTilePlacement){
+        // if tile cannot be placed on board in given position
+        // add tile back to hand
+        player.addTileToHand(fromPlayer);
+        // print appropriate error message
+    }
 
 }
 
-void GameEngine::replaceTile(Player player, Colour colour, Shape shape){
-    
+bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
+    // placeholder logic/functions/exceptions
+    // TODO: add appropriate menu callbacks to print info to console if need be
+    try{
+        // get tile from player's hand
+        Tile fromPlayer = player.getTileFromHand(colour, shape);
+
+        // get tile for player from tilebag
+        Tile forPlayer = tileBag.getTile();
+
+        // add tile from player to tilebag
+        tileBag.addTile(fromPlayer);
+
+        // add tile from tilebag to player's had
+        player.addTileToHand(forPlayer);
+
+    } catch (exception& tileNotInHand){
+        // if tile does not exist in player's hand
+        // print appropriate error message
+
+    }
 }
 
-void GameEngine::saveGame(){
+bool GameEngine::saveGame(){
     
 }
