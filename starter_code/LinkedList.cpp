@@ -21,12 +21,6 @@ int LinkedList::size() {
 }
 
 void LinkedList::clear() {
-//    while (numTiles != 0) {
-//        deleteFront();
-//    }
-//    delete head;
-//    delete tail;
-    
     while (head != nullptr) {
         Node* nNode = head;
         head = head->next;

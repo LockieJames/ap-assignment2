@@ -31,7 +31,6 @@ class GameEngine {
 
     void gameLoop();
     void gameFinish();
-    std::vector<int> calcMaxTileSeq(LinkedList* hand);
     void openingHelper(std::vector<int> openingPlay, int PlayerIndex);
     bool gameEndCheck();
     bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
