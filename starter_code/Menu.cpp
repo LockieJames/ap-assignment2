@@ -22,39 +22,26 @@ void Menu::startMessage() {
 
 // Input must be an int
 void Menu::menuOptions() {
-    int input = 0;
-    bool check = false;
+    std::cout << "Menu" << std::endl;
+    std::cout << "----" << std::endl;
+    std::cout << "1. New Game" << std::endl;
+    std::cout << "2. Load Game" << std::endl;
+    std::cout << "3. Show Student Information" << std::endl;
+    std::cout << "4. Quit" << std::endl << std::endl;
     
-    // Menu "crashes" if input is not an integer
-    while (check == false) {
-        std::cout << "Menu" << std::endl;
-        std::cout << "----" << std::endl;
-        std::cout << "1. New Game" << std::endl;
-        std::cout << "2. Load Game" << std::endl;
-        std::cout << "3. Show Student Information" << std::endl;
-        std::cout << "4. Quit" << std::endl << std::endl;
-        
-        std::cout << "> ";
-        
-        std::cin >> input;
-        
-        check = choiceMenu(input);
-    }
+    std::cout << "> ";
 }
 
-// Names should only be in uppercase
-void Menu::newGame() {
-    std::string player1;
-    std::string player2;
-    
+void Menu::newGamePt1() {    
     std::cout << "----------------------------------" << std::endl;
     std::cout << "Starting a New Game" << std::endl;
-    std::cout << "Enter a name for player 1 (uppercase characters only)" << std::endl << "> ";
-    std::cin >> player1;
-    
-    std::cout << "Enter a name for player 2 (uppercase characters only)" << std::endl << "> ";
-    std::cin >> player2;
-    
+}
+
+void Menu::newGameNames(int playerNo) {
+    std::cout << "Enter a name for player " << playerNo << " (uppercase characters only)" << std::endl << "> ";
+}
+
+void Menu::newGamePt2() {
     std::cout << "Let's Play!" << std::endl;
     std::cout << "----------------------------------" << std::endl;
 }
@@ -81,41 +68,3 @@ void Menu::stuInfo() {
 void Menu::quit() {
     std::cout << "Goodbye" << std::endl;
 }
-
-bool Menu::choiceMenu(int input) {
-    bool check = false;
-    
-    if (input == 1) {
-        newGame();
-    } else if (input == 2) {
-        loadGame();
-    } else if (input == 3) {
-        stuInfo();
-    } else if (input == 4) {
-        check = true;
-        quit();
-    } else {
-        std::cout << "Input not accepted" << std::endl;
-    }
-    
-    return check;
-}
-
-//int Menu::returnInput() {
-//    std::string input;
-//    std::string place ("Place");
-//    std::string replace ("Replace");
-//    int out = 0;
-//
-//    std::cout << "> ";
-//    std::cin >> input;
-//
-//    // place
-//    if (input.find(place)) {
-//        out = 1;
-//    } else if (input.find(replace)) { // replace
-//        out = 2;
-//    }
-//
-//    return out;
-//}

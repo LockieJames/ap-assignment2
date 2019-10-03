@@ -60,7 +60,7 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
 
             int positions = 0;
 
-            for (int i = 0; i < shapes.size(); ++i) {
+            for (int i = 0; i < (int) shapes.size(); ++i) {
                 if (shapesColours[i] != 0) {
                     positions++;
                 }

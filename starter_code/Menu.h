@@ -20,12 +20,13 @@ class Menu {
 
         void startMessage();
         void menuOptions();
-        void newGame();
+        void newGamePt1();
+        void newGameNames(int playerNo);
+        void newGamePt2();
         void loadGame();
         void stuInfo();
         void quit();
         bool choiceMenu(int input);
-        int returnInput();
 
     private:
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lachlan Boughton", "Peter Bui"};

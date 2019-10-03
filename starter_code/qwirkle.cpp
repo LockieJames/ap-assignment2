@@ -10,7 +10,7 @@ int main(void)
 {
     int numPlayers = 2;
     GameEngine gameEngine(numPlayers);
-//    gameEngine.gameInit();
+    gameEngine.mainMenu();
 
     std::cout << "GOT HERE" << std::endl;
     
