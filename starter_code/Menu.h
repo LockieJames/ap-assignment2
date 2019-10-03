@@ -27,7 +27,6 @@ class Menu {
         void stuInfo();
         void quit();
         bool choiceMenu(int input);
-        int returnInput();
 
     private:
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lachlan Boughton", "Peter Bui"};

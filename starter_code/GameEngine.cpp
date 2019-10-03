@@ -37,29 +37,41 @@ GameEngine::~GameEngine(){
 void GameEngine::mainMenu() {
     menu.startMessage();
 
-    bool choiceMade = false;
+    bool validChoice;
+    bool quit = false;
     int input;
 
-    while (!choiceMade){
-        menu.menuOptions();
-        std::cin >> input;
-        if (std::cin.fail() || !(input >= 1 && input <= 4)){
-            std::cout << "Input not accepted" << std::endl;
-            std::cin.clear();
-        } else {
-            choiceMade = true;
+    while (!quit){
+        validChoice = false;
+        while (!validChoice){
+            menu.menuOptions();
+            std::cin >> input;
+            if (std::cin.fail() || !(input >= 1 && input <= 4)){
+                std::cout << "Input not accepted" << std::endl;
+                std::cin.clear();
+            } else {
+                validChoice = true;
+            }
+        }
+
+        if (input == 1) {
+            newGame();
+            quit = true;
+        } else if (input == 2) {
+            // TODO: action - load game
+            menu.loadGame();
+            // uncomment the line below when loading is implemented
+            // quit = true;
+        } else if (input == 3) {
+            menu.stuInfo();
+        } else if (input == 4) {
+            // TODO: action - quit from main menu
+            quit = true;
         }
     }
 
-    if (input == 1) {
-        newGame();
-    } else if (input == 2) {
-        // TODO: action - load game
-    } else if (input == 3) {
-        menu.stuInfo();
-    } else if (input == 4) {
-        // TODO: action - quit from main menu
-    }
+    // call quit method to print exit message as game is closing
+    menu.quit();
 }
 
 // gets player names and makes tilebag, then starts main game loop
@@ -69,7 +81,7 @@ void GameEngine::newGame(){
     for (int i = 0; i < (int) players.size(); i++) {
         menu.newGameNames(i + 1);
         std::string name;
-        std::cin >> name;
+        std::getline(std::cin, name);
         players.at(i)->setName(name);
     }
     menu.newGamePt2();
@@ -82,45 +94,52 @@ void GameEngine::newGame(){
 // main game loop
 void GameEngine::gameLoop(){
     bool gameFinished = false;
+    bool gameQuit = false;
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players.size(); i++) {
-            printGameInfo(i);
-            bool turnComplete = false;
-            while (!turnComplete) {
+            if (!gameQuit){
+                printGameInfo(i);
+                bool turnComplete = false;
+                while (!turnComplete) {
 
-                // TODO: Ask for input in menu and pass string userInput
-                turnComplete = true;
-                gameFinished = true;
-                // print exit statement
-                std::string userInput;
-                std::smatch field;
-                std::cout << "> ";
-                std::getline(std::cin, userInput);
+                    // TODO: Ask for input in menu and pass string userInput
+                    std::string userInput;
+                    std::smatch field;
+                    std::cout << "> ";
+                    std::getline(std::cin, userInput);
 
-                if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
-                    turnComplete = placeTile(*players.at(i), field[0].str()[6], field[0].str()[7],
-                                             field[0].str()[12], field[0].str()[13]);
-                    if (tileBag.size() == 0 && players.at(i)->getHand()->size() == 0) {
+                    if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
+                        turnComplete = placeTile(*players.at(i), field[0].str()[6], field[0].str()[7],
+                                                field[0].str()[12], field[0].str()[13]);
+                        if (tileBag.size() == 0 && players.at(i)->getHand()->size() == 0) {
+                            gameFinished = true;
+                        }
+                    } else if (std::regex_match(userInput, field, std::regex(R"(replace\s[ROYGBP][1-6])"))) {
+                        turnComplete = replaceTile(*players.at(i), field[0].str()[8], field[0].str()[9]);
+                    }  else if (std::regex_match(userInput, field, std::regex(R"(save\s[a-zA-Z0-9]+)"))) {
+                        // TODO: action - save game
+                        // saveGame();
+                    } else if (userInput == "quit") {
+                        turnComplete = true;
+                        gameQuit = true;
                         gameFinished = true;
+                    } else {
+                        std::cout << "Invalid input!" << std::endl;
                     }
-                } else if (std::regex_match(userInput, field, std::regex(R"(replace\s[ROYGBP][1-6])"))) {
-                    turnComplete = replaceTile(*players.at(i), field[0].str()[8], field[0].str()[9]);
-                // }  else if (playerAction == 2) {
-                    // TODO: action - save game
-                    // saveGame();
-                // } else if (playerAction == 3) {
-                    // action - quit game
-                } else {
-                    std::cout << "Invalid input!" << std::endl;
-                }
 
-                if (!turnComplete)
-                    std::cout << "Couldn't place tile or replace tile!" << std::endl;
+                    if (!turnComplete)
+                        std::cout << "Couldn't place tile or replace tile!" << std::endl;
+                }
             }
         }
     }
-    gameFinish();
+
+    if (!gameQuit){
+        // if the game wasn't quit, finish the game normally
+        // i.e. print out end of game info
+        gameFinish();
+    }
 }
 
 void GameEngine::printGameInfo(int playerIndex) {
@@ -135,45 +154,6 @@ void GameEngine::printGameInfo(int playerIndex) {
 
 void GameEngine::gameFinish(){
     // TODO: events upon game finish
-}
-
-std::vector<int> GameEngine::calcMaxTileSeq(LinkedList* hand){
-    int handSize = hand->size();
-    std::vector<int> maxIndexList;
-
-    // iterate through hand, and for each tile, check if other tiles'
-    // colour and shape match, and get indexes of tiles
-    for (int i = 0; i < handSize; i++){
-        Tile* currTile = hand->get(i);
-        Colour currColour = currTile->getColour();
-        Shape currShape = currTile->getShape();
-
-        std::vector<int> currIndexListColour;
-        currIndexListColour.push_back(i);
-        std::vector<int> currIndexListShape;
-        currIndexListShape.push_back(i);
-
-        for (int j = i; j < handSize; i++){
-            if (currColour == hand->get(j)->getColour()){
-                currIndexListColour.push_back(j);
-            }
-
-            if (currShape == hand->get(j)->getShape()){
-                currIndexListShape.push_back(j);
-            }
-        }
-
-        if (currIndexListColour.size() >= currIndexListShape.size()
-            && currIndexListColour.size() > maxIndexList.size()){
-            maxIndexList = currIndexListColour;
-        }
-        else if (currIndexListShape.size() >= currIndexListColour.size()
-            && currIndexListShape.size() > maxIndexList.size()){
-            maxIndexList = currIndexListShape;
-        }
-    }
-
-    return maxIndexList;
 }
 
 bool GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int col) {
