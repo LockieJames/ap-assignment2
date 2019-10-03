@@ -11,8 +11,6 @@ int main(void)
     int numPlayers = 2;
     GameEngine gameEngine(numPlayers);
     gameEngine.mainMenu();
-
-    std::cout << "GOT HERE" << std::endl;
     
     return EXIT_SUCCESS;
 }

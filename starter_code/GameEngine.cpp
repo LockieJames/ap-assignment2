@@ -13,20 +13,10 @@ GameEngine::GameEngine(int numPlayers){
     this->gameBoard = Board();
     this->menu = Menu();
 
-    std::cout << "Got here1" << std::endl;
-
     for (int i = 0; i < numPlayers; i++) {
         Player* player = new Player();
         this->players.push_back(player);
-        std::cout << "Got here " << i << std::endl;
     }
-
-    std::cout << "Size of Vct: " << players.size() << std::endl;
-    std::cout << "Got here2" << std::endl;
-
-    std::cout << "Score at position 0: " << players.at(0)->getScore() << std::endl;
-    std::cout << "Score at position 1: " << players.at(1)->getScore() << std::endl;
-
 }
 
 GameEngine::~GameEngine(){

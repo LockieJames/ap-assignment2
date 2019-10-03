@@ -9,7 +9,6 @@ Player::Player()
 Player::~Player()
 {
     delete hand;
-    std::cout << "Got to player dest" << std::endl;
 }
 
 std::string Player::getName()

@@ -32,8 +32,6 @@ void LinkedList::clear() {
     
     delete head;
     delete tail;
-    
-    std::cout << "Got to clear nodes" << std::endl;
 }
 
 Tile* LinkedList::get(int i) {
