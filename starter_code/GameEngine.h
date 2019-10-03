@@ -21,7 +21,7 @@ class GameEngine {
     ~GameEngine();
 
     // todo: implement methods for game states and player turns
-    void gameInit();
+    void mainMenu();
 
     private:
     Board gameBoard;
@@ -29,10 +29,11 @@ class GameEngine {
     Menu menu;
     std::vector<Player> players;
 
+    void newGame();
     void gameLoop();
+    void loadGame();
     void gameFinish();
     std::vector<int> calcMaxTileSeq(LinkedList* hand);
-    void openingHelper(std::vector<int> openingPlay, int PlayerIndex);
     bool gameEndCheck();
     bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
     bool replaceTile(Player player, Colour colour, Shape shape);

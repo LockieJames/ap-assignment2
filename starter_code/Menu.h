@@ -20,7 +20,9 @@ class Menu {
 
         void startMessage();
         void menuOptions();
-        void newGame();
+        void newGamePt1();
+        void newGameNames(int playerNo);
+        void newGamePt2();
         void loadGame();
         void stuInfo();
         void quit();

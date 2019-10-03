@@ -27,48 +27,69 @@ GameEngine::GameEngine(int numPlayers){
     std::cout << "Score at position 0: " << players.at(0).getScore() << std::endl;
     std::cout << "Score at position 1: " << players.at(1).getScore() << std::endl;
 
-    menu.startMessage();
-    menu.menuOptions();
 }
 
 GameEngine::~GameEngine(){
-
+    players.clear();
 }
 
-// TODO: implement methods for game states and player turns
-void GameEngine::gameInit(){
-    std::vector<int> maxLengthOpening;
-    int openingPlayerIndex;
+// prints main menu using menu.menuOptions(), gets user's choice, and calls appropriate methods
+void GameEngine::mainMenu() {
+    menu.startMessage();
 
-    // TODO: get hands for each player from tileBag and assign to players
+    bool choiceMade = false;
+    int input;
 
-    // calculate largest length opening hand and player it belongs to
-    for (int i = 0; i < players.size(); i++){
-        std::vector<int> currOpening = calcMaxTileSeq(players[i].getHand());
-        if (currOpening.size() > maxLengthOpening.size()){
-            maxLengthOpening = currOpening;
-            openingPlayerIndex = i;
+    while (!choiceMade){
+        menu.menuOptions();
+        std::cin >> input;
+        if (std::cin.fail() || !(input >= 1 && input <= 4)){
+            std::cout << "Input not accepted" << std::endl;
+            std::cin.clear();
+        } else {
+            choiceMade = true;
         }
     }
-    // make opening play
-    openingHelper(maxLengthOpening, openingPlayerIndex);
 
-    // begin game loop
-    gameLoop();
-
+    if (input == 1) {
+        newGame();
+    } else if (input == 2) {
+        // TODO: action - load game
+    } else if (input == 3) {
+        menu.stuInfo();
+    } else if (input == 4) {
+        // TODO: action - quit from main menu
+    }
 }
 
+// gets player names and makes tilebag, then starts main game loop
+void GameEngine::newGame(){
+
+    menu.newGamePt1();
+    for (int i = 0; i < (int) players.size(); i++) {
+        menu.newGameNames(i + 1);
+        std::string name;
+        std::cin >> name;
+        players.at(i).setName(name);
+    }
+    menu.newGamePt2();
+
+    tileBag.makeBag();
+
+    gameLoop();
+}
+
+// main game loop
 void GameEngine::gameLoop(){
     bool gameFinished = false;
 
     while (!gameFinished) {
-        for (int i = 0; i < players.size(); i++) {
+        for (int i = 0; i < (int) players.size(); i++) {
             printGameInfo(i);
             bool turnComplete = false;
             while (!turnComplete) {
 
-                // TODO: Ask for input in menu and pass string userInput
-                quit = true;
+                // TODO: Ask for input in menu and pass string userInput    
                 turnComplete = true;
                 gameFinished = true;
                 // print exit statement
@@ -114,45 +135,6 @@ void GameEngine::printGameInfo(int playerIndex) {
 
 void GameEngine::gameFinish(){
     // TODO: events upon game finish
-}
-
-std::vector<int> GameEngine::calcMaxTileSeq(LinkedList* hand){
-    int handSize = hand->size();
-    std::vector<int> maxIndexList;
-
-    // iterate through hand, and for each tile, check if other tiles'
-    // colour and shape match, and get indexes of tiles
-    for (int i = 0; i < handSize; i++){
-        Tile* currTile = hand->get(i);
-        Colour currColour = currTile->getColour();
-        Shape currShape = currTile->getShape();
-
-        std::vector<int> currIndexListColour;
-        currIndexListColour.push_back(i);
-        std::vector<int> currIndexListShape;
-        currIndexListShape.push_back(i);
-
-        for (int j = i; j < handSize; i++){
-            if (currColour == hand->get(j)->getColour()){
-                currIndexListColour.push_back(j);
-            }
-
-            if (currShape == hand->get(j)->getShape()){
-                currIndexListShape.push_back(j);
-            }
-        }
-
-        if (currIndexListColour.size() >= currIndexListShape.size()
-            && currIndexListColour.size() > maxIndexList.size()){
-            maxIndexList = currIndexListColour;
-        }
-        else if (currIndexListShape.size() >= currIndexListColour.size()
-            && currIndexListShape.size() > maxIndexList.size()){
-            maxIndexList = currIndexListShape;
-        }
-    }
-
-    return maxIndexList;
 }
 
 bool GameEngine::placeTile(Player player, Colour colour, Shape shape, char rowInput, int col) {
