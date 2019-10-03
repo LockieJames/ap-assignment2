@@ -27,7 +27,7 @@ class GameEngine {
     Board gameBoard;
     TileBag tileBag;
     Menu menu;
-    std::vector<Player> players;
+    std::vector<Player *> players;
 
     void newGame();
     void gameLoop();
