@@ -10,6 +10,7 @@
 
 // #includes decide later
 #include <iostream>
+#include <fstream>
 #include "Board.h"
 #include "TileBag.h"
 #include "Menu.h"
@@ -36,8 +37,8 @@ class GameEngine {
     bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
     bool replaceTile(Player player, Colour colour, Shape shape);
     void drawTile(Player player);
-    bool saveGame();
-    bool loadGame();
+    void saveGame(std::string fileName, int currentPlayer);
+    void loadGame();
 
 };
 

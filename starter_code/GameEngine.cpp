@@ -78,10 +78,10 @@ void GameEngine::newGame(){
     menu.newGamePt2();
 
     tileBag.makeBag();
-    for (auto i : players){
-        // give players their hands
-        // using i->appropriateMethodHere()
-    }
+    // for (auto i : players){
+    //     // give players their hands
+    //     // using i->appropriateMethodHere()
+    // }
 
     gameLoop();
 }
@@ -109,26 +109,35 @@ void GameEngine::gameLoop(){
                     std::getline(std::cin, userInput);
 
                     if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
+                        // place tile
                         turnComplete = placeTile(*players.at(i), field[0].str()[6], field[0].str()[7],
                                                 field[0].str()[12], field[0].str()[13]);
+
+                        // check if game is finished
                         if (tileBag.size() == 0 && players.at(i)->getHand()->size() == 0) {
                             gameFinished = true;
                         }
+
                     } else if (std::regex_match(userInput, field, std::regex(R"(replace\s[ROYGBP][1-6])"))) {
+                        // replace tile
                         turnComplete = replaceTile(*players.at(i), field[0].str()[8], field[0].str()[9]);
+
                     }  else if (std::regex_match(userInput, field, std::regex(R"(save\s[a-zA-Z0-9]+)"))) {
-                        // TODO: action - save game
-                        // saveGame();
+                        // save game
+                        saveGame(field[0].str().substr(5), i);
+
                     } else if (userInput == "quit") {
+                        // quit game
                         turnComplete = true;
                         gameQuit = true;
                         gameFinished = true;
+
                     } else {
-                        std::cout << "Invalid input!" << std::endl;
+                        // else print that input is invalid
+                        menu.invalidInput();
+                        
                     }
 
-                    if (!turnComplete)
-                        std::cout << "Couldn't place tile or replace tile!" << std::endl;
                 }
             }
         }
@@ -203,10 +212,37 @@ bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
     return placed;
 }
 
-bool GameEngine::saveGame() {
-    return false;
+void GameEngine::saveGame(std::string fileName, int currentPlayer) {
+    std::ofstream file;
+    fileName.append(".txt");
+    file.open(fileName);
+
+    // get player names, scores, hands and write to file
+    for (auto i : players){
+        std::cout << i->getName() << std::endl;
+        file << i->getName() << std::endl;
+
+        std::cout << i->getScore() << std::endl;
+        file << i->getScore() << std::endl;
+
+        std::cout << i->getHand()->getTiles() << std::endl;
+        file << i->getHand()->getTiles() << std::endl; 
+    }
+
+    // get game board and write to file
+    gameBoard.printBoard(std::cout);
+    gameBoard.printBoard(file);
+
+    // get all tiles in tilebag and write to file
+    file << tileBag.getTileBag()->getTiles() << std::endl;
+
+    // get name of current player and write to file
+    file << players.at(currentPlayer)->getName() << std::endl;
+    
+    file.close();
+
+    menu.gameSaved();
 }
 
-bool GameEngine::loadGame() {
-    return false;
+void GameEngine::loadGame() {
 }
