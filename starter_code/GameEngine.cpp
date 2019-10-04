@@ -36,6 +36,7 @@ void GameEngine::mainMenu() {
         while (!validChoice){
             menu.menuOptions();
             std::cin >> input;
+            std::cin.get();
             if (std::cin.fail() || !(input >= 1 && input <= 4)){
                 std::cout << "Input not accepted" << std::endl;
                 std::cin.clear();
@@ -77,6 +78,10 @@ void GameEngine::newGame(){
     menu.newGamePt2();
 
     tileBag.makeBag();
+    for (auto i : players){
+        // give players their hands
+        // using i->appropriateMethodHere()
+    }
 
     gameLoop();
 }
@@ -88,8 +93,12 @@ void GameEngine::gameLoop(){
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players.size(); i++) {
+
             if (!gameQuit){
-                printGameInfo(i);
+
+                // have menu print the current game state
+                menu.printGameInfo(players, i, gameBoard);
+
                 bool turnComplete = false;
                 while (!turnComplete) {
 
@@ -130,16 +139,6 @@ void GameEngine::gameLoop(){
         // i.e. print out end of game info
         gameFinish();
     }
-}
-
-void GameEngine::printGameInfo(int playerIndex) {
-    std::cout << players[playerIndex]->getName() << ", it's your turn" << std::endl;
-    for (Player *player : players) {
-        std::cout << "Score for " << player->getName() << " is: " << player->getScore() << std::endl;
-    }
-    gameBoard.printBoard(std::cout) ;
-    std::cout << "Your hand is " << std::endl;
-    std::cout << players[playerIndex]->getHand()->getTiles() << std::endl;
 }
 
 void GameEngine::gameFinish(){
@@ -205,5 +204,9 @@ bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
 }
 
 bool GameEngine::saveGame() {
+    return false;
+}
+
+bool GameEngine::loadGame() {
     return false;
 }
