@@ -93,7 +93,7 @@ void GameEngine::gameLoop(){
     bool gameQuit = false;
 
     while (!gameFinished) {
-        for (int i = 0; i < (int) players.size(); i++) {
+        for (int i = 0; i < players.size(); i++) {
 
             if (!gameQuit){
 
@@ -103,16 +103,19 @@ void GameEngine::gameLoop(){
                 bool turnComplete = false;
                 while (!turnComplete) {
 
+                    std::cout << "GOT HERE 1" << std::endl;
+                    
                     // TODO: Ask for input in menu and pass string userInput
                     std::string userInput;
                     std::smatch field;
                     std::cout << "> ";
                     std::getline(std::cin, userInput);
+                    
+                    std::cout << "GOT HERE 2" << std::endl;
 
                     if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
                         // place tile
-                        turnComplete = placeTile(*players.at(i), field[0].str()[6], field[0].str()[7],
-                                                field[0].str()[12], field[0].str()[13]);
+                        turnComplete = placeTile(*players.at(i), field[0].str()[6], field[0].str()[7], field[0].str()[12], field[0].str()[13]);
 
                         // check if game is finished
                         if (tileBag.size() == 0 && players.at(i)->getHand()->size() == 0) {
