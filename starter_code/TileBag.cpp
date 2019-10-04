@@ -1,6 +1,6 @@
 //
 //  TileBag.cpp
-//  
+//
 //
 //  Created by Peter Bui on 22/9/19.
 //
@@ -27,7 +27,8 @@ TileBag::TileBag(LinkedList* loadedTileBag) {
 }
 
 TileBag::~TileBag() {
-    delete tileBag;
+    std::cout << "Got to start delete tileBag" << std::endl;
+    std::cout << "Got to end delete tileBag" << std::endl;
 }
 
 void TileBag::createTiles() {
@@ -63,15 +64,15 @@ void TileBag::sortMethod(Tile* tile) {
 // Not the most efficient, but does allow for code reusability
 void TileBag::shuffleBag() {
     int counter = 0;
-    
+
     while (counter < tileBag->size()) {
         random = rand() % MAX_CHOICE;
         Tile* getTile = tileBag->get(counter);
-        
+
         addRandomTile(random, getTile);
-        
+
         tileBag->deleteAtIndex(counter);
-        
+
         counter++;
     }
 }
@@ -90,19 +91,23 @@ void TileBag::addRandomTile(int random, Tile* tile) {
 void TileBag::showBag() {
     std::cout << "--------" << std::endl;
     std::cout << "Tiles currently in bag:" << "\n" << std::endl;
-    
+
     for (int i = 0; i < tileBag->size(); i++) {
         std::cout << tileBag->get(i)->getColour();
         std::cout << tileBag->get(i)->getShape();
-    
+
         if ((i % 8) == 7) {
             std::cout << std::endl;
         } else {
             std::cout << " ";
         }
     }
-    
+
     std::cout << std::endl << "--------" << std::endl;
+}
+
+Tile* TileBag::getFront() {
+    return getTileBag()->get(0);
 }
 
 int TileBag::size() {

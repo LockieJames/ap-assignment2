@@ -44,6 +44,7 @@ class GameEngine {
         void drawTile(Player player);
         void saveGame(std::string fileName, int currentPlayer);
         void loadGame();
+        int correctRegex(int regex);
 
 };
 

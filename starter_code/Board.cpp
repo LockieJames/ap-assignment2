@@ -17,11 +17,13 @@ Board::Board(std::vector<std::vector<Tile*>> loadedGrid){
 }
 
 Board::~Board() {
+    std::cout << "Got to start delete board" << std::endl;
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLS; ++j) {
             delete grid[i][j];
         }
     }
+    std::cout << "Got to end delete board" << std::endl;
 }
 
 // Returns number of points earned in this turn
@@ -39,18 +41,16 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
     if (grid[row][col] != nullptr)
         validInput = false;
 
-
     if (row <= ROWS && col <= COLS && validInput) {
+        emptyBoard = isEmpty();
         if (emptyBoard) {
+            grid[row][col] = &tile;
             emptyBoard = isEmpty();
-            if (emptyBoard) {
-                grid[row][col] = &tile;
-                emptyBoard = isEmpty();
-                scoreTurn = 1;
-            }
+            scoreTurn = 1;
         } else {
             auto colours = getMap(tile.getColour(), row, col);
             auto shapes = getMap(tile.getShape(), row, col);
+
             int shapesColours[] = { colours["topRight"] + shapes["topRight"],
                                     colours["topLeft"] + shapes["topLeft"],
                                     colours["bottomLeft"] + shapes["bottomLeft"],
@@ -234,5 +234,3 @@ void Board::printCoord(std::ostream &destination, int startNumber) {
     }
     destination << std::endl;
 }
-
-
