@@ -8,10 +8,13 @@
 #include <regex>
 #include "GameEngine.h"
 
+#define MAX_HAND_SIZE 6
+
 GameEngine::GameEngine(int numPlayers){
     this->tileBag = TileBag();
     this->gameBoard = Board();
     this->menu = Menu();
+    this->numPlayers = numPlayers;
 
     for (int i = 0; i < numPlayers; i++) {
         Player* player = new Player();
@@ -71,12 +74,11 @@ void GameEngine::newGame(){
     for (int i = 0; i < (int) players.size(); i++) {
         menu.newGameNames(i + 1);
         std::string name;
+        
         std::getline(std::cin, name);
         players.at(i)->setName(name);
     }
     menu.newGamePt2();
-
-    tileBag.makeBag();
 
     gameLoop();
 }
@@ -85,6 +87,9 @@ void GameEngine::newGame(){
 void GameEngine::gameLoop(){
     bool gameFinished = false;
     bool gameQuit = false;
+    
+    // Instantiate players' hands
+    instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players.size(); i++) {
@@ -202,6 +207,20 @@ bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
         placed = true;
     }
     return placed;
+}
+
+void GameEngine::instantiateHand() {
+    //Instantiate player hands
+    // for loop to loop through vector players
+    // for loop to take tiles from tilebag
+    
+    for (int i = 0; i < numPlayers; i++) {
+        for (int j = 0; j < MAX_HAND_SIZE; j++) {
+            Tile* tile = tileBag.getTileBag()->get(0);
+            players.at(i)->getHand()->addEnd(tile);
+            tileBag.getTileBag()->deleteFront();
+        }
+    }
 }
 
 bool GameEngine::saveGame() {
