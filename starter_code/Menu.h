@@ -29,8 +29,9 @@ class Menu {
         void loadGame();
         void stuInfo();
         void quit();
-        bool choiceMenu(int input);
         void printGameInfo(std::vector<Player *> players, int currentPlayer, Board gameBoard);
+        void invalidInput();
+        void gameSaved();
 
     private:
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lachlan Boughton", "Peter Bui"};

@@ -78,3 +78,11 @@ void Menu::printGameInfo(std::vector<Player *> players, int currentPlayer, Board
     std::cout << "Your hand is " << std::endl;
     std::cout << players.at(currentPlayer)->getHand()->getTiles() << std::endl;
 }
+
+void Menu::invalidInput(){
+    std::cout << "Invalid input!" << std::endl;
+}
+
+void Menu::gameSaved(){
+    std::cout << "Game saved successfully saved" << std::endl;
+}

@@ -17,8 +17,8 @@ class TileBag {
     public:
         TileBag();
         ~TileBag();
-        void createTiles();
         void makeBag();
+        void createTiles();
         void sortMethod(Tile* tile);
         void shuffleBag();
         void addRandomTile(int random, Tile* tile);
