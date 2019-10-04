@@ -81,6 +81,9 @@ void GameEngine::newGame(){
     }
     menu.newGamePt2();
 
+    // Instantiate players' hands
+    instantiateHand();
+    
     gameLoop();
 }
 
@@ -88,9 +91,6 @@ void GameEngine::newGame(){
 void GameEngine::gameLoop(){
     bool gameFinished = false;
     bool gameQuit = false;
-
-    // Instantiate players' hands
-    instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players.size(); i++) {
@@ -257,7 +257,6 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     file.close();
 
     menu.gameSaved();
-}
 }
 
 void GameEngine::loadGame() {
