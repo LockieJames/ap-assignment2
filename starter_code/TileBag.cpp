@@ -22,7 +22,8 @@ TileBag::TileBag() {
 }
 
 TileBag::~TileBag() {
-    
+    std::cout << "Got to start delete tileBag" << std::endl;
+    std::cout << "Got to end delete tileBag" << std::endl;
 }
 
 void TileBag::createTiles() {
@@ -98,6 +99,10 @@ void TileBag::showBag() {
     }
     
     std::cout << std::endl << "--------" << std::endl;
+}
+
+Tile* TileBag::getFront() {
+    return getTileBag()->get(0);
 }
 
 int TileBag::size() {

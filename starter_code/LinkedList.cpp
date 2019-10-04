@@ -13,7 +13,9 @@ LinkedList::LinkedList()
 
 LinkedList::~LinkedList()
 {
+    std::cout << "Got to start delete list" << std::endl;
     clear();
+    std::cout << "Got to end delete list" << std::endl;
 }
 
 int LinkedList::size() {
@@ -187,23 +189,31 @@ bool LinkedList::findNodeByTile(Tile* tile)
 
 Tile* LinkedList::removeTile(char colour, int shape)
 {
-    Tile* requiredNode = nullptr;
+    Tile* requiredTile = nullptr;
     Node* curr = head;
+    int counter = 0;
 
     if(head != nullptr)
     {
-        while(curr != nullptr && requiredNode == nullptr)
+        while(curr != nullptr && requiredTile == nullptr)
         {
             if(curr->tile->getShape() == shape && curr->tile->getColour() == colour)
             {
-                requiredNode = curr->tile;
-                curr->prev->next = curr->next;
-                delete curr;
+                requiredTile = curr->tile;
+                
+                if (curr->prev != nullptr) {
+                    curr->prev->next = curr->next;
+                    delete curr;
+                } else {
+                    deleteFront();
+                }
             }
             curr = curr->next;
+            counter ++;
         }
     }
-    return requiredNode;
+    
+    return requiredTile;
 }
 
 int LinkedList::getIndexByTile(Tile* tile)

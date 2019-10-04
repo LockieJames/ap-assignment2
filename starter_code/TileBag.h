@@ -24,6 +24,7 @@ class TileBag {
         void addRandomTile(int random, Tile* tile);
         void showBag();
         int size();
+        Tile* getFront();
         LinkedList* getTileBag();
     
     private:

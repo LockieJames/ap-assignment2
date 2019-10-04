@@ -30,7 +30,9 @@ class Menu {
         void stuInfo();
         void quit();
         void printGameInfo(std::vector<Player *> players, int currentPlayer, Board gameBoard);
+        void gameFinish(std::vector<Player *> players);
         void invalidInput();
+        void invalidPlay();
         void gameSaved();
 
     private:

@@ -35,12 +35,13 @@ class GameEngine {
     void gameLoop();
     void gameFinish();
     bool gameEndCheck();
-    bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
-    bool replaceTile(Player player, Colour colour, Shape shape);
+    bool placeTile(Player* player, Colour colour, Shape shape, char rowInput, int col);
+    bool replaceTile(Player* player, Colour colour, Shape shape);
     void instantiateHand();
-    void drawTile(Player player);
+    void drawTile(Player* player);
     void saveGame(std::string fileName, int currentPlayer);
     void loadGame();
+    int correctRegex(int regex);
 
 };
 
