@@ -27,9 +27,10 @@ class Menu {
         void newGameNames(int playerNo);
         void newGamePt2();
         void loadGame();
+        void loadGameSuccess();
         void stuInfo();
         void quit();
-        void printGameInfo(std::vector<Player *> players, int currentPlayer, Board gameBoard);
+        void printGameInfo(std::vector<Player *>* players, int currentPlayer, Board* gameBoard);
         void invalidInput();
         void gameSaved();
 

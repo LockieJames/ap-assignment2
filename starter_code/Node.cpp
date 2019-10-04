@@ -16,6 +16,5 @@ Node::Node(Node& other) :
 }
 
 Node::~Node() {
-
 }
 

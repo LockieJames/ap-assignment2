@@ -9,8 +9,9 @@
 int main(void)
 {
     int numPlayers = 2;
-    GameEngine gameEngine(numPlayers);
-    gameEngine.mainMenu();
+    GameEngine* gameEngine = new GameEngine(numPlayers);
+    gameEngine->mainMenu();
+    delete gameEngine;
     
     return EXIT_SUCCESS;
 }

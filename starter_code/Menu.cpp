@@ -47,9 +47,11 @@ void Menu::newGamePt2() {
 }
 
 void Menu::loadGame() {
-    std::cout << "----------------------------------" << std::endl;
-    std::cout << "Not yet implemented" << std::endl;
-    std::cout << "----------------------------------" << std::endl;
+    std::cout << "Enter the filename from which to load the a game" << std::endl;
+}
+
+void Menu::loadGameSuccess() {
+    std::cout << "Qwirkle game successfully loaded" << std::endl;
 }
 
 void Menu::stuInfo() {
@@ -69,14 +71,14 @@ void Menu::quit() {
     std::cout << "Goodbye" << std::endl;
 }
 
-void Menu::printGameInfo(std::vector<Player *> players, int currentPlayer, Board gameBoard) {
-    std::cout << players.at(currentPlayer)->getName() << ", it's your turn" << std::endl;
-    for (auto i : players) {
+void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Board* gameBoard) {
+    std::cout << players->at(currentPlayer)->getName() << ", it's your turn" << std::endl;
+    for (auto i : *players) {
         std::cout << "Score for " << i->getName() << " is: " << i->getScore() << std::endl;
     }
-    gameBoard.printBoard(std::cout);
+    gameBoard->printBoard(std::cout);
     std::cout << "Your hand is " << std::endl;
-    std::cout << players.at(currentPlayer)->getHand()->getTiles() << std::endl;
+    std::cout << players->at(currentPlayer)->getHand()->getTiles() << std::endl;
 }
 
 void Menu::invalidInput(){

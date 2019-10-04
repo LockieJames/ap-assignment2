@@ -6,19 +6,20 @@
 #include "Tile.h"
 
 Board::Board() {
-    grid = std::vector<std::vector<Tile* > > (ROWS);
+    grid = std::vector<std::vector<Tile*>> (ROWS);
     for (int i = 0; i < ROWS; ++i) {
         grid.at(i) = std::vector<Tile*> (COLS);
     }
 }
 
+Board::Board(std::vector<std::vector<Tile*>> loadedGrid){
+    this->grid = loadedGrid;
+}
+
 Board::~Board() {
     for (int i = 0; i < ROWS; ++i) {
         for (int j = 0; j < COLS; ++j) {
-            if (grid[i][j] != nullptr) {
-                delete grid[i][j];
-                grid[i][j] = nullptr;
-            }
+            delete grid[i][j];
         }
     }
 }
@@ -197,7 +198,7 @@ bool Board::printBoard(std::ostream &destination) {
                 letter++;
             } else {
                 destination << PATTERN;
-                if (grid[i][j - 1] != nullptr) {
+                if (grid[i][j - 1]) {
                     destination << grid[i][j - 1]->getColour() << grid[i][j - 1]->getShape();
                 } else {
                     destination << "  ";

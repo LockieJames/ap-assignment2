@@ -21,8 +21,13 @@ TileBag::TileBag() {
     makeBag();
 }
 
+TileBag::TileBag(LinkedList* loadedTileBag) {
+    tileBag = loadedTileBag;
+    random = 0;
+}
+
 TileBag::~TileBag() {
-    
+    delete tileBag;
 }
 
 void TileBag::createTiles() {

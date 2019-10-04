@@ -22,6 +22,7 @@ class Tile;
 class Board {
 public:
     Board();
+    Board(std::vector<std::vector<Tile*>> loadedGrid);
     ~Board();
     bool printBoard(std::ostream &destination);
     int placeTile(Tile &tile, char row, int col);
@@ -37,7 +38,7 @@ private:
     int calculateCol(bool odd, bool right, int col);
     std::map<std::string, int> getMap(int shapeColour, int row, int col);
 
-    std::vector<std::vector<Tile*> > grid;
+    std::vector<std::vector<Tile*>> grid;
     bool emptyBoard = true;
     int scoreTurn;
 };

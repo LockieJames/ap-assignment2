@@ -16,6 +16,7 @@
 class TileBag {
     public:
         TileBag();
+        TileBag(LinkedList* loadedTileBag);
         ~TileBag();
         void makeBag();
         void createTiles();
