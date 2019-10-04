@@ -10,6 +10,9 @@
 
 // #includes decide later
 #include <iostream>
+#include <vector>
+#include "Player.h"
+#include "Board.h"
 
 #define NUM_STUDENTS    4
 
@@ -27,6 +30,7 @@ class Menu {
         void stuInfo();
         void quit();
         bool choiceMenu(int input);
+        void printGameInfo(std::vector<Player *> players, int currentPlayer, Board gameBoard);
 
     private:
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lachlan Boughton", "Peter Bui"};

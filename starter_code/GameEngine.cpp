@@ -39,6 +39,7 @@ void GameEngine::mainMenu() {
         while (!validChoice){
             menu.menuOptions();
             std::cin >> input;
+            std::cin.get();
             if (std::cin.fail() || !(input >= 1 && input <= 4)){
                 std::cout << "Input not accepted" << std::endl;
                 std::cin.clear();
@@ -74,7 +75,7 @@ void GameEngine::newGame(){
     for (int i = 0; i < (int) players.size(); i++) {
         menu.newGameNames(i + 1);
         std::string name;
-        
+
         std::getline(std::cin, name);
         players.at(i)->setName(name);
     }
@@ -87,14 +88,18 @@ void GameEngine::newGame(){
 void GameEngine::gameLoop(){
     bool gameFinished = false;
     bool gameQuit = false;
-    
+
     // Instantiate players' hands
     instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players.size(); i++) {
+
             if (!gameQuit){
-                printGameInfo(i);
+
+                // have menu print the current game state
+                menu.printGameInfo(players, i, gameBoard);
+
                 bool turnComplete = false;
                 while (!turnComplete) {
 
@@ -135,16 +140,6 @@ void GameEngine::gameLoop(){
         // i.e. print out end of game info
         gameFinish();
     }
-}
-
-void GameEngine::printGameInfo(int playerIndex) {
-    std::cout << players[playerIndex]->getName() << ", it's your turn" << std::endl;
-    for (Player *player : players) {
-        std::cout << "Score for " << player->getName() << " is: " << player->getScore() << std::endl;
-    }
-    gameBoard.printBoard(std::cout) ;
-    std::cout << "Your hand is " << std::endl;
-    std::cout << players[playerIndex]->getHand()->getTiles() << std::endl;
 }
 
 void GameEngine::gameFinish(){
@@ -213,7 +208,7 @@ void GameEngine::instantiateHand() {
     //Instantiate player hands
     // for loop to loop through vector players
     // for loop to take tiles from tilebag
-    
+
     for (int i = 0; i < numPlayers; i++) {
         for (int j = 0; j < MAX_HAND_SIZE; j++) {
             Tile* tile = tileBag.getTileBag()->get(0);
@@ -224,5 +219,9 @@ void GameEngine::instantiateHand() {
 }
 
 bool GameEngine::saveGame() {
+    return false;
+}
+
+bool GameEngine::loadGame() {
     return false;
 }
