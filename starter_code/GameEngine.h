@@ -29,6 +29,7 @@ class GameEngine {
     TileBag tileBag;
     Menu menu;
     std::vector<Player *> players;
+    int numPlayers;
 
     void newGame();
     void gameLoop();
@@ -36,6 +37,8 @@ class GameEngine {
     bool gameEndCheck();
     bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
     bool replaceTile(Player player, Colour colour, Shape shape);
+    void instantiateHand();
+    bool saveGame();
     void drawTile(Player player);
     void saveGame(std::string fileName, int currentPlayer);
     void loadGame();

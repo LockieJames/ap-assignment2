@@ -8,10 +8,13 @@
 #include <regex>
 #include "GameEngine.h"
 
+#define MAX_HAND_SIZE 6
+
 GameEngine::GameEngine(int numPlayers){
     this->tileBag = TileBag();
     this->gameBoard = Board();
     this->menu = Menu();
+    this->numPlayers = numPlayers;
 
     for (int i = 0; i < numPlayers; i++) {
         Player* player = new Player();
@@ -72,16 +75,11 @@ void GameEngine::newGame(){
     for (int i = 0; i < (int) players.size(); i++) {
         menu.newGameNames(i + 1);
         std::string name;
+
         std::getline(std::cin, name);
         players.at(i)->setName(name);
     }
     menu.newGamePt2();
-
-    tileBag.makeBag();
-    // for (auto i : players){
-    //     // give players their hands
-    //     // using i->appropriateMethodHere()
-    // }
 
     gameLoop();
 }
@@ -90,6 +88,9 @@ void GameEngine::newGame(){
 void GameEngine::gameLoop(){
     bool gameFinished = false;
     bool gameQuit = false;
+
+    // Instantiate players' hands
+    instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players.size(); i++) {
@@ -135,7 +136,7 @@ void GameEngine::gameLoop(){
                     } else {
                         // else print that input is invalid
                         menu.invalidInput();
-                        
+
                     }
 
                 }
@@ -212,6 +213,20 @@ bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
     return placed;
 }
 
+void GameEngine::instantiateHand() {
+    //Instantiate player hands
+    // for loop to loop through vector players
+    // for loop to take tiles from tilebag
+
+    for (int i = 0; i < numPlayers; i++) {
+        for (int j = 0; j < MAX_HAND_SIZE; j++) {
+            Tile* tile = tileBag.getTileBag()->get(0);
+            players.at(i)->getHand()->addEnd(tile);
+            tileBag.getTileBag()->deleteFront();
+        }
+    }
+}
+
 void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     std::ofstream file;
     fileName.append(".txt");
@@ -226,7 +241,7 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
         file << i->getScore() << std::endl;
 
         std::cout << i->getHand()->getTiles() << std::endl;
-        file << i->getHand()->getTiles() << std::endl; 
+        file << i->getHand()->getTiles() << std::endl;
     }
 
     // get game board and write to file
@@ -238,10 +253,11 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
 
     // get name of current player and write to file
     file << players.at(currentPlayer)->getName() << std::endl;
-    
+
     file.close();
 
     menu.gameSaved();
+}
 }
 
 void GameEngine::loadGame() {
