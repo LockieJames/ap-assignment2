@@ -234,25 +234,21 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
 
     // get player names, scores, hands and write to file
     for (auto i : players){
-        std::cout << i->getName() << std::endl;
         file << i->getName() << std::endl;
 
-        std::cout << i->getScore() << std::endl;
         file << i->getScore() << std::endl;
 
-        std::cout << i->getHand()->getTiles() << std::endl;
         file << i->getHand()->getTiles() << std::endl;
     }
 
     // get game board and write to file
-    gameBoard.printBoard(std::cout);
     gameBoard.printBoard(file);
 
     // get all tiles in tilebag and write to file
     file << tileBag.getTileBag()->getTiles() << std::endl;
 
     // get name of current player and write to file
-    file << players.at(currentPlayer)->getName() << std::endl;
+    file << players.at(currentPlayer)->getName();
 
     file.close();
 
