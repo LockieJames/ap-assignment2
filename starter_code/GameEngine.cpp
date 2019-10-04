@@ -205,10 +205,6 @@ bool GameEngine::replaceTile(Player player, Colour colour, Shape shape){
 }
 
 void GameEngine::instantiateHand() {
-    //Instantiate player hands
-    // for loop to loop through vector players
-    // for loop to take tiles from tilebag
-
     for (int i = 0; i < numPlayers; i++) {
         for (int j = 0; j < MAX_HAND_SIZE; j++) {
             Tile* tile = tileBag.getTileBag()->get(0);

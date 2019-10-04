@@ -234,7 +234,8 @@ std::string LinkedList::getTiles() {
     std::string allTiles = "";
     Node* curr = head;
     while (curr != nullptr) {
-        allTiles += curr->tile->getColour() << curr->tile->getShape();
+        allTiles += curr->tile->getColour();
+        allTiles += std::to_string(curr->tile->getShape());
         if (curr->next != nullptr)
             allTiles += ",";
         curr = curr->next;
