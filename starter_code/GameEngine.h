@@ -38,7 +38,6 @@ class GameEngine {
     bool placeTile(Player player, Colour colour, Shape shape, char rowInput, int col);
     bool replaceTile(Player player, Colour colour, Shape shape);
     void instantiateHand();
-    bool saveGame();
     void drawTile(Player player);
     void saveGame(std::string fileName, int currentPlayer);
     void loadGame();
