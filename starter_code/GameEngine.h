@@ -43,7 +43,7 @@ class GameEngine {
         void instantiateHand();
         void drawTile(Player* player);
         void saveGame(std::string fileName, int currentPlayer);
-        void loadGame();
+        bool loadGame();
         int correctRegex(int regex);
 
 };

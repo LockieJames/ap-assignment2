@@ -35,6 +35,7 @@ class Menu {
         void invalidInput();
         void invalidPlay();
         void gameSaved();
+        void printString(std::string strToPrint);
 
     private:
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lachlan Boughton", "Peter Bui"};

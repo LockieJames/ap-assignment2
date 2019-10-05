@@ -48,6 +48,7 @@ void Menu::newGamePt2() {
 
 void Menu::loadGame() {
     std::cout << "Enter the filename from which to load the a game" << std::endl;
+    std::cout << "> ";
 }
 
 void Menu::loadGameSuccess() {
@@ -98,6 +99,7 @@ void Menu::gameFinish(std::vector<Player *>* players) {
 
 void Menu::invalidInput() {
     std::cout << "Invalid input!" << std::endl;
+    std::cout << std::endl;
 }
 
 void Menu::invalidPlay() {
@@ -106,4 +108,8 @@ void Menu::invalidPlay() {
 
 void Menu::gameSaved(){
     std::cout << "Game saved successfully saved" << std::endl;
+}
+
+void Menu::printString(std::string strToPrint){
+    std::cout << strToPrint << std::endl;
 }

@@ -30,9 +30,13 @@ class SaveLoad {
         ~SaveLoad();
 
         void saveGame(std::string fileName, int currentPlayer, std::vector<Player*>* players, Board* gameBoard, TileBag* tileBag);
-        void loadGame(std::string filename, GameEngine* gameEngine);
+        bool loadGame(std::string filename, GameEngine* gameEngine);
+        std::string getError();
+
 
     private:
+        bool error;
+        std::string errorString;
 
         LinkedList* makeLinkedList(std::string tiles);
         void validateName(std::string name);

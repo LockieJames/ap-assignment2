@@ -8,7 +8,7 @@
 #include "SaveLoad.h"
 
 SaveLoad::SaveLoad(){
-
+    error = false;
 }
 
 SaveLoad::~SaveLoad(){
@@ -42,7 +42,7 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     file.close();
 }
 
-void SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
+bool SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
     // declare objects for data to be loaded
     std::vector<Player*>* playersVector = new std::vector<Player*>;
@@ -53,11 +53,15 @@ void SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
     
     // read from file. the end of each step gets the first line of the next in
     // order to check if current step is finished
+    // open file
+    std::ifstream file;
     try {
 
-        // open file
-        std::ifstream file;
         file.open(fileName);
+        if (!file){
+            throw std::ifstream::failure("Error: file with inputted filename was not found");
+        }
+
         std::string line;
         while (!file.eof()){
 
@@ -140,10 +144,15 @@ void SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
         file.close();
 
     } catch (const std::ifstream::failure& e){
-        std::cout << "Error opening/reading the file" << std::endl;
+        error = true;
+        errorString = e.what();
     }
 
-    gameEngine->loadGameState(playersVector, grid, tileBag, currPlayerIndex);
+    if (!error){
+        gameEngine->loadGameState(playersVector, grid, tileBag, currPlayerIndex);
+    }
+
+    return error;
 
 }
 
@@ -169,13 +178,15 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
 void SaveLoad::validateName(std::string name){
     std::regex validInput = std::regex("[A-Z]+");
     if (!std::regex_match(name, validInput)){
-        //throw InvalidName exception
+        error = true;
+        errorString = "Error: loaded player name was invalid";
     }
 }
 
 int SaveLoad::validateScore(std::string score){
     if (!(score == std::to_string(std::stoi(score)))){
-        // throw InvalidScore exception
+        error = true;
+        errorString = "Error: loaded player score was invalid";
     }
     return std::stoi(score);
 }
@@ -183,7 +194,8 @@ int SaveLoad::validateScore(std::string score){
 void SaveLoad::validateTile(std::string tileString){
     std::regex validTile = std::regex("[ROYGBP][123456]");
     if (!(std::regex_match(tileString, validTile))){
-        // throw InvalidTile exception
+        error = true;
+        errorString = "Error: loaded tile was invalid";
     }
 
 }
@@ -201,7 +213,7 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString){
 
         if (!tile.empty()){
             validateTile(tile);
-            boardRow[i] = new Tile(tile[0], tile[1]);
+            boardRow[i] = new Tile(tile[0], tile[1] - '0');
 
         }
 
@@ -220,8 +232,17 @@ int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPl
     }
 
     if (currentPlayerIndex == -1){
-        // throw InvalidPlayerName exception
+        error = true;
+        errorString = "Error: player whose turn it currently is does not exist in loaded players";
     }
 
     return currentPlayerIndex;
+}
+
+std::string SaveLoad::getError(){
+    std::string returnStr = "There were no errors with saving/loading";
+    if (error){
+        returnStr = errorString;
+    }
+    return returnStr;
 }

@@ -48,7 +48,7 @@ void GameEngine::mainMenu() {
             std::cin >> input;
             std::cin.get();
             if (std::cin.fail() || !(input >= 1 && input <= 4)){
-                std::cout << "Input not accepted" << std::endl;
+                menu.invalidInput();
                 std::cin.clear();
                 std::cin.get();
             } else {
@@ -61,9 +61,10 @@ void GameEngine::mainMenu() {
             quit = true;
         } else if (input == 2) {
             // TODO: action - load game
-            loadGame();
-            // uncomment the line below when loading is implemented
-            quit = true;
+            if (loadGame()){
+                quit = true;
+            }
+            
         } else if (input == 3) {
             menu.stuInfo();
         } else if (input == 4) {
@@ -270,13 +271,18 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     menu.gameSaved();
 }
 
-void GameEngine::loadGame() {
+bool GameEngine::loadGame() {
     menu.loadGame();
     std::string fileName;
     std::getline(std::cin, fileName);
 
     SaveLoad saveLoader = SaveLoad();
-    saveLoader.loadGame(fileName, this);
+    bool loadFailure = saveLoader.loadGame(fileName, this);
+    if (loadFailure) {
+        menu.printString(saveLoader.getError());
+    }
+
+    return !loadFailure;
 }
 
 void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, LinkedList* loadedTileBag, int currentPlayerIndex){
