@@ -272,8 +272,8 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
 
 void GameEngine::loadGame() {
     menu.loadGame();
-    std::string fileName = "test1.txt";
-    //std::getline(std::cin, fileName);
+    std::string fileName;
+    std::getline(std::cin, fileName);
 
     SaveLoad saveLoader = SaveLoad();
     saveLoader.loadGame(fileName, this);

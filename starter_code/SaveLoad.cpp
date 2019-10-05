@@ -160,7 +160,7 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
         validateTile(i);
         std::cout << i[0] << std::endl;
         std::cout << i[1] << std::endl;
-        linkedList->addFront(new Tile(i[0], (int) i[1]));
+        linkedList->addFront(new Tile(i[0], i[1] - '0'));
     }
 
     return linkedList;
