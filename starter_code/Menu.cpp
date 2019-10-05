@@ -1,6 +1,6 @@
 //
 //  Menu.cpp
-//  
+//
 //
 //  Created by Peter Bui on 22/9/19.
 //
@@ -8,11 +8,11 @@
 #include "Menu.h"
 
 Menu::Menu(){
-    
+
 }
 
 Menu::~Menu() {
-    
+
 }
 
 void Menu::startMessage() {
@@ -28,11 +28,11 @@ void Menu::menuOptions() {
     std::cout << "2. Load Game" << std::endl;
     std::cout << "3. Show Student Information" << std::endl;
     std::cout << "4. Quit" << std::endl << std::endl;
-    
+
     std::cout << "> ";
 }
 
-void Menu::newGamePt1() {    
+void Menu::newGamePt1() {
     std::cout << "----------------------------------" << std::endl;
     std::cout << "Starting a New Game" << std::endl;
 }
@@ -48,6 +48,7 @@ void Menu::newGamePt2() {
 
 void Menu::loadGame() {
     std::cout << "Enter the filename from which to load the a game" << std::endl;
+    std::cout << "> ";
 }
 
 void Menu::loadGameSuccess() {
@@ -87,7 +88,7 @@ void Menu::gameFinish(std::vector<Player *>* players) {
     for (auto player : *players) {
         std::cout << "Score for " << player->getName() << ": " << player->getScore() << std::endl;
     }
-    
+
     // Hard coded, can be changed to be more efficient
     if (players->at(0)->getScore() > players->at(1)->getScore()) {
         std::cout << "Player " << players->at(0)->getName() << "won!" << std::endl;
@@ -99,6 +100,7 @@ void Menu::gameFinish(std::vector<Player *>* players) {
 
 void Menu::invalidInput() {
     std::cout << "Invalid input!" << std::endl;
+    std::cout << std::endl;
 }
 
 void Menu::invalidPlay() {
@@ -107,4 +109,8 @@ void Menu::invalidPlay() {
 
 void Menu::gameSaved(){
     std::cout << "Game saved successfully saved" << std::endl;
+}
+
+void Menu::printString(std::string strToPrint){
+    std::cout << strToPrint << std::endl;
 }
