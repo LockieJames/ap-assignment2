@@ -135,8 +135,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
 
                         // place tile
-                        turnComplete = placeTile(players->at(i), field[0].str()[6], field[0].str()[7],
-                                                field[0].str()[12], field[0].str()[13]);
+                        turnComplete = placeTile(players->at(i), field[0].str()[6], field[0].str()[7], field[0].str()[12], field[0].str()[13]);
 
                         // check if game is finished
                         if (tileBag->size() == 0 && players->at(i)->getHand()->size() == 0) {
@@ -191,6 +190,9 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 
     int newShape = correctRegex(shape);
     int newCol = correctRegex(col);
+    
+    std::cout << "newShape: " << newShape << std::endl;
+    std::cout << "newCol: " << newCol << std::endl;
 
     bool placed = false;
     Tile* tile = player->getHand()->removeTile(colour, newShape);
@@ -224,7 +226,13 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 
 void GameEngine::drawTile(Player* player) {
     if (tileBag->size() != 0) {
+        std::cout << "Drew tile" << std::endl;
+        
         player->getHand()->addEnd(tileBag->getFront());
+        
+        std::cout << "replace Tile colour: " << tileBag->getFront()->getColour() << std::endl;
+        std::cout << "replace Tile shape: " << tileBag->getFront()->getShape() << std::endl;
+        
         tileBag->getTileBag()->deleteFront();
     }
 }
@@ -237,9 +245,15 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
 
     // remove a tile from players  hand
     Tile* tile = player->getHand()->removeTile(colour, newShape);
+    
+    std::cout << "replace Tile colour: " << tile->getColour() << std::endl;
+    std::cout << "replace Tile shape: " << tile->getShape() << std::endl;
+    
     if (tile != nullptr) {
         // draw a tile from bag
         player->getHand()->addEnd(tileBag->getTileBag()->get(0));
+        
+        std::cout << "Added tile to hand" << std::endl;
 
         // add player's tile to the bag
         tileBag->getTileBag()->addEnd(tile);

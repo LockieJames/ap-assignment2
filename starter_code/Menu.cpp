@@ -77,6 +77,7 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
         std::cout << "Score for " << i->getName() << " is: " << i->getScore() << std::endl;
     }
     gameBoard->printBoard(std::cout);
+    std::cout << "Your hand size is " << players->at(currentPlayer)->getHand()->size() << std::endl;
     std::cout << "Your hand is " << std::endl;
     std::cout << players->at(currentPlayer)->getHand()->getTiles() << std::endl;
 }

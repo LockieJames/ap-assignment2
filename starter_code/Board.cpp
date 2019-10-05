@@ -44,10 +44,14 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
     if (row <= ROWS && col <= COLS && validInput) {
         emptyBoard = isEmpty();
         if (emptyBoard) {
+            std::cout << "Got to empty board" << std::endl;
+            
             grid[row][col] = &tile;
             emptyBoard = isEmpty();
             scoreTurn = 1;
         } else {
+            std::cout << "Got to else board" << std::endl;
+            
             auto colours = getMap(tile.getColour(), row, col);
             auto shapes = getMap(tile.getShape(), row, col);
 
