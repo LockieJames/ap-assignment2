@@ -29,7 +29,6 @@ GameEngine::~GameEngine(){
     for (int i = 0; i < (int) players->size(); i++){
         delete (*players)[i];
     }
-    players->clear();
     delete players;
 }
 
@@ -280,6 +279,7 @@ bool GameEngine::loadGame() {
     bool loadFailure = saveLoader.loadGame(fileName, this);
     if (loadFailure) {
         menu.printString(saveLoader.getError());
+
     }
 
     return !loadFailure;

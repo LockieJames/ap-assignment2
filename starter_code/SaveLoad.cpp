@@ -150,6 +150,23 @@ bool SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
     if (!error){
         gameEngine->loadGameState(playersVector, grid, tileBag, currPlayerIndex);
+    } else {
+
+        // if error, delete memory on heap
+        // delete players
+        for (auto i : *playersVector){
+            delete i;
+        }
+        delete playersVector;
+
+        // delete tiles in board
+        for (auto i : grid){
+            for (auto j : i){
+                delete j;
+            }
+        }
+        
+        delete tileBag;
     }
 
     return error;
