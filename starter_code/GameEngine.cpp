@@ -142,10 +142,10 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     std::cout << "> ";
                     std::getline(std::cin, userInput);
 
-                    if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-F][0-7])"))) {
+                    if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-Z][0-9]+)"))) {
 
                         // place tile
-                        turnComplete = placeTile(players->at(i), field[0].str()[6], field[0].str()[7], field[0].str()[12], field[0].str()[13]);
+                        turnComplete = placeTile(players->at(i), field[0].str()[6], field[0].str()[7], field[0].str()[12], std::stoi(field[0].str().substr(13)));
 
                         // check if game is finished
                         if (tileBag->size() == 0 && players->at(i)->getHand()->size() == 0) {
@@ -202,17 +202,14 @@ void GameEngine::gameFinish(){
 
 bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowInput, int col) {
     // TODO: add appropriate menu callbacks to print info to console if need be
-
     int newShape = correctRegex(shape);
-    int newCol = correctRegex(col);
 
     bool placed = false;
     Tile* tile = player->getHand()->removeTile(colour, newShape);
     
 //    std::cout << "Got to place tile" << std::endl;
-
     if (tile != nullptr) {
-        int score = gameBoard->placeTile(*tile, rowInput, newCol);
+        int score = gameBoard->placeTile(*tile, rowInput, col);
         if (score != 0) {
             player->addScore(score);
             drawTile(player);
@@ -333,14 +330,14 @@ bool GameEngine::loadGame() {
     return loadSuccess;
 }
 
-void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, LinkedList* loadedTileBag, int currentPlayerIndex){
+void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex){
 
     // delete existing objects on heap 
     this->~GameEngine();
 
     // load new objects
     this->players = loadedPlayers;
-    this->gameBoard = new Board(loadedGameBoard);
+    this->gameBoard = new Board(loadedGameBoard, firstRowOffset);
     this->tileBag = new TileBag(loadedTileBag);
 
     // proceed into main game loop starting with the player whose turn it currently is

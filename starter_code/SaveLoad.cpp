@@ -50,6 +50,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
     std::vector<std::vector<Tile*>> grid;
     LinkedList* tileBag = nullptr;
     std::string playerName;
+    bool firstRowOffset = false;
     int currPlayerIndex = -1;
     
     // read from file. the end of each step gets the first line of the next in
@@ -97,10 +98,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                         i = 3;
                         players = false;
                     } else if (line[0] == ' ' && i != PLAYER_NAME_POS){
-                        // if this line is the game board, and the program is
-                        // not checking for the player's name (i.e. save file
-                        // is structured wrong),
-                        // throw InvalidSaveFile exception
+                        throw std::ifstream::failure("Error: invalid save file");
                     }
                 }
 
@@ -115,10 +113,21 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
             bool board = true;
             // define regex expressions to identify different lines of board
             std::regex boardRows = std::regex("[A-Z]\\s");
-            std::regex tiles = std::regex("[ROYGBP][123456]");  
+            std::regex tiles = std::regex("[ROYGBP][123456]");
+            bool firstRow = true;
             while (board){
-                // if line is a board row, add it to vector of rowsx
+                // if line is a board row, add it to vector of rows
                 if (std::regex_match(line.substr(0, 2), boardRows)){
+
+                    // if first row of board, check if first row is offset
+                    if (firstRow){
+                        std::regex rowOffsetCheck = std::regex("[A-Z]\\s\\s\\s\\s\\s|");
+                        if (std::regex_match(line.substr(0, 7), rowOffsetCheck)){
+                            firstRowOffset = true;
+                        }
+                        firstRow = false;
+                    }
+
                     grid.push_back(parseBoardRow(line));
 
                 }
@@ -128,6 +137,10 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                 if (std::regex_match(line.substr(0, 2), tiles)){
                     board = false;
                 }
+            }
+
+            if (grid.size() > MAX_ROWS){
+                throw std::ifstream::failure("Error: loaded board has more than the maximum number of rows");
             }
 
             // load tiles in tile bag
@@ -140,16 +153,16 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
             // get index of current player's name
             currPlayerIndex = getCurrPlayer(playersVector, playerName);
-        }
 
-        file.close();
+            file.close();
+        }
 
     } catch (const std::ifstream::failure& e){
         errorMsg= e.what();
     }
 
     if (errorMsg.empty()){
-        gameEngine->loadGameState(playersVector, grid, tileBag, currPlayerIndex);
+        gameEngine->loadGameState(playersVector, grid, firstRowOffset, tileBag, currPlayerIndex);
     } else {
 
         // if error, delete memory on heap
@@ -170,7 +183,6 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
     }
 
     return errorMsg;
-
 }
 
 LinkedList* SaveLoad::makeLinkedList(std::string tiles){
@@ -184,8 +196,6 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     LinkedList* linkedList = new LinkedList();
     for (auto i : tileContainer){
         validateTile(i);
-        std::cout << i[0] << std::endl;
-        std::cout << i[1] << std::endl;
         linkedList->addFront(new Tile(i[0], i[1] - '0'));
     }
 
@@ -217,10 +227,13 @@ void SaveLoad::validateTile(std::string tileString) noexcept(false){
 std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString) noexcept(false){
     int rowStart = boardRowString.find('|');
     std::vector<Tile*> boardRow;
-    std::stringstream ss(boardRowString.substr(rowStart));
+    std::stringstream ss(boardRowString.substr(rowStart + 1));
     std::string tile;
     int i = 0;
     while (std::getline(ss, tile, '|')){
+        if (i > MAX_COLS){
+            throw std::ifstream::failure("Error: loaded board has more than the maximum number of columns");
+        }
         boardRow.resize(boardRow.size() + 1);
 
         tile.erase(remove(tile.begin(), tile.end(), ' '), tile.end());

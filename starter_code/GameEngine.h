@@ -24,7 +24,7 @@ class GameEngine {
     public:
         GameEngine(int numPlayers);
         ~GameEngine();
-        void loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, LinkedList* loadedTileBag, int currentPlayerIndex);
+        void loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex);
         void mainMenu();
 
     private:

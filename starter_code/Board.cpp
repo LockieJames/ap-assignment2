@@ -3,23 +3,24 @@
 #include <map>
 
 #include "Board.h"
-#include "Tile.h"
 
 Board::Board() {
     grid = std::vector<std::vector<Tile*>> (ROWS);
     for (int i = 0; i < ROWS; ++i) {
         grid.at(i) = std::vector<Tile*> (COLS);
     }
+    firstRowOffset = false;
 }
 
-Board::Board(std::vector<std::vector<Tile*>> loadedGrid){
+Board::Board(std::vector<std::vector<Tile*>> loadedGrid, bool firstRowOffset){
     this->grid = loadedGrid;
+    this->firstRowOffset = firstRowOffset;
 }
 
 Board::~Board() {
 //    std::cout << "Got to start delete board" << std::endl;
-    for (int i = 0; i < ROWS; ++i) {
-        for (int j = 0; j < COLS; ++j) {
+    for (int i = 0; i < (int) grid.size(); ++i) {
+        for (int j = 0; j < (int) grid.at(i).size(); ++j) {
             delete grid[i][j];
         }
     }
@@ -33,15 +34,24 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
     int row = rowInput - A_VALUE;
 
     bool validInput = false;
-    if ((row + col) % 2 == 0)
-        validInput = true;
+    if (!firstRowOffset){
+        if ((row + col) % 2 == 0) {
+            validInput = true;
+        }
+    } else {
+        if ((row + col + 1) % 2 == 0) {
+            validInput = true;
+        }
+    }
 
     col = col / 2;
 
-    if (grid[row][col] != nullptr)
+    if (grid[row][col] != nullptr) {
         validInput = false;
+    }
 
-    if (row <= ROWS && col <= COLS && validInput) {
+
+    if (row <= (int) grid.size() - 1 && col <= (int) grid.at(0).size() - 1 && validInput) {
         emptyBoard = isEmpty();
         if (emptyBoard) {
             grid[row][col] = &tile;
@@ -94,12 +104,23 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
             }
         }
     }
+
+    if (scoreTurn != 0){
+        expandBoard();
+    }
+
     return scoreTurn;
 }
 
 int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool right) {
     int inputColourShape = 0;
-    bool odd = row % 2 == 1;
+    bool odd;
+    if (!firstRowOffset){
+        odd = row % 2 == 1;
+    } else {
+        odd = (row + 1) % 2 == 1;
+    }
+
     bool border = (edgeRow(row, rowDirection) || edgeCol(col, odd, right));
     col = calculateCol(odd, right, col);
     row = row + rowDirection;
@@ -107,6 +128,7 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
     int numberOfCheckedTiles = 0;
 
     while (!border && grid[row][col] != nullptr && numberOfCheckedTiles <= QWIRKLE) {
+
         int positionValue = 0;
 
         if (colourShape < 6) {
@@ -154,11 +176,11 @@ int Board::calculateCol(bool odd, bool right, int col) {
 }
 
 bool Board::edgeRow(int row, int rowDirection) {
-    return (row == 0 && rowDirection == -1) || (row == ROWS - 1 && rowDirection == 1);
+    return (row == 0 && rowDirection == -1) || (row == (int) grid.size() - 1 && rowDirection == 1);
 }
 
 bool Board::edgeCol(int col, bool odd, bool right) {
-    return (col == 0 && !odd && !right) || (col == COLS - 1 && odd && right);
+    return (col == 0 && !odd && !right) || (col == (int) grid.at(0).size() - 1 && odd && right);
 }
 
 std::map<std::string, int> Board::getMap(int shapeColour, int row, int col) {
@@ -172,8 +194,8 @@ std::map<std::string, int> Board::getMap(int shapeColour, int row, int col) {
 
 bool Board::isEmpty() {
     bool isEmpty = true;
-    for (int i = 0; i < ROWS; ++i) {
-        for (int j = 0; j < COLS; ++j) {
+    for (int i = 0; i < (int) grid.size(); ++i) {
+        for (int j = 0; j < (int) grid.at(i).size(); ++j) {
             if (grid[i][j] != nullptr) {
                 isEmpty = false;
             }
@@ -186,10 +208,10 @@ bool Board::printBoard(std::ostream &destination) {
     char letter = 'A';
     printCoord(destination, 0);
     printBorder(destination);
-    bool odd = false;
+    bool odd = firstRowOffset;
 
-    for (int i = 0; i < ROWS; ++i) {
-        for (int j = 0; j < (COLS + 1); ++j) {
+    for (int i = 0; i < (int) grid.size(); ++i) {
+        for (int j = 0; j < ((int) grid.at(i).size() + 1); ++j) {
             if (j == 0) {
                 destination << letter << " ";
                 if (odd) {
@@ -205,7 +227,7 @@ bool Board::printBoard(std::ostream &destination) {
                 }
             }
         }
-        destination << "  |";
+        destination << " |";
         odd = !odd;
         destination << std::endl;
     }
@@ -217,9 +239,10 @@ bool Board::printBoard(std::ostream &destination) {
 
 void Board::printBorder(std::ostream &destination) {
     destination << SPACE;
-    for (int k = 0; k < COLS + 1; ++k) {
+    for (int k = 0; k < (int) grid.at(0).size(); ++k) {
         destination << BORDER_PATTERN;
     }
+    destination << BORDER_PATTERN_END;
     destination << std::endl;
 }
 
@@ -228,9 +251,59 @@ void Board::printCoord(std::ostream &destination, int startNumber) {
     if(startNumber % 2 == 1) {
         destination << SPACE;
     }
-    for (int i = 0; i < COLS; ++i) {
-        destination << "  " << startNumber << "  ";
+    for (int i = 0; i < (int) grid.at(0).size(); ++i) {
+        if (std::to_string(startNumber).length() == 2){
+            destination << " " << startNumber << "  ";
+        } else {
+            destination << "  " << startNumber << "  ";
+        }
         startNumber += 2;
     }
     destination << std::endl;
+}
+
+void Board::expandBoard(){
+
+    printBoard(std::cout);
+
+    std::cout << "checking front of rows needs to be expanded" << std::endl;
+    for (auto i : grid.at(0)){
+        if (i && (int) grid.size() <= MAX_ROWS){
+            grid.insert(grid.begin(), std::vector<Tile *>(grid.at(grid.size() - 1).size()));
+            std::cout << "expanded front of rows" << std::endl;
+            firstRowOffset = !firstRowOffset;
+        }
+    }
+
+    std::cout << "checking back of rows needs to be expanded" << std::endl;
+    // expand back row
+    for (auto i : grid.at(grid.size() - 1)){
+        if (i && (int) grid.size() <= MAX_ROWS){
+            grid.insert(grid.end(), std::vector<Tile *>(grid.at(0).size()));
+            std::cout << "expanded back of rows" << std::endl;
+        }
+    }
+
+    std::cout << "checking front of cols needs to be expanded" << std::endl;
+    // expand front col
+    for (int i = 0; i < (int) grid.size(); i++){
+        if (grid.at(i).at(0) && grid.at(i).size() <= MAX_COLS){
+            for (int j = 0; j < (int) grid.size(); j++){
+                grid.at(j).insert(grid.at(j).begin(), nullptr);
+
+            }
+            std::cout << "expanded front of cols" << std::endl;
+        }
+    }
+
+    std::cout << "checking back of cols needs to be expanded" << std::endl;
+    // expand back col
+    for (int i = 0; i < (int) grid.size(); i++){
+        if (grid.at(i).at(grid.at(i).size() - 1) && (int) grid.at(i).size() <= MAX_COLS){
+            for (int j = 0; j < (int) grid.size(); j++){
+                grid.at(j).insert(grid.at(j).end(), nullptr);
+            }
+            std::cout << "expanded back of cols" << std::endl;
+        }
+    }
 }

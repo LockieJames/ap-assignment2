@@ -21,6 +21,8 @@
 #define PLAYER_NAME_POS 0
 #define PLAYER_SCORE_POS 1
 #define PLAYER_HANDS_POS 2
+#define MAX_COLS 26 / 2
+#define MAX_ROWS 26
 
 class GameEngine;
 
