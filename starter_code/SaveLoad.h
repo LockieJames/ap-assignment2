@@ -30,20 +30,17 @@ class SaveLoad {
         ~SaveLoad();
 
         void saveGame(std::string fileName, int currentPlayer, std::vector<Player*>* players, Board* gameBoard, TileBag* tileBag);
-        bool loadGame(std::string filename, GameEngine* gameEngine);
-        std::string getError();
+        std::string loadGame(std::string filename, GameEngine* gameEngine);
 
 
     private:
-        bool error;
-        std::string errorString;
 
-        LinkedList* makeLinkedList(std::string tiles);
-        void validateName(std::string name);
-        int validateScore(std::string score);
-        void validateTile(std::string tileString);
-        std::vector<Tile*> parseBoardRow(std::string boardRowString);
-        int getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName);
+        LinkedList* makeLinkedList(std::string tiles) noexcept(false);
+        void validateName(std::string name) noexcept(false);
+        int validateScore(std::string score) noexcept(false);
+        void validateTile(std::string tileString) noexcept(false);
+        std::vector<Tile*> parseBoardRow(std::string boardRowString) noexcept(false);
+        int getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) noexcept(false);
 
 };
 
