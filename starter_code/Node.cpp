@@ -16,5 +16,7 @@ Node::Node(Node& other) :
 }
 
 Node::~Node() {
+    // For debugging
+//    std::cout << "Got to node delete" << std::endl;
 }
 

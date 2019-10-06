@@ -14,7 +14,10 @@ Player::Player(std::string loadedName, int loadedScore, LinkedList* loadedHand){
 
 Player::~Player()
 {
+//    clearTiles();
+//    std::cout << "Got to start delete player" << std::endl;
     delete hand;
+//    std::cout << "Got to end delete player" << std::endl;
 }
 
 std::string Player::getName()
@@ -45,16 +48,4 @@ LinkedList* Player::getHand()
 int Player::getHandSize()
 {
     return hand->size();
-}
-
-// TODO: The player placing a tile
-
-// TODO: Replacing a tile in the players hand
-void Player::replaceTile(Tile* tile)
-{
-    // Validate that tile is in hand
-    if(hand->findNodeByTile(tile))
-    {
-        hand->deleteAtIndex(hand->getIndexByTile(tile));
-    }
 }

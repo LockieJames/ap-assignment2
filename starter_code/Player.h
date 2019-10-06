@@ -23,6 +23,7 @@ class Player
         LinkedList* getHand();
         int getHandSize();
         void replaceTile(Tile* tile);
+        void clearTiles();
 };
 
 #endif

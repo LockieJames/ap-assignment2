@@ -8,27 +8,34 @@ LinkedList::LinkedList()
 {
     head = nullptr;
     tail = nullptr;
-    numTiles = 0;
 }
 
 LinkedList::~LinkedList()
 {
-    std::cout << "Got to start delete list" << std::endl;
+//    std::cout << "Got to start delete list" << std::endl;
     clear();
-    std::cout << "Got to end delete list" << std::endl;
+//    std::cout << "Got to end delete list" << std::endl;
 }
 
 int LinkedList::size() {
-    return numTiles;
+    int counter = 0;
+    Node* curr = head;
+    
+    while (curr != nullptr) {
+        curr = curr->next;
+        counter++;
+    }
+    
+    return counter;
 }
 
 void LinkedList::clear() {
     while (head != nullptr) {
         Node* nNode = head;
         head = head->next;
+        delete nNode->tile;
         delete nNode;
     }
-    numTiles = 0;
     
     tail = nullptr;
     
@@ -39,7 +46,7 @@ void LinkedList::clear() {
 Tile* LinkedList::get(int i) {
     Tile* cTile = nullptr;
     
-    if (i > -1 && i < numTiles) {
+    if (i > -1 && i < size()) {
         Node* curr = head;
         int count = 0;
         
@@ -69,9 +76,9 @@ void LinkedList::addFront(Tile* tile) {
     }
     else {
         head->prev = nNode;
+        nNode->next = head;
         head = nNode;
     }
-    numTiles++;
 }
 
 void LinkedList::addEnd(Tile* tile) {
@@ -80,13 +87,14 @@ void LinkedList::addEnd(Tile* tile) {
     if (head == nullptr) {
         head = nNode;
     } else {
-        tail = head;
-        while (tail->next != nullptr) {
-            tail = tail->next;
+        Node* travel = head;
+        while (travel->next != nullptr) {
+            travel = travel->next;
         }
-        tail->next = nNode;
+        travel->next = nNode;
+        nNode->prev = travel;
+        tail = nNode;
     }
-    numTiles++;
 }
 
 void LinkedList::addMid(Tile* tile) {
@@ -95,38 +103,36 @@ void LinkedList::addMid(Tile* tile) {
 
     if (head == nullptr) {
         head = nNode;
-    } else if (numTiles < BEFORE_MID) {
+    } else if (size() < BEFORE_MID) {
         addEnd(tile);
-        numTiles--;
     } else {
-        int middle = numTiles / 2;
+        int middle = (size() / 2) - 1;
         
-        Node* currNode = head;
+        Node* travel = head;
         
-        while (currNode->next != nullptr && counter != middle) {
-            currNode = currNode->next;
+        // travel->next != nullptr &&
+        while (travel->next != nullptr && counter != middle) {
+            travel = travel->next;
             counter++;
         }
+
+        nNode->prev = travel;
+        nNode->next = travel->next;
         
-        nNode->prev = currNode;
-        nNode->next = currNode->next;
-        
-        if (currNode->next->next != nullptr) {
-            currNode->next = nNode;
-            currNode->next->next->prev = nNode;
-        } else {
-            currNode->next = nNode;
+        // In case there is a nullptr somehow
+        if (travel->next != nullptr) {
+            travel->next->prev = nNode;
+            travel->next = nNode;
         }
     }
-    numTiles++;
 }
 
 void LinkedList::deleteFront() {
     if (head != nullptr) {
-        Node* nNode = head;
+        Node* curr = head;
         head = head->next;
-        delete nNode;
-        numTiles--;
+        head->prev = nullptr;
+        delete curr;
     }
     if (head == nullptr) {
         tail = nullptr;
@@ -134,111 +140,146 @@ void LinkedList::deleteFront() {
 }
 
 // Can change to be more efficient/less complex
-void LinkedList::deleteAtIndex(int i) {
-    if (i > -1 && i < numTiles) {
-        Node* curr = head;
-        // For deleting at specific index
-        Node* prev = nullptr;
-        int count = 0;
-        
-        while (curr != nullptr && count < i) {
-            prev = curr;
-            curr = curr->next;
-            count++;
-        }
-        
-        if (count == i) {
-            if (i == 0 || prev == nullptr) {
-                deleteFront();
-            } else {
-                prev->next = curr->next;
-                delete curr;
-                numTiles--;
-            }
-        }
-        else {
-            throw std::runtime_error("Not Deleted: Index could not be found");
-        }
-    } else {
-        throw std::out_of_range("Not Deleted: Provided index not acceptable");
-    }
-}
-
-// Returns true if the tile exists in the linked list, else false
-bool LinkedList::findNodeByTile(Tile* tile)
-{
-    bool found = false;
-    
-    Node* curr = head;
-    
-    if(head != nullptr)
-    {
-        while(curr != nullptr && !found)
-        {
-            if(curr->tile == tile)
-            {
-                found = true;
-            }
-            
-            curr = curr->next;
-        }
-    }
-    
-    return found;
-}
+//void LinkedList::deleteAtIndex(int i) {
+//    if (i > -1 && i < size()) {
+//        Node* curr = head;
+//        // For deleting at specific index
+//        Node* prev = nullptr;
+//        int count = 0;
+//
+//        std::cout << "Index: " << i << std::endl;
+//
+//        while (curr != nullptr && count < i) {
+//            prev = curr;
+//            curr = curr->next;
+//            count++;
+//        }
+//
+//        std::cout << "Count: " << count << std::endl;
+//
+//        if (count == i) {
+//            if (i == 0 || prev == nullptr) {
+//                deleteFront();
+//            } else {
+//                prev->next = curr->next;
+//                delete curr;
+//            }
+//        }
+//        else {
+//            throw std::runtime_error("Not Deleted: Index could not be found");
+//        }
+//    } else {
+//        throw std::out_of_range("Not Deleted: Provided index not acceptable");
+//    }
+//}
 
 Tile* LinkedList::removeTile(char colour, int shape)
 {
     Tile* requiredTile = nullptr;
     Node* curr = head;
-    int counter = 0;
+    int counter = 1;
+    
+//    std::cout << "Got to remove tile" << std::endl;
 
     if(head != nullptr)
     {
+//        std::cout << "Got to head != nullptr" << std::endl;
+        
         while(curr != nullptr && requiredTile == nullptr)
         {
             if(curr->tile->getShape() == shape && curr->tile->getColour() == colour)
             {
-                requiredTile = curr->tile;
+                char nColour = curr->tile->getColour();
+                int nShape = curr->tile->getShape();
                 
+//                std::cout << "Tile is at: " << counter << std::endl;
+//
+//                std::cout << "Got to place tile nColour: " << nColour << std::endl;
+//                std::cout << "Got to place tile nShape: " << nShape << std::endl;
+
+                requiredTile = new Tile(nColour, nShape);
+                
+                // Rework node workings
                 if (curr->prev != nullptr) {
+//                    std::cout << "Got to curr->prev != nullptr" << std::endl;
+                    
+//                    std::cout << "Got to curr->prev tile Colour: " << curr->prev->tile->getColour() << std::endl;
+//                    std::cout << "Got to curr->prev tile Shape: " << curr->prev->tile->getShape() << std::endl;
+                    
                     curr->prev->next = curr->next;
+                    
+                    if (curr->next != nullptr) {
+                        curr->next->prev = curr->prev;
+//                        std::cout << "Got to curr->next tile Colour: " << curr->next->tile->getColour() << std::endl;
+//                        std::cout << "Got to curr->next tile Shape: " << curr->next->tile->getShape() << std::endl;
+                    }
+                    
+//                    std::cout << "Got to after curr tile colour: " << curr->tile->getColour() << std::endl;
+//                    std::cout << "Got to after curr tile shape: " << curr->tile->getShape() << std::endl;
+                    
                     delete curr;
                 } else {
+//                    std::cout << "Got to place tile deleteFront" << std::endl;
                     deleteFront();
                 }
             }
+            counter++;
             curr = curr->next;
-            counter ++;
         }
     }
+    
+//    std::cout << "tile in required tile colour: " << requiredTile->getColour() << std::endl;
+//    std::cout << "tile in required tile shape: " << requiredTile->getShape() << std::endl;
     
     return requiredTile;
 }
 
-int LinkedList::getIndexByTile(Tile* tile)
-{
-    bool found = false;
-    int index = 0;
-    
-    Node* curr = head;
-    
-    if(head != nullptr)
-    {
-        while(curr != nullptr && !found)
-        {
-            if(curr->tile == tile)
-            {
-                found = true;
-            }
-            
-            curr = curr->next;
-            index++;
-        }
-    }
-    
-    return index;
-}
+// Returns true if the tile exists in the linked list, else false
+//bool LinkedList::findNodeByTile(Tile* tile)
+//{
+//    bool found = false;
+//
+//    Node* curr = head;
+//
+//    if(head != nullptr)
+//    {
+//        while(curr != nullptr && !found)
+//        {
+//            if(curr->tile == tile)
+//            {
+//                found = true;
+//            }
+//
+//            curr = curr->next;
+//        }
+//    }
+//
+//    return found;
+//}
+//
+//int LinkedList::getIndexByTile(Tile* tile)
+//{
+//    bool found = false;
+//    int index = 0;
+//
+//    Node* curr = head;
+//
+//    if(head != nullptr)
+//    {
+//        while(curr != nullptr && !found)
+//        {
+//            if(curr->tile == tile)
+//            {
+//                found = true;
+//            }
+//
+//            curr = curr->next;
+//            index++;
+//        }
+//    }
+//
+//    return index;
+//}
 
 std::string LinkedList::getTiles() {
     std::string allTiles = "";
@@ -251,4 +292,16 @@ std::string LinkedList::getTiles() {
         curr = curr->next;
     }
     return allTiles;
+}
+
+void LinkedList::clearTiles() {
+    Node* curr = head;
+    int counter = 0;
+    
+    while (counter < size()) {
+        delete curr->tile;
+        curr = curr->next;
+        counter++;
+//        std::cout << "Tile " << counter << " deleted" << std::endl;
+    }
 }

@@ -10,8 +10,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX_SHUFFLE 2
+#define MAX_CREATE 2
+#define MAX_SHUFFLE 5
 #define MAX_CHOICE 3
+#define MAX_CHOICE_2 2
 
 TileBag::TileBag() {
     tileBag = new LinkedList();
@@ -27,8 +29,9 @@ TileBag::TileBag(LinkedList* loadedTileBag) {
 }
 
 TileBag::~TileBag() {
-    std::cout << "Got to start delete tileBag" << std::endl;
-    std::cout << "Got to end delete tileBag" << std::endl;
+//    std::cout << "Got to start delete tileBag" << std::endl;
+    delete tileBag;
+//    std::cout << "Got to end delete tileBag" << std::endl;
 }
 
 void TileBag::createTiles() {
@@ -44,7 +47,7 @@ void TileBag::makeBag() {
     int create = 0;
     int shuffle = 0;
 
-    while (create < MAX_SHUFFLE) {
+    while (create < MAX_CREATE) {
         createTiles();
         create++;
     }
@@ -65,25 +68,34 @@ void TileBag::sortMethod(Tile* tile) {
 void TileBag::shuffleBag() {
     int counter = 0;
 
-    while (counter < tileBag->size()) {
-        random = rand() % MAX_CHOICE;
-        Tile* getTile = tileBag->get(counter);
+    while (counter < tileBag->size()/2) {
+        random = rand() % MAX_CHOICE_2;
+        
+        Colour nColour = getFront()->getColour();
+        Shape nShape = getFront()->getShape();
+        
+        Tile* getTile = new Tile(nColour, nShape);
 
         addRandomTile(random, getTile);
 
-        tileBag->deleteAtIndex(counter);
+        tileBag->deleteFront();
 
         counter++;
     }
 }
 
 void TileBag::addRandomTile(int random, Tile* tile) {
+    Colour nColour = tile->getColour();
+    Shape nShape = tile->getShape();
+    
+    Tile* nTile = new Tile(nColour, nShape);
+    
     if (random == 0) {
-        tileBag->addFront(tile);
+        tileBag->addMid(nTile);
     } else if (random == 1) {
-        tileBag->addEnd(tile);
+        tileBag->addEnd(nTile);
     } else if (random == 2) {
-        tileBag->addMid(tile);
+        tileBag->addFront(nTile);
     }
 }
 

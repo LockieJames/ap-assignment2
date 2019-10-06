@@ -26,11 +26,11 @@ class LinkedList
         int getIndexByTile(Tile* tile);
         std::string getTiles();
         Tile* removeTile(char colour, int shape);
+        void clearTiles();
 
     private:
         Node* head;
         Node* tail;
-        int numTiles;
 };
 
 #endif // ASSIGN2_LINKEDLIST_H
