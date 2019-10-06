@@ -8,7 +8,6 @@
 #include "SaveLoad.h"
 
 SaveLoad::SaveLoad(){
-    error = false;
 }
 
 SaveLoad::~SaveLoad(){
@@ -42,7 +41,9 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     file.close();
 }
 
-bool SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
+std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
+
+    std::string errorMsg;
 
     // declare objects for data to be loaded
     std::vector<Player*>* playersVector = new std::vector<Player*>;
@@ -144,11 +145,10 @@ bool SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
         file.close();
 
     } catch (const std::ifstream::failure& e){
-        error = true;
-        errorString = e.what();
+        errorMsg= e.what();
     }
 
-    if (!error){
+    if (errorMsg.empty()){
         gameEngine->loadGameState(playersVector, grid, tileBag, currPlayerIndex);
     } else {
 
@@ -165,11 +165,11 @@ bool SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                 delete j;
             }
         }
-        
+
         delete tileBag;
     }
 
-    return error;
+    return errorMsg;
 
 }
 
@@ -192,32 +192,29 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     return linkedList;
 }
 
-void SaveLoad::validateName(std::string name){
+void SaveLoad::validateName(std::string name) noexcept(false){
     std::regex validInput = std::regex("[A-Z]+");
     if (!std::regex_match(name, validInput)){
-        error = true;
-        errorString = "Error: loaded player name was invalid";
+        throw std::ifstream::failure("Error: loaded player name was invalid");
     }
 }
 
-int SaveLoad::validateScore(std::string score){
+int SaveLoad::validateScore(std::string score) noexcept(false){
     if (!(score == std::to_string(std::stoi(score)))){
-        error = true;
-        errorString = "Error: loaded player score was invalid";
+        throw std::ifstream::failure("Error: loaded player score was invalid");
     }
     return std::stoi(score);
 }
 
-void SaveLoad::validateTile(std::string tileString){
+void SaveLoad::validateTile(std::string tileString) noexcept(false){
     std::regex validTile = std::regex("[ROYGBP][123456]");
     if (!(std::regex_match(tileString, validTile))){
-        error = true;
-        errorString = "Error: loaded tile was invalid";
+        throw std::ifstream::failure("Error: loaded tile was invalid");
     }
 
 }
 
-std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString){
+std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString) noexcept(false){
     int rowStart = boardRowString.find('|');
     std::vector<Tile*> boardRow;
     std::stringstream ss(boardRowString.substr(rowStart));
@@ -240,7 +237,7 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString){
     return boardRow;
 }
 
-int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName){
+int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) noexcept(false){
     int currentPlayerIndex = -1;
     for (int i = 0; i < (int) players->size(); i++){
         if (players->at(i)->getName() == currentPlayerName){
@@ -249,17 +246,8 @@ int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPl
     }
 
     if (currentPlayerIndex == -1){
-        error = true;
-        errorString = "Error: player whose turn it currently is does not exist in loaded players";
+        throw std::ifstream::failure("Error: player whose turn it currently is does not exist in loaded players");
     }
 
     return currentPlayerIndex;
-}
-
-std::string SaveLoad::getError(){
-    std::string returnStr = "There were no errors with saving/loading";
-    if (error){
-        returnStr = errorString;
-    }
-    return returnStr;
 }

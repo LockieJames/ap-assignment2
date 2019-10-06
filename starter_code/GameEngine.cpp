@@ -24,12 +24,17 @@ GameEngine::GameEngine(int numPlayers){
 }
 
 GameEngine::~GameEngine(){
+    std::cout << "deleting tilebag" << std::endl;
     delete tileBag;
+    std::cout << "deleting gameBoard" << std::endl;
     delete gameBoard;
+    std::cout << "deleting individual players" << std::endl;
     for (int i = 0; i < (int) players->size(); i++){
         delete (*players)[i];
     }
+    std::cout << "deleting players vector" << std::endl;
     delete players;
+    std::cout << "deletion finished" << std::endl;
 }
 
 // prints main menu using menu.menuOptions(), gets user's choice, and calls appropriate methods
@@ -285,28 +290,38 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
 }
 
 bool GameEngine::loadGame() {
+    bool loadSuccess = false;
+
+    // get filename to be loaded from user
     menu.loadGame();
     std::string fileName;
     std::getline(std::cin, fileName);
 
+    // attempt to load game
     SaveLoad saveLoader = SaveLoad();
-    bool loadFailure = saveLoader.loadGame(fileName, this);
-    if (loadFailure) {
-        menu.printString(saveLoader.getError());
+    std::string errorMsg = saveLoader.loadGame(fileName, this);
 
+    // if there was an error, print the error, otherwise indicate that the load was successful
+    if (!errorMsg.empty()) {
+        menu.printString(errorMsg);
+    } else {
+        loadSuccess = true;
     }
 
-    return !loadFailure;
+    return loadSuccess;
 }
 
 void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, LinkedList* loadedTileBag, int currentPlayerIndex){
 
+    // delete existing objects on heap 
     this->~GameEngine();
 
+    // load new objects
     this->players = loadedPlayers;
     this->gameBoard = new Board(loadedGameBoard);
     this->tileBag = new TileBag(loadedTileBag);
 
+    // proceed into main game loop starting with the player whose turn it currently is
     gameLoop(currentPlayerIndex);
 }
 
