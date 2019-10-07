@@ -16,6 +16,8 @@
 
 #define NUM_STUDENTS    4
 
+class Player;
+
 class Menu {
     public:
         Menu();

@@ -85,17 +85,23 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
 
 
 void Menu::gameFinish(std::vector<Player *>* players) {
+    int finalScore = 0;
+    int index = 0;
+    
     std::cout << "Game Over" << std::endl;
     for (auto player : *players) {
         std::cout << "Score for " << player->getName() << ": " << player->getScore() << std::endl;
     }
 
-    // Hard coded, can be changed to be more efficient
-    if (players->at(0)->getScore() > players->at(1)->getScore()) {
-        std::cout << "Player " << players->at(0)->getName() << "won!" << std::endl;
-    } else {
-        std::cout << "Player " << players->at(1)->getName() << "won!" << std::endl;
+    for (int i = 0; i < players->size(); i++) {
+        if (players->at(0)->getScore() > finalScore) {
+            finalScore = players->at(0)->getScore();
+            index = i;
+        }
     }
+    
+    std::cout << "Player " << players->at(index)->getName() << "won!" << std::endl;
+        
     quit();
 }
 

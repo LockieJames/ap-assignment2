@@ -18,6 +18,8 @@
 #include "Player.h"
 #include "SaveLoad.h"
 
+#define MAX_HAND_SIZE 6
+
 class SaveLoad;
 
 class GameEngine {

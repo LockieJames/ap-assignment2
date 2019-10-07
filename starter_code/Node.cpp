@@ -1,5 +1,4 @@
 #include "Node.h"
-#include <iostream>
 
 Node::Node(Tile* tile, Node* next, Node* prev) :
     tile(tile),
@@ -16,7 +15,6 @@ Node::Node(Node& other) :
 }
 
 Node::~Node() {
-    // For debugging
-//    std::cout << "Got to node delete" << std::endl;
+
 }
 

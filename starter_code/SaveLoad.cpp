@@ -196,7 +196,7 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     LinkedList* linkedList = new LinkedList();
     for (auto i : tileContainer){
         validateTile(i);
-        linkedList->addFront(new Tile(i[0], i[1] - '0'));
+        linkedList->addEnd(new Tile(i[0], i[1] - '0'));
     }
 
     return linkedList;

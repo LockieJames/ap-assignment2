@@ -11,7 +11,7 @@
 
 #define ONE_ROW 1
 #define TWO_ROWS 2
-#define QWIRKLE 6
+#define QWIRKLE 5
 #define ROWS    6
 #define COLS    8 / 2
 #define MAX_ROWS    26

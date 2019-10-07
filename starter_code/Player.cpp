@@ -14,10 +14,7 @@ Player::Player(std::string loadedName, int loadedScore, LinkedList* loadedHand){
 
 Player::~Player()
 {
-//    clearTiles();
-//    std::cout << "Got to start delete player" << std::endl;
     delete hand;
-//    std::cout << "Got to end delete player" << std::endl;
 }
 
 std::string Player::getName()

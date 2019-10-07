@@ -7,13 +7,6 @@
 
 #include "TileBag.h"
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
-
-#define MAX_CREATE 2
-#define MAX_SHUFFLE 5
-#define MAX_CHOICE 3
-#define MAX_CHOICE_2 2
 
 TileBag::TileBag() {
     tileBag = new LinkedList();
@@ -29,9 +22,7 @@ TileBag::TileBag(LinkedList* loadedTileBag) {
 }
 
 TileBag::~TileBag() {
-//    std::cout << "Got to start delete tileBag" << std::endl;
     delete tileBag;
-//    std::cout << "Got to end delete tileBag" << std::endl;
 }
 
 void TileBag::createTiles() {

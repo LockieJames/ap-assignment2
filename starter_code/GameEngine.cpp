@@ -6,9 +6,6 @@
 //
 
 #include "GameEngine.h"
-#include <typeinfo>
-
-#define MAX_HAND_SIZE 6
 
 GameEngine::GameEngine(int numPlayers){
     // Tilebag made upon instantiating it
@@ -117,11 +114,6 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     bool gameFinished = false;
     bool gameQuit = false;
     bool firstTurn = true;
-    
-//    // For debugging
-//    tileBag->showBag();
-//
-//    std::cout << "Size of tileBag: " << tileBag->getTileBag()->size() << std::endl;
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players->size(); i++) {
@@ -175,12 +167,6 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         turnComplete = true;
                         gameQuit = true;
                         gameFinished = true;
-                    } else if (userInput == "print") {
-                        // For debugging
-                        gameBoard->printBoard(std::cout);
-                    } else if (userInput == "bagsize") {
-                        // For debugging
-                        std::cout << "Size of tileBag: " << tileBag->getTileBag()->size() << std::endl;
                     } else if (userInput == "tilebag") {
                         tileBag->showBag();
                     } else {
@@ -241,8 +227,6 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 
 void GameEngine::drawTile(Player* player) {
     if (tileBag->size() != 0) {
-//        std::cout << "Drew tile" << std::endl;
-
         player->getHand()->addEnd(tileBag->getFront());
 
         tileBag->getTileBag()->deleteFront();
@@ -258,30 +242,20 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
     // remove a tile from players  hand
     Tile* tile = player->getHand()->removeTile(colour, newShape);
 
-//    std::cout << "Got tile from removeTile" << std::endl;
-
     if (tile != nullptr) {
         // draw a tile from bag
         Colour nColour = tileBag->getFront()->getColour();
         Shape nShape = tileBag->getFront()->getShape();
 
-//        std::cout << "tile after nonnull colour: " << nColour << std::endl;
-//        std::cout << "tile after nonnull shape: " << nShape << std::endl;
-
         Tile* nTile = new Tile(nColour, nShape);
 
         player->getHand()->addEnd(nTile);
-
-//        std::cout << "Added tile to hand" << std::endl;
 
         // add player's tile to the bag
         tileBag->getTileBag()->addEnd(tile);
 
         // delete drawn node from tile bag
         tileBag->getTileBag()->deleteFront();
-//
-//        std::cout << player->getName() << " hand is " << std::endl;
-//        std::cout << player->getHand()->getTiles() << std::endl;
 
         placed = true;
     }

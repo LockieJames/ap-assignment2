@@ -10,8 +10,14 @@
 
 #include "LinkedList.h"
 #include "Tile.h"
+#include <stdlib.h>
+#include <time.h>
 
 #define PART_LENGTH 6
+#define MAX_CREATE 2
+#define MAX_SHUFFLE 5
+#define MAX_CHOICE 3
+#define MAX_CHOICE_2 2
 
 class TileBag {
     public:

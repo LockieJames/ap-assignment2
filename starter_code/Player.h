@@ -5,6 +5,8 @@
 #include "Tile.h"
 #include <iostream>
 
+class LinkedList;
+
 class Player
 {
     private:

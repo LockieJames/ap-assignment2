@@ -1,6 +1,4 @@
 #include <iostream>
-#include <vector>
-#include <map>
 
 #include "Board.h"
 #include "Menu.h"

@@ -5,8 +5,10 @@
 #include <string>
 #include "Node.h"
 #include "Tile.h"
+#include "Menu.h"
 
 #define PART_LENGTH 6
+#define BEFORE_MID 4
 
 class LinkedList
 {
