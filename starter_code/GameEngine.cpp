@@ -7,18 +7,18 @@
 
 #include "GameEngine.h"
 
-GameEngine::GameEngine(int numPlayers){
+GameEngine::GameEngine(){
     // Tilebag made upon instantiating it
     this->tileBag = new TileBag();
     this->gameBoard = new Board();
     this->menu = Menu();
     this->players = new std::vector<Player *>;
-    this->numPlayers = numPlayers;
-
-    for (int i = 0; i < numPlayers; i++) {
-        Player* player = new Player();
-        this->players->push_back(player);
-    }
+//    this->numPlayers = numPlayers;
+//
+//    for (int i = 0; i < numPlayers; i++) {
+//        Player* player = new Player();
+//        this->players->push_back(player);
+//    }
 }
 
 GameEngine::~GameEngine(){
@@ -82,8 +82,32 @@ void GameEngine::mainMenu() {
 
 // gets player names and makes tilebag, then starts main game loop
 void GameEngine::newGame(){
-
+    int input;
+    bool validInt = false;
+    
     menu.newGamePt1();
+    menu.numOfPlayers();
+    
+    while (!validInt) {
+        std::cin >> input;
+        std::cin.get();
+        
+        if (std::cin.fail() || !(input >= 1 && input <= 4)){
+            std::cin.clear();
+            menu.invalidInput();
+            std::cout << "> ";
+        } else {
+            this->numPlayers = input;
+            validInt = true;
+        }
+    }
+    
+    // Instantiate players
+    for (int i = 0; i < numPlayers; i++) {
+        Player* player = new Player();
+        this->players->push_back(player);
+    }
+    
     for (int i = 0; i < (int) players->size(); i++) {
         menu.newGameNames(i + 1);
         bool validName = false;
@@ -98,7 +122,6 @@ void GameEngine::newGame(){
                 menu.invalidInput();
                 std::cout << "> ";
             }
-
         }
     }
     menu.newGamePt2();
@@ -168,6 +191,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         gameQuit = true;
                         gameFinished = true;
                     } else if (userInput == "tilebag") {
+                        // For debugging
                         tileBag->showBag();
                     } else {
                         // else print that input is invalid

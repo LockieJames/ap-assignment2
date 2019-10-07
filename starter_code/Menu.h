@@ -26,6 +26,7 @@ class Menu {
         void startMessage();
         void menuOptions();
         void newGamePt1();
+        void numOfPlayers();
         void newGameNames(int playerNo);
         void newGamePt2();
         void loadGame();

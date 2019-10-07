@@ -37,8 +37,12 @@ void Menu::newGamePt1() {
     std::cout << "Starting a New Game" << std::endl;
 }
 
+void Menu::numOfPlayers() {
+    std::cout << "Number of players(MAX 4): " << std::endl << PROMPT;
+}
+
 void Menu::newGameNames(int playerNo) {
-    std::cout << "Enter a name for player " << playerNo << " (uppercase characters only)" << std::endl << "> ";
+    std::cout << "Enter a name for player " << playerNo << " (uppercase characters only)" << std::endl << PROMPT;
 }
 
 void Menu::newGamePt2() {

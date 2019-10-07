@@ -24,7 +24,7 @@ class SaveLoad;
 
 class GameEngine {
     public:
-        GameEngine(int numPlayers);
+        GameEngine();
         ~GameEngine();
         void loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex);
         void mainMenu();
