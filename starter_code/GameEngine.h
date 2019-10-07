@@ -10,13 +10,13 @@
 
 // #includes decide later
 #include <iostream>
-#include <fstream>
 #include <regex>
 #include "Board.h"
 #include "TileBag.h"
 #include "Menu.h"
 #include "Player.h"
 #include "SaveLoad.h"
+#include "Highscore.h"
 
 #define MAX_HAND_SIZE 6
 
@@ -35,6 +35,8 @@ class GameEngine {
         Menu menu;
         std::vector<Player *>* players;
         int numPlayers;
+        Highscore * hs;
+        std::string highscoreFilename;
 
         void newGame();
         void gameLoop(int firstPlayerIndex);

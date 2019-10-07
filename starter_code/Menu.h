@@ -13,6 +13,7 @@
 #include <vector>
 #include "Player.h"
 #include "Board.h"
+#include "Highscore.h"
 
 #define NUM_STUDENTS    4
 #define PROMPT  "> "
@@ -40,6 +41,7 @@ class Menu {
         void gameSaved();
         void printString(std::string strToPrint);
         void getHelp();
+        void printHighscores(Highscore * hs);
         std::string printColour(Colour colour, std::ostream &destination);
         std::string printShape(Shape shape, std::ostream &destination);
 

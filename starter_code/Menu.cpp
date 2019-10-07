@@ -26,8 +26,9 @@ void Menu::menuOptions() {
     std::cout << "----" << std::endl;
     std::cout << "1. New Game" << std::endl;
     std::cout << "2. Load Game" << std::endl;
-    std::cout << "3. Show Student Information" << std::endl;
-    std::cout << "4. Quit" << std::endl << std::endl;
+    std::cout << "3. Highscores" << std::endl;
+    std::cout << "4. Show Student Information" << std::endl;
+    std::cout << "5. Quit" << std::endl << std::endl;
 
     std::cout << PROMPT;
 }
@@ -193,4 +194,17 @@ void Menu::gameSaved(){
 
 void Menu::printString(std::string strToPrint){
     std::cout << strToPrint << std::endl;
+}
+
+void Menu::printHighscores(Highscore * hs)
+{
+    std::cout << "Highscores!" << std::endl;
+    std::cout << "----------------------------------" << std::endl;
+    
+    for(int i = 0; i < hs->getSize(); i++)
+    {
+        std::cout << i + 1 << ". " << hs->getHighscoreName(i) << "  " << hs->getHighscore(i) << std::endl;
+    }
+    
+    std::cout << "----------------------------------" << std::endl;
 }
