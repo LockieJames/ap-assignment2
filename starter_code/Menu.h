@@ -15,6 +15,7 @@
 #include "Board.h"
 
 #define NUM_STUDENTS    4
+#define PROMPT  "> "
 
 class Player;
 

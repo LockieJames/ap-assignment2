@@ -29,7 +29,7 @@ void Menu::menuOptions() {
     std::cout << "3. Show Student Information" << std::endl;
     std::cout << "4. Quit" << std::endl << std::endl;
 
-    std::cout << "> ";
+    std::cout << PROMPT;
 }
 
 void Menu::newGamePt1() {
@@ -48,7 +48,7 @@ void Menu::newGamePt2() {
 
 void Menu::loadGame() {
     std::cout << "Enter the filename from which to load the a game" << std::endl;
-    std::cout << "> ";
+    std::cout << PROMPT;
 }
 
 void Menu::loadGameSuccess() {
@@ -121,6 +121,9 @@ void Menu::getHelp() {
 
     std::cout << "quit" << std::endl;
     std::cout << "\t Will quit the game." << std::endl << std::endl;
+
+    std::cout << "^D" << std::endl;
+    std::cout << "\t Will quit the game as well." << std::endl << std::endl;
 
     std::cout << "help" << std::endl;
     std::cout << "\t Opens this." << std::endl << std::endl;

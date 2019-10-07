@@ -200,7 +200,7 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 //    std::cout << "Got to place tile" << std::endl;
     if (tile != nullptr) {
         int score = gameBoard->placeTile(*tile, rowInput, col);
-        if (score != 0) {
+        if (score != 0 && score != -20) {
             player->addScore(score);
             drawTile(player);
             placed = true;

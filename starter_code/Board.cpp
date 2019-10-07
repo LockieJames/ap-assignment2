@@ -28,7 +28,6 @@ Board::~Board() {
 
 // Returns number of points earned in this turn
 int Board::placeTile(Tile &tile, char rowInput, int col) {
-    // TODO: scoring system
     scoreTurn = 0;
     int row = rowInput - A_VALUE;
 
@@ -57,45 +56,51 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
             emptyBoard = isEmpty();
             scoreTurn = 1;
         } else {
-            auto colours = getMap(tile.getColour(), row, col);
-            auto shapes = getMap(tile.getShape(), row, col);
+            std::map<std::string, int> colours = getMap(tile.getColour(), row, col);
+            std::map<std::string, int> shapes = getMap(tile.getShape(), row, col);
 
-            int shapesColours[] = { colours["topRight"] + shapes["topRight"],
-                                    colours["topLeft"] + shapes["topLeft"],
-                                    colours["bottomLeft"] + shapes["bottomLeft"],
-                                    colours["bottomRight"] + shapes["bottomRight"] };
+            int shapesColours[] = { colours.at("topRight") + shapes.at("topRight"),
+                                    colours.at("topLeft") + shapes.at("topLeft"),
+                                    colours.at("bottomLeft") + shapes.at("bottomLeft"),
+                                    colours.at("bottomRight") + shapes.at("bottomRight") };
 
-            bool offDiagonal = colours["topRight"] == colours["bottomLeft"] || shapes["topRight"] == shapes["bottomLeft"];
-            bool mainDiagonal = colours["topLeft"] == colours["bottomRight"] || shapes["topLeft"] == shapes["bottomRight"];
+            bool offDiagonal = (colours["topRight"] == colours["bottomLeft"]) || (shapes["topRight"] == shapes["bottomLeft"]);
+            bool mainDiagonal = (colours["topLeft"] == colours["bottomRight"]) || (shapes["topLeft"] == shapes["bottomRight"]);
 
             int positions = 0;
 
+            bool placeable = true;
             for (int i = 0; i < (int) shapes.size(); ++i) {
                 if (shapesColours[i] != 0) {
                     positions++;
                 }
+                // Invalid value in both shape and colour therefore tile cannot be placed
+                if (shapesColours[i] == -20) {
+                    placeable = false;
+                    scoreTurn = 0;
+                }
             }
 
-            if (positions == 1) {
+            if (positions == 1 && placeable) {
                 grid[row][col] = &tile;
                 scoreTurn += ONE_ROW;
-            } else if (positions == 2) {
+            } else if (positions == 2 && placeable) {
                 if((shapesColours[0] != 0 && shapesColours[2] != 0)
                    || (shapesColours[1] != 0 && shapesColours[3] !=0)) {
                     if (offDiagonal || mainDiagonal) {
                         grid[row][col] = &tile;
                         scoreTurn += ONE_ROW;
                     }
-                } else {
+                } else  {
                     grid[row][col] = &tile;
                     scoreTurn += TWO_ROWS;
                 }
-            } else if (positions == 3) {
+            } else if (positions == 3 && placeable) {
                 if (offDiagonal || mainDiagonal) {
                     grid[row][col] = &tile;
                     scoreTurn += TWO_ROWS;
                 }
-            } else if (positions == 4){
+            } else if (positions == 4 && placeable){
                 if (offDiagonal && mainDiagonal) {
                     grid[row][col] = &tile;
                     scoreTurn += TWO_ROWS;
@@ -120,45 +125,46 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
         odd = (row + 1) % 2 == 1;
     }
 
-    bool border = (edgeRow(row, rowDirection) || edgeCol(col, odd, right));
     col = calculateCol(odd, right, col);
     row = row + rowDirection;
     odd = !odd;
     int numberOfCheckedTiles = 0;
 
-    while (!border && grid[row][col] != nullptr && numberOfCheckedTiles <= QWIRKLE) {
+    while (grid[row][col] != nullptr) {
 
         int positionValue = 0;
 
-        if (colourShape < 6) {
+        if (colourShape < 7) {
             positionValue = grid[row][col]->getShape();
         } else {
             positionValue = grid[row][col]->getColour();
         }
 
         if (colourShape != positionValue){
-            inputColourShape = 0;
+            inputColourShape = -10;
         } else {
             inputColourShape = colourShape;
             numberOfCheckedTiles++;
         }
 
-        border = edgeRow(row, rowDirection) || edgeCol(col, odd, right);
         col = calculateCol(odd, right, col);
         row = row + rowDirection;
         odd = !odd;
     }
-
-    std::cout << "Number of checked Tiles: " << std::endl;
     
-    if (inputColourShape != 0) {
+    if (inputColourShape != 0 && inputColourShape != -10) {
         inputColourShape = colourShape;
     }
 
-    if (numberOfCheckedTiles == QWIRKLE) {
+    if (numberOfCheckedTiles == QWIRKLE - 1) {
         std::cout << "QWIRKLE!!!";
     }
-    scoreTurn += numberOfCheckedTiles;
+
+    if (numberOfCheckedTiles == QWIRKLE) {
+        inputColourShape = -10;
+    } else {
+        scoreTurn += numberOfCheckedTiles;
+    }
 
     return inputColourShape;
 }
@@ -176,20 +182,12 @@ int Board::calculateCol(bool odd, bool right, int col) {
     return col;
 }
 
-bool Board::edgeRow(int row, int rowDirection) {
-    return (row == 0 && rowDirection == -1) || (row == (int) grid.size() - 1 && rowDirection == 1);
-}
-
-bool Board::edgeCol(int col, bool odd, bool right) {
-    return (col == 0 && !odd && !right) || (col == (int) grid.at(0).size() - 1 && odd && right);
-}
-
 std::map<std::string, int> Board::getMap(int shapeColour, int row, int col) {
     std::map<std::string, int> coloursShapes;
-    coloursShapes["topRight"] = validateRow(shapeColour, row, col, 1, true);
-    coloursShapes["bottomRight"] = validateRow(shapeColour, row, col, -1, true);
-    coloursShapes["bottomLeft"] = validateRow(shapeColour, row, col, -1, false);
-    coloursShapes["topLeft"] = validateRow(shapeColour, row, col, 1, false);
+    coloursShapes.insert( std::pair<std::string, int>("topRight", validateRow(shapeColour, row, col, -1, true)));
+    coloursShapes.insert( std::pair<std::string, int>("bottomRight", validateRow(shapeColour, row, col, 1, true)));
+    coloursShapes.insert( std::pair<std::string, int>("bottomLeft", validateRow(shapeColour, row, col, 1, false)));
+    coloursShapes.insert( std::pair<std::string, int>("topLeft", validateRow(shapeColour, row, col, -1, false)));
     return coloursShapes;
 }
 
@@ -266,8 +264,6 @@ void Board::printCoord(std::ostream &destination, int startNumber) {
 }
 
 void Board::expandBoard(){
-
-    printBoard(std::cout);
 
 //    std::cout << "checking front of rows needs to be expanded" << std::endl;
     for (auto i : grid.at(0)){
