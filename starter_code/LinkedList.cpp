@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include "Menu.h"
 #include <iostream>
 
 #define PART_LENGTH 6
@@ -281,11 +282,18 @@ Tile* LinkedList::removeTile(char colour, int shape)
 //    return index;
 //}
 
-std::string LinkedList::getTiles() {
+// If colour prints colourful result
+std::string LinkedList::getTiles(bool colour) {
+    Menu menu;
     std::string allTiles = "";
     Node* curr = head;
     while (curr != nullptr) {
-        allTiles += curr->tile->getColour();
+        if (colour) {
+            allTiles += menu.printColour(curr->tile->getColour(), std::cout);
+        } else {
+            allTiles += curr->tile->getColour();
+        }
+
         allTiles += std::to_string(curr->tile->getShape());
         if (curr->next != nullptr)
             allTiles += ",";

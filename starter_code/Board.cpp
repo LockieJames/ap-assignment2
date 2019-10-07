@@ -3,6 +3,7 @@
 #include <map>
 
 #include "Board.h"
+#include "Menu.h"
 
 Board::Board() {
     grid = std::vector<std::vector<Tile*>> (ROWS);
@@ -207,6 +208,7 @@ bool Board::isEmpty() {
 }
 
 bool Board::printBoard(std::ostream &destination) {
+    Menu menu;
     char letter = 'A';
     printCoord(destination, 0);
     printBorder(destination);
@@ -223,7 +225,8 @@ bool Board::printBoard(std::ostream &destination) {
             } else {
                 destination << PATTERN;
                 if (grid[i][j - 1]) {
-                    destination << grid[i][j - 1]->getColour() << grid[i][j - 1]->getShape();
+                    destination << menu.printColour(grid[i][j - 1]->getColour(), destination)
+                    << menu.printShape(grid[i][j - 1]->getShape(), destination);
                 } else {
                     destination << "  ";
                 }

@@ -79,8 +79,10 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
     }
     gameBoard->printBoard(std::cout);
     std::cout << "Your hand is " << std::endl;
-    std::cout << players->at(currentPlayer)->getHand()->getTiles() << std::endl;
+    std::cout << players->at(currentPlayer)->getHand()->getTiles(true) << std::endl;
 }
+
+
 
 void Menu::gameFinish(std::vector<Player *>* players) {
     std::cout << "Game Over" << std::endl;
@@ -95,6 +97,73 @@ void Menu::gameFinish(std::vector<Player *>* players) {
         std::cout << "Player " << players->at(1)->getName() << "won!" << std::endl;
     }
     quit();
+}
+
+void Menu::getHelp() {
+    std::cout << "HELP!" << std::endl;
+    std::cout << "Feeling a little stuck? Here are your options: " << std::endl;
+    std::cout << "Write: " << std::endl;
+    std::cout << "place (colour of the tile you want to place)(shape you want to place) at (selected row)(selected column) " << std::endl;
+    std::cout << "\t This could for instance look like \033[38;5;126m\"place P4 at D5\"\033[0m" << std::endl;
+    std::cout << "\t Be careful however, you are allowed to place tiles only next to one that already exists" << std::endl;
+    std::cout << "\t and has the same shape or colour!" << std::endl;
+    std::cout << "\t Additionally, you can place only the tiles that are in you hand!" << std::endl << std::endl;
+
+    std::cout << "replace (colour of tile)(shape of tile)" << std::endl;
+    std::cout << "\t This will replace the tile you choose and you will get a new one from the bag." << std::endl;
+    std::cout << "\t Could look like \033[38;5;126m\"replace Y2\"\033[0m" << std::endl << std::endl;
+
+    std::cout << "quit" << std::endl;
+    std::cout << "\t Will quit the game." << std::endl << std::endl;
+
+    std::cout << "help" << std::endl;
+    std::cout << "\t Opens this." << std::endl << std::endl;
+}
+
+std::string Menu::printColour(Colour colour, std::ostream &destination) {
+    std::string finalColour;
+
+    if (typeid(destination).name() == typeid(std::cout).name()) {
+        if (colour == RED) {
+            finalColour = "\033[38;5;160mR\033[0m";
+        } else if (colour == ORANGE) {
+            finalColour = "\033[38;5;202mO\033[0m";
+        } else if (colour == YELLOW) {
+            finalColour = "\033[38;5;226mY\033[0m";
+        } else if (colour == GREEN) {
+            finalColour = "\033[38;5;40mG\033[0m";
+        } else if (colour == BLUE) {
+            finalColour = "\033[38;5;33mB\033[0m";
+        } else if (colour == PURPLE) {
+            finalColour = "\033[38;5;55mP\033[0m";
+        }
+    } else {
+        finalColour = colour;
+    }
+    return finalColour;
+}
+
+std::string Menu::printShape(Shape shape, std::ostream &destination) {
+    std::string finalColour;
+
+    if (typeid(destination).name() == typeid(std::cout).name()) {
+        if (shape == CIRCLE) {
+            finalColour = "\u25CF";
+        } else if (shape == STAR_4) {
+            finalColour = "\u2726";
+        } else if (shape == DIAMOND) {
+            finalColour = "\u25C6";
+        } else if (shape == SQUARE) {
+            finalColour = "\u25A0";
+        } else if (shape == STAR_6) {
+            finalColour = "\u2736";
+        } else if (shape == CLOVER) {
+            finalColour = "\u2724";
+        }
+    } else {
+        finalColour = shape;
+    }
+    return finalColour;
 }
 
 void Menu::invalidInput() {

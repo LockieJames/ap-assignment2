@@ -20,7 +20,6 @@ class Menu {
     public:
         Menu();
         ~Menu();
-
         void startMessage();
         void menuOptions();
         void newGamePt1();
@@ -36,8 +35,13 @@ class Menu {
         void invalidPlay();
         void gameSaved();
         void printString(std::string strToPrint);
+        void getHelp();
+        std::string printColour(Colour colour, std::ostream &destination);
+        std::string printShape(Shape shape, std::ostream &destination);
 
     private:
+    void printHand(Player* currentPlayer);
+
     std::string name[NUM_STUDENTS] = {"Louis Baudinette", "Sim Bilkova", "Lachlan Boughton", "Peter Bui"};
     std::string stu_id[NUM_STUDENTS] = {"s3668025", "s3748189", "s3769219", "s3786794"};
     std::string email[NUM_STUDENTS] = {"s3668025@student.rmit.edu.au", "s3748189@student.rmit.edu.au",

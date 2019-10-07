@@ -49,7 +49,7 @@ void GameEngine::mainMenu() {
         while (!quit) {
             menu.menuOptions();
             validChoice = false;
-            
+
             while (!validChoice){
                 std::cin >> input;
                 std::cin.get();
@@ -151,11 +151,11 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         turnComplete = placeTile(players->at(i), field[0].str()[6], field[0].str()[7], field[0].str()[12], std::stoi(field[0].str().substr(13)));
 
                         // check if game is finished
-                        if (tileBag->size() == 0 && players->at(i)->getHand()->size() == 0) {
+                        if (players->at(i)->getHand()->size() == 0) {
                             gameFinished = true;
                         }
 
-                        if (turnComplete != true) {
+                        if (!turnComplete) {
                             menu.invalidPlay();
                         }
 
@@ -166,6 +166,9 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     }  else if (std::regex_match(userInput, field, std::regex(R"(save\s[a-zA-Z0-9]+)"))) {
                         // save game
                         saveGame(field[0].str().substr(5), i);
+
+                    } else if (userInput == "help") {
+                        menu.getHelp();
 
                     } else if (userInput == "quit" || std::cin.eof()) {
                         // quit game
