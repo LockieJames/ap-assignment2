@@ -47,6 +47,7 @@ void GameEngine::mainMenu() {
 
     bool validChoice;
     bool quit = false;
+    std::string strInput;
     int input;
 
         while (!quit) {
@@ -54,8 +55,15 @@ void GameEngine::mainMenu() {
             validChoice = false;
 
             while (!validChoice){
-                std::cin >> input;
+                std::cin >> strInput;
                 std::cin.get();
+                
+                if(isdigit(strInput[0]) && strInput.size() == 1)
+                {
+                    std::stringstream ss(strInput);
+                    ss >> input;
+                }
+                
                 if (std::cin.eof()) {
                     quit = true;
                     validChoice = true;
