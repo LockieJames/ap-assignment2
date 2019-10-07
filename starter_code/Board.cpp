@@ -150,6 +150,8 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
         odd = !odd;
     }
 
+    std::cout << "Number of checked Tiles: " << std::endl;
+    
     if (inputColourShape != 0) {
         inputColourShape = colourShape;
     }
@@ -266,25 +268,25 @@ void Board::expandBoard(){
 
     printBoard(std::cout);
 
-    std::cout << "checking front of rows needs to be expanded" << std::endl;
+//    std::cout << "checking front of rows needs to be expanded" << std::endl;
     for (auto i : grid.at(0)){
         if (i && (int) grid.size() <= MAX_ROWS){
             grid.insert(grid.begin(), std::vector<Tile *>(grid.at(grid.size() - 1).size()));
-            std::cout << "expanded front of rows" << std::endl;
+//            std::cout << "expanded front of rows" << std::endl;
             firstRowOffset = !firstRowOffset;
         }
     }
 
-    std::cout << "checking back of rows needs to be expanded" << std::endl;
+//    std::cout << "checking back of rows needs to be expanded" << std::endl;
     // expand back row
     for (auto i : grid.at(grid.size() - 1)){
         if (i && (int) grid.size() <= MAX_ROWS){
             grid.insert(grid.end(), std::vector<Tile *>(grid.at(0).size()));
-            std::cout << "expanded back of rows" << std::endl;
+//            std::cout << "expanded back of rows" << std::endl;
         }
     }
 
-    std::cout << "checking front of cols needs to be expanded" << std::endl;
+//    std::cout << "checking front of cols needs to be expanded" << std::endl;
     // expand front col
     for (int i = 0; i < (int) grid.size(); i++){
         if (grid.at(i).at(0) && grid.at(i).size() <= MAX_COLS){
@@ -292,18 +294,18 @@ void Board::expandBoard(){
                 grid.at(j).insert(grid.at(j).begin(), nullptr);
 
             }
-            std::cout << "expanded front of cols" << std::endl;
+//            std::cout << "expanded front of cols" << std::endl;
         }
     }
 
-    std::cout << "checking back of cols needs to be expanded" << std::endl;
+//    std::cout << "checking back of cols needs to be expanded" << std::endl;
     // expand back col
     for (int i = 0; i < (int) grid.size(); i++){
         if (grid.at(i).at(grid.at(i).size() - 1) && (int) grid.at(i).size() <= MAX_COLS){
             for (int j = 0; j < (int) grid.size(); j++){
                 grid.at(j).insert(grid.at(j).end(), nullptr);
             }
-            std::cout << "expanded back of cols" << std::endl;
+//            std::cout << "expanded back of cols" << std::endl;
         }
     }
 }

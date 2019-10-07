@@ -11,6 +11,7 @@
 #define MAX_HAND_SIZE 6
 
 GameEngine::GameEngine(int numPlayers){
+    // Tilebag made upon instantiating it
     this->tileBag = new TileBag();
     this->gameBoard = new Board();
     this->menu = Menu();
@@ -45,37 +46,38 @@ void GameEngine::mainMenu() {
     bool quit = false;
     int input;
 
-    while (!quit){
-        validChoice = false;
-        while (!validChoice){
+        while (!quit) {
             menu.menuOptions();
-            std::cin >> input;
-            std::cin.get();
-            if (std::cin.fail() || !(input >= 1 && input <= 4)){
-                menu.invalidInput();
-                std::cin.clear();
+            validChoice = false;
+            
+            while (!validChoice){
+                std::cin >> input;
                 std::cin.get();
-            } else {
-                validChoice = true;
+                if (std::cin.eof()) {
+                    quit = true;
+                    validChoice = true;
+                } else if (std::cin.fail() || !(input >= 1 && input <= 4)){
+                    std::cin.clear();
+                    menu.invalidInput();
+                    std::cout << "> ";
+                } else {
+                    validChoice = true;
+                }
             }
-        }
 
-        if (input == 1) {
-            newGame();
-            quit = true;
-        } else if (input == 2) {
-            // TODO: action - load game
-            if (loadGame()){
+            if (input == 1) {
+                newGame();
+                quit = true;
+            } else if (input == 2) {
+                if (loadGame()){
+                    quit = true;
+                }
+            } else if (input == 3) {
+                menu.stuInfo();
+            } else if (input == 4) {
                 quit = true;
             }
-            
-        } else if (input == 3) {
-            menu.stuInfo();
-        } else if (input == 4) {
-            // TODO: action - quit from main menu
-            quit = true;
         }
-    }
 
     // call quit method to print exit message as game is closing
     menu.quit();
@@ -97,6 +99,7 @@ void GameEngine::newGame(){
                 validName = true;
             } else {
                 menu.invalidInput();
+                std::cout << "> ";
             }
 
         }
@@ -164,12 +167,11 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         // save game
                         saveGame(field[0].str().substr(5), i);
 
-                    } else if (userInput == "quit") {
+                    } else if (userInput == "quit" || std::cin.eof()) {
                         // quit game
                         turnComplete = true;
                         gameQuit = true;
                         gameFinished = true;
-
                     } else if (userInput == "print") {
                         // For debugging
                         gameBoard->printBoard(std::cout);
@@ -181,7 +183,6 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     } else {
                         // else print that input is invalid
                         menu.invalidInput();
-
                     }
 
                 }
@@ -237,7 +238,7 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 
 void GameEngine::drawTile(Player* player) {
     if (tileBag->size() != 0) {
-        std::cout << "Drew tile" << std::endl;
+//        std::cout << "Drew tile" << std::endl;
 
         player->getHand()->addEnd(tileBag->getFront());
 
