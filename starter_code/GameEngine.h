@@ -10,7 +10,6 @@
 
 // #includes decide later
 #include <iostream>
-#include <fstream>
 #include <regex>
 #include "Board.h"
 #include "TileBag.h"
