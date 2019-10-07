@@ -13,6 +13,12 @@ GameEngine::GameEngine(){
     this->gameBoard = new Board();
     this->menu = Menu();
     this->players = new std::vector<Player *>;
+    
+    this->hs = new Highscore();
+    
+    highscoreFilename = "Highscores.txt";
+    hs->loadHighscores(highscoreFilename);
+    
 //    this->numPlayers = numPlayers;
 //
 //    for (int i = 0; i < numPlayers; i++) {
@@ -53,7 +59,7 @@ void GameEngine::mainMenu() {
                 if (std::cin.eof()) {
                     quit = true;
                     validChoice = true;
-                } else if (std::cin.fail() || !(input >= 1 && input <= 4)){
+                } else if (std::cin.fail() || !(input >= 1 && input <= 5)){
                     std::cin.clear();
                     menu.invalidInput();
                     std::cout << "> ";
@@ -70,8 +76,11 @@ void GameEngine::mainMenu() {
                     quit = true;
                 }
             } else if (input == 3) {
-                menu.stuInfo();
+                menu.printHighscores(hs);
             } else if (input == 4) {
+                menu.stuInfo();
+            }
+            else if (input == 5) {
                 quit = true;
             }
         }
@@ -210,7 +219,17 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     }
 }
 
-void GameEngine::gameFinish(){
+void GameEngine::gameFinish()
+{
+    // checks if each player has broken a highscore or not
+    for(int i = 0; i < players->size(); i++)
+    {
+        hs->addHighscore(players->at(i)->getName(), players->at(i)->getScore());
+    }
+    
+    // saves the highscores into the file.
+    hs->saveHighscore(highscoreFilename);
+    
     menu.gameFinish(players);
 }
 
