@@ -309,35 +309,43 @@ void GameEngine::drawTile(Player* player) {
  */
 bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
     std::string errMsg;
-    bool placed = false;
+    bool replaced = false;
     int newShape = correctRegex(shape);
     LinkedList* playerHand = player->getHand();
     LinkedList* showBag = tileBag->getTileBag();
     Tile* frontTile = nullptr;
     Tile* tile = nullptr;
-    Colour nColour;
-    Shape nShape;
+    Colour nColour = Colour();
+    Shape nShape = Shape();
+    std::cout << "1" << std::endl;
 
     try {
-        Tile* frontTile = tileBag->getFront();
+        frontTile = tileBag->getFront();
+        std::cout << "2" << std::endl;
 
         // draw a tile from bag
         nColour = frontTile->getColour();
+        std::cout << "3" << std::endl;
         nShape = frontTile->getShape();
+        std::cout << "4" << std::endl;
 
         // remove a tile from players  hand
         tile = playerHand->removeTile(colour, newShape);
+        std::cout << "5" << std::endl;
 
     } catch (const std::runtime_error& run) {
+        std::cout << "6" << std::endl;
         errMsg = run.what();
         menu.printString(errMsg);
     } catch (const std::out_of_range& range) {
+        std::cout << "7" << std::endl;
         errMsg = range.what();
         menu.printString(errMsg);
     }
 
-    if (tile != nullptr) {
-        if (frontTile != nullptr) {
+    if (tile) {
+        if (frontTile) {
+            std::cout << "replacement successful    " << std::endl;
             Tile* nTile = new Tile(nColour, nShape);
 
             playerHand->addEnd(nTile);
@@ -348,10 +356,10 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
             // delete drawn node from tile bag
             showBag->deleteFront();
 
-            placed = true;
+            replaced = true;
         }
     }
-    return placed;
+    return replaced;
 }
 
 /*
