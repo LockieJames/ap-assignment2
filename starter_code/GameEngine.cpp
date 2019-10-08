@@ -7,18 +7,24 @@
 
 #include "GameEngine.h"
 
-GameEngine::GameEngine(int numPlayers){
+GameEngine::GameEngine(){
     // Tilebag made upon instantiating it
     this->tileBag = new TileBag();
     this->gameBoard = new Board();
     this->menu = Menu();
     this->players = new std::vector<Player *>;
-    this->numPlayers = numPlayers;
-
-    for (int i = 0; i < numPlayers; i++) {
-        Player* player = new Player();
-        this->players->push_back(player);
-    }
+    
+    this->hs = new Highscore();
+    
+    highscoreFilename = "Highscores.txt";
+    hs->loadHighscores(highscoreFilename);
+    
+//    this->numPlayers = numPlayers;
+//
+//    for (int i = 0; i < numPlayers; i++) {
+//        Player* player = new Player();
+//        this->players->push_back(player);
+//    }
 }
 
 GameEngine::~GameEngine(){
@@ -41,6 +47,7 @@ void GameEngine::mainMenu() {
 
     bool validChoice;
     bool quit = false;
+    std::string strInput;
     int input;
 
         while (!quit) {
@@ -48,12 +55,19 @@ void GameEngine::mainMenu() {
             validChoice = false;
 
             while (!validChoice){
-                std::cin >> input;
+                std::cin >> strInput;
                 std::cin.get();
+                
+                if(isdigit(strInput[0]) && strInput.size() == 1)
+                {
+                    std::stringstream ss(strInput);
+                    ss >> input;
+                }
+                
                 if (std::cin.eof()) {
                     quit = true;
                     validChoice = true;
-                } else if (std::cin.fail() || !(input >= 1 && input <= 4)){
+                } else if (std::cin.fail() || !(input >= 1 && input <= 5)){
                     std::cin.clear();
                     menu.invalidInput();
                     std::cout << "> ";
@@ -70,8 +84,11 @@ void GameEngine::mainMenu() {
                     quit = true;
                 }
             } else if (input == 3) {
-                menu.stuInfo();
+                menu.printHighscores(hs);
             } else if (input == 4) {
+                menu.stuInfo();
+            }
+            else if (input == 5) {
                 quit = true;
             }
         }
@@ -82,8 +99,32 @@ void GameEngine::mainMenu() {
 
 // gets player names and makes tilebag, then starts main game loop
 void GameEngine::newGame(){
-
+    int input;
+    bool validInt = false;
+    
     menu.newGamePt1();
+    menu.numOfPlayers();
+    
+    while (!validInt) {
+        std::cin >> input;
+        std::cin.get();
+        
+        if (std::cin.fail() || !(input >= 1 && input <= 4)){
+            std::cin.clear();
+            menu.invalidInput();
+            std::cout << "> ";
+        } else {
+            this->numPlayers = input;
+            validInt = true;
+        }
+    }
+    
+    // Instantiate players
+    for (int i = 0; i < numPlayers; i++) {
+        Player* player = new Player();
+        this->players->push_back(player);
+    }
+    
     for (int i = 0; i < (int) players->size(); i++) {
         menu.newGameNames(i + 1);
         bool validName = false;
@@ -98,7 +139,6 @@ void GameEngine::newGame(){
                 menu.invalidInput();
                 std::cout << "> ";
             }
-
         }
     }
     menu.newGamePt2();
@@ -168,6 +208,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         gameQuit = true;
                         gameFinished = true;
                     } else if (userInput == "tilebag") {
+                        // For debugging
                         tileBag->showBag();
                     } else {
                         // else print that input is invalid
@@ -186,7 +227,17 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     }
 }
 
-void GameEngine::gameFinish(){
+void GameEngine::gameFinish()
+{
+    // checks if each player has broken a highscore or not
+    for(int i = 0; i < players->size(); i++)
+    {
+        hs->addHighscore(players->at(i)->getName(), players->at(i)->getScore());
+    }
+    
+    // saves the highscores into the file.
+    hs->saveHighscore(highscoreFilename);
+    
     menu.gameFinish(players);
 }
 
