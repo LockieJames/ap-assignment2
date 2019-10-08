@@ -317,35 +317,27 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
     Tile* tile = nullptr;
     Colour nColour = Colour();
     Shape nShape = Shape();
-    std::cout << "1" << std::endl;
 
     try {
         frontTile = tileBag->getFront();
-        std::cout << "2" << std::endl;
 
         // draw a tile from bag
         nColour = frontTile->getColour();
-        std::cout << "3" << std::endl;
         nShape = frontTile->getShape();
-        std::cout << "4" << std::endl;
 
         // remove a tile from players  hand
         tile = playerHand->removeTile(colour, newShape);
-        std::cout << "5" << std::endl;
 
     } catch (const std::runtime_error& run) {
-        std::cout << "6" << std::endl;
         errMsg = run.what();
         menu.printString(errMsg);
     } catch (const std::out_of_range& range) {
-        std::cout << "7" << std::endl;
         errMsg = range.what();
         menu.printString(errMsg);
     }
 
     if (tile) {
         if (frontTile) {
-            std::cout << "replacement successful    " << std::endl;
             Tile* nTile = new Tile(nColour, nShape);
 
             playerHand->addEnd(nTile);
