@@ -8,7 +8,7 @@
 #include "GameEngine.h"
 
 GameEngine::GameEngine(){
-    // Tilebag made upon instantiating it
+    // Tile objects made upon instantiating tilebag
     this->tileBag = new TileBag();
     this->gameBoard = new Board();
     this->menu = Menu();
@@ -24,7 +24,10 @@ GameEngine::~GameEngine(){
     clear();
 }
 
-// prints main menu using menu.menuOptions(), gets user's choice, and calls appropriate methods
+/*
+ * Prints main menu using menu.menuOptions(), gets user's choice, and calls
+ * appropriate methods
+ */
 void GameEngine::mainMenu() {
     menu.startMessage();
 
@@ -81,6 +84,9 @@ void GameEngine::mainMenu() {
     menu.quit();
 }
 
+/*
+ *
+ */
 int GameEngine::newNumPlayers() {
     int input;
     bool validInt = false;
@@ -100,7 +106,7 @@ int GameEngine::newNumPlayers() {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             menu.invalidInput();
-            std::cout << "> ";
+            menu.printUserInputPrompt();
         } else {
             this->numPlayers = input;
             validInt = true;
@@ -110,7 +116,10 @@ int GameEngine::newNumPlayers() {
     return input;
 }
 
-// gets player names and makes tilebag, then starts main game loop
+/*
+ * Gets player name and sets name for each player, before starting main
+ * game loop
+ */
 bool GameEngine::newGame(int numPlayers){
     bool validCheck = false;
     
@@ -132,27 +141,28 @@ bool GameEngine::newGame(int numPlayers){
             if (std::cin.eof()) {
                 validName = true;
                 validCheck = true;
+                i = players->size();
             } else if (std::regex_match(name, validInput)){
                 players->at(i)->setName(name);
                 validName = true;
             } else {
                 menu.invalidInput();
-                std::cout << "> ";
+                menu.printUserInputPrompt();
             }
         }
     }
     return validCheck;
 }
 
-// main game loop, begins on turn of player passed to method
+/*
+ * Main game loop, beings on turn of player passed to method
+ */
 void GameEngine::gameLoop(int firstPlayerIndex){
     bool gameFinished = false;
     bool gameQuit = false;
     bool firstTurn = true;
     
     menu.newGamePt2();
-    
-//    instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players->size(); i++) {
@@ -173,7 +183,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     // TODO: Ask for input in menu and pass string userInput
                     std::string userInput;
                     std::smatch field;
-                    std::cout << "> ";
+                    menu.printUserInputPrompt();
                     std::getline(std::cin, userInput);
 
                     if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-Z][0-9]+)"))) {
@@ -227,6 +237,9 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     }
 }
 
+/*
+ *
+ */
 void GameEngine::gameFinish()
 {
     // checks if each player has broken a highscore or not
@@ -242,6 +255,9 @@ void GameEngine::gameFinish()
     menu.gameFinish(players);
 }
 
+/*
+ *
+ */
 bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowInput, int col) {
     // TODO: add appropriate menu callbacks to print info to console if need be
     int newShape = correctRegex(shape);
@@ -259,88 +275,121 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
             placed = true;
         } else {
             playerHand->addFront(tile);
-            // IF throw an exception that tile wasnt placed then goes HERE
-            /*
-             * catch (exception& invalidTilePlacement){
-             * if tile cannot be placed on board in given position
-             * print appropriate error message
-             */
         }
     }
-    // If throw exeption that tile wasnt found then else statement and goes HERE
-    /*
-     * catch (exception& tileNotInHand){
-          if tile does not exist in player's hand
-          print appropriate error message
-     */
 
     return placed;
 }
 
+/*
+ *
+ */
 void GameEngine::drawTile(Player* player) {
+    std::string errMsg;
     LinkedList* playerHand = player->getHand();
     LinkedList* showBag = tileBag->getTileBag();
     
     if (tileBag->size() != 0) {
-        playerHand->addEnd(tileBag->getFront());
-
-        showBag->deleteFront();
+        try {
+            playerHand->addEnd(tileBag->getFront());
+            showBag->deleteFront();
+        } catch (const std::runtime_error& run) {
+            errMsg = run.what();
+            menu.printString(errMsg);
+        } catch (const std::out_of_range& range) {
+            errMsg = range.what();
+            menu.printString(errMsg);
+        }
+        
     }
 }
 
+/*
+ *
+ */
 bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
-    // TODO: add appropriate menu callbacks to print info to console if need be
+    std::string errMsg;
     bool placed = false;
     int newShape = correctRegex(shape);
     LinkedList* playerHand = player->getHand();
     LinkedList* showBag = tileBag->getTileBag();
-
-    // remove a tile from players  hand
-    Tile* tile = playerHand->removeTile(colour, newShape);
-
-    if (tile != nullptr) {
+    Tile* frontTile = nullptr;
+    Tile* tile = nullptr;
+    Colour nColour;
+    Shape nShape;
+    
+    try {
         Tile* frontTile = tileBag->getFront();
         
         // draw a tile from bag
-        Colour nColour = frontTile->getColour();
-        Shape nShape = frontTile->getShape();
-
-        Tile* nTile = new Tile(nColour, nShape);
-
-        playerHand->addEnd(nTile);
-
-        // add player's tile to the bag
-        showBag->addEnd(tile);
-
-        // delete drawn node from tile bag
-        showBag->deleteFront();
-
-        placed = true;
+        nColour = frontTile->getColour();
+        nShape = frontTile->getShape();
+        
+        // remove a tile from players  hand
+        tile = playerHand->removeTile(colour, newShape);
+        
+    } catch (const std::runtime_error& run) {
+        errMsg = run.what();
+        menu.printString(errMsg);
+    } catch (const std::out_of_range& range) {
+        errMsg = range.what();
+        menu.printString(errMsg);
     }
 
+    if (tile != nullptr) {
+        if (frontTile != nullptr) {
+            Tile* nTile = new Tile(nColour, nShape);
+
+            playerHand->addEnd(nTile);
+
+            // add player's tile to the bag
+            showBag->addEnd(tile);
+
+            // delete drawn node from tile bag
+            showBag->deleteFront();
+
+            placed = true;
+        }
+    }
     return placed;
 }
 
+/*
+ *
+ */
 void GameEngine::instantiateHand() {
+    std::string errMsg;
     LinkedList* showBag = tileBag->getTileBag();
     
     for (auto player : *players) {
         LinkedList* playerHand = player->getHand();
         
+        // Starts loop to ensure each player gets six tiles
         for (int j = 0; j < MAX_HAND_SIZE; j++) {
-            Tile* frontTile = tileBag->getFront();
-            
-            Colour nColour = frontTile->getColour();
-            Shape nShape = frontTile->getShape();
-            
-            Tile* tile = new Tile(nColour, nShape);
-            
-            playerHand->addEnd(tile);
-            showBag->deleteFront();
+            try {
+                Tile* frontTile = tileBag->getFront();
+                
+                Colour nColour = frontTile->getColour();
+                Shape nShape = frontTile->getShape();
+                
+                Tile* tile = new Tile(nColour, nShape);
+                
+                playerHand->addEnd(tile);
+                showBag->deleteFront();
+            } catch (const std::runtime_error& run) {
+                errMsg = run.what();
+                menu.printString(errMsg);
+            } catch (const std::out_of_range& range) {
+                errMsg = range.what();
+                menu.printString(errMsg);
+            }
         }
     }
 }
 
+/*
+ *
+ */
 void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     SaveLoad saveLoader;
     saveLoader.saveGame(fileName, currentPlayer, players, gameBoard, tileBag);
@@ -349,6 +398,9 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     menu.gameSaved();
 }
 
+/*
+ *
+ */
 bool GameEngine::loadGame() {
     bool loadSuccess = false;
 
@@ -375,6 +427,9 @@ bool GameEngine::loadGame() {
     return loadSuccess;
 }
 
+/*
+ *
+ */
 void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex){
 
     // delete existing objects on heap 
@@ -390,8 +445,8 @@ void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<
 }
 
 /*
- * Function is created to ensure shape
- * is converted from char to int;
+ * Function is created to ensure the regex's numeral is converted from char to int
+ * to be used in other functions.
  */
 int GameEngine::correctRegex(int regex) {
     char zero = '0';
@@ -400,16 +455,14 @@ int GameEngine::correctRegex(int regex) {
     return change;
 }
 
+/*
+ *
+ */
 void GameEngine::clear(){
-    std::cout << "deleting tilebag" << std::endl;
     delete tileBag;
-    std::cout << "deleting gameBoard" << std::endl;
     delete gameBoard;
-    std::cout << "deleting individual players" << std::endl;
     for (int i = 0; i < (int) players->size(); i++){
         delete (*players)[i];
     }
-    std::cout << "deleting players vector" << std::endl;
     delete players;
-    std::cout << "deletion finished" << std::endl;
 }

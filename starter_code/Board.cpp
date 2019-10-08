@@ -11,6 +11,9 @@ Board::Board() {
     firstRowOffset = false;
 }
 
+/*
+ *
+ */
 Board::Board(std::vector<std::vector<Tile*>> loadedGrid, bool firstRowOffset){
     this->grid = loadedGrid;
     this->firstRowOffset = firstRowOffset;
@@ -24,7 +27,9 @@ Board::~Board() {
     }
 }
 
-// Returns number of points earned in this turn
+/*
+ * Returns number of points earned in this turn depending on tile placement
+ */
 int Board::placeTile(Tile &tile, char rowInput, int col) {
     scoreTurn = 0;
     int row = rowInput - A_VALUE;
@@ -115,6 +120,9 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
     return scoreTurn;
 }
 
+/*
+ *
+ */
 int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col, int rowDirection, bool right) {
     int inputColourShape = 0;
     Tile* currentTile;
@@ -179,7 +187,7 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
     }
 
     if (numberOfCheckedTiles == QWIRKLE) {
-        std::cout << "QWIRKLE!!!";
+        std::cout << "QWIRKLE!!!" << std::endl;
     }
 
     scoreTurn += numberOfCheckedTiles;
@@ -187,14 +195,23 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
     return inputColourShape;
 }
 
+/*
+ *
+ */
 bool Board::edgeRow(int row, int rowDirection) {
     return (row == 0 && rowDirection == -1) || (row == (int) grid.size() - 1 && rowDirection == 1);
 }
 
+/*
+ *
+ */
 bool Board::edgeCol(int col, bool odd, bool right) {
     return (col == 0 && !odd && !right) || (col == (int) grid.at(0).size() - 1 && odd && right);
 }
 
+/*
+ *
+ */
 int Board::calculateCol(bool odd, bool right, int col) {
     if (odd) {
         if (right) {
@@ -208,6 +225,9 @@ int Board::calculateCol(bool odd, bool right, int col) {
     return col;
 }
 
+/*
+ *
+ */
 std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, int row, int col) {
     std::map<std::string, int> coloursShapes;
     coloursShapes.insert( std::pair<std::string, int>
@@ -222,6 +242,9 @@ std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, in
 }
 
 // Validating if the board is empty for the first tile
+/*
+ *
+ */
 bool Board::isEmpty() {
     bool isEmpty = true;
     for (int i = 0; i < (int) grid.size(); ++i) {
@@ -234,6 +257,9 @@ bool Board::isEmpty() {
     return isEmpty;
 }
 
+/*
+ *
+ */
 bool Board::printBoard(std::ostream &destination, bool symbols) {
     Menu menu;
     char letter = 'A';
@@ -273,6 +299,9 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
     return true;
 }
 
+/*
+ *
+ */
 void Board::printBorder(std::ostream &destination) {
     destination << SPACE;
     for (int k = 0; k < (int) grid.at(0).size(); ++k) {
@@ -282,6 +311,9 @@ void Board::printBorder(std::ostream &destination) {
     destination << std::endl;
 }
 
+/*
+ *
+ */
 void Board::printCoord(std::ostream &destination, int startNumber) {
     destination << " " << SPACE;
     if(startNumber % 2 == 1) {
@@ -298,48 +330,41 @@ void Board::printCoord(std::ostream &destination, int startNumber) {
     destination << std::endl;
 }
 
+/*
+ *
+ */
 void Board::expandBoard(){
 
-    //printBoard(std::cout);
-
-//    std::cout << "checking front of rows needs to be expanded" << std::endl;
+    // expland front row
     for (auto i : grid.at(0)){
         if (i && (int) grid.size() <= MAX_ROWS){
             grid.insert(grid.begin(), std::vector<Tile *>(grid.at(grid.size() - 1).size()));
-//            std::cout << "expanded front of rows" << std::endl;
             firstRowOffset = !firstRowOffset;
         }
     }
 
-//    std::cout << "checking back of rows needs to be expanded" << std::endl;
     // expand back row
     for (auto i : grid.at(grid.size() - 1)){
         if (i && (int) grid.size() <= MAX_ROWS){
             grid.insert(grid.end(), std::vector<Tile *>(grid.at(0).size()));
-//            std::cout << "expanded back of rows" << std::endl;
         }
     }
 
-//    std::cout << "checking front of cols needs to be expanded" << std::endl;
     // expand front col
     for (int i = 0; i < (int) grid.size(); i++){
         if (grid.at(i).at(0) && grid.at(i).size() <= MAX_COLS){
             for (int j = 0; j < (int) grid.size(); j++){
                 grid.at(j).insert(grid.at(j).begin(), nullptr);
-
             }
-//            std::cout << "expanded front of cols" << std::endl;
         }
     }
 
-//    std::cout << "checking back of cols needs to be expanded" << std::endl;
     // expand back col
     for (int i = 0; i < (int) grid.size(); i++){
         if (grid.at(i).at(grid.at(i).size() - 1) && (int) grid.at(i).size() <= MAX_COLS){
             for (int j = 0; j < (int) grid.size(); j++){
                 grid.at(j).insert(grid.at(j).end(), nullptr);
             }
-//            std::cout << "expanded back of cols" << std::endl;
         }
     }
 }

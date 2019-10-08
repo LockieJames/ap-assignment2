@@ -12,6 +12,10 @@ LinkedList::~LinkedList()
     clear();
 }
 
+/*
+ * Function goes throughout the linked list and returns a counter of
+ * all the nodes within the list.
+ */
 int LinkedList::size() {
     int counter = 0;
     Node* curr = head;
@@ -24,6 +28,10 @@ int LinkedList::size() {
     return counter;
 }
 
+/*
+ * Function is responsible for clearing all the tiles and nodes within the
+ * list. Called by the destructor.
+ */
 void LinkedList::clear() {
     while (head != nullptr) {
         Node* nNode = head;
@@ -38,6 +46,10 @@ void LinkedList::clear() {
     delete tail;
 }
 
+/*
+ * Gets a tile at a specific index dependent on the parameter parsed into
+ * the function. Throws an exception if the specific tile is not found.
+ */
 Tile* LinkedList::get(int i) {
     Tile* cTile = nullptr;
     
@@ -63,6 +75,11 @@ Tile* LinkedList::get(int i) {
     return cTile;
 }
 
+/*
+ * Adds a tile to the front of the list through the creation of a new
+ * node and passing the attributes necessary to create a new node. Access
+ * through the head of the list.
+ */
 void LinkedList::addFront(Tile* tile) {
     Node* nNode = new Node(tile, head, nullptr);
     
@@ -76,6 +93,12 @@ void LinkedList::addFront(Tile* tile) {
     }
 }
 
+/*
+ * Adds a tile to the end of the list through the creation of a new
+ * node and passing the attributes necessary to create a new node.
+ * Another node is used to travel through the list to the tail, where
+ * the new node is added to the end.
+ */
 void LinkedList::addEnd(Tile* tile) {
     Node* nNode = new Node(tile, nullptr, tail);
     
@@ -92,6 +115,12 @@ void LinkedList::addEnd(Tile* tile) {
     }
 }
 
+/*
+ * Adds a tile to the middle of the list through the creation of a new
+ * node and passing the attributes necessary to create a new node. addMid
+ * is not fully called until there are 4 nodes within the list through ease
+ * of use, and instead addEnd is called instead to fulfill that addition.
+ */
 void LinkedList::addMid(Tile* tile) {
     Node* nNode = new Node(tile, nullptr, nullptr);
     int counter = 0;
@@ -121,11 +150,16 @@ void LinkedList::addMid(Tile* tile) {
     }
 }
 
+/*
+ *
+ */
 void LinkedList::deleteFront() {
     if (head != nullptr) {
         Node* curr = head;
         head = head->next;
-        head->prev = nullptr;
+        if (head != nullptr) {
+            head->prev = nullptr;
+        }
         delete curr;
     }
     if (head == nullptr) {
@@ -133,12 +167,14 @@ void LinkedList::deleteFront() {
     }
 }
 
+/*
+ *
+ */
 Tile* LinkedList::removeTile(char colour, int shape)
 {
     Tile* requiredTile = nullptr;
     Node* curr = head;
-    int counter = 1;
-
+    
     if(head != nullptr)
     {
         while(curr != nullptr && requiredTile == nullptr)
@@ -157,18 +193,23 @@ Tile* LinkedList::removeTile(char colour, int shape)
                         curr->next->prev = curr->prev;
                     }
                     delete curr;
+                    
                 } else {
                     deleteFront();
                 }
             }
-            counter++;
-            curr = curr->next;
+            if (curr->next != nullptr) {
+                curr = curr->next;
+            }
         }
     }
     return requiredTile;
 }
 
 // If colour prints colourful result
+/*
+ *
+ */
 std::string LinkedList::getTiles(bool colour, bool shape) {
     Menu menu;
     std::string allTiles = "";
@@ -189,21 +230,9 @@ std::string LinkedList::getTiles(bool colour, bool shape) {
             allTiles += std::to_string(curr->tile->getShape());
         }
 
-
         if (curr->next != nullptr)
             allTiles += ",";
         curr = curr->next;
     }
     return allTiles;
-}
-
-void LinkedList::clearTiles() {
-    Node* curr = head;
-    int counter = 0;
-    
-    while (counter < size()) {
-        delete curr->tile;
-        curr = curr->next;
-        counter++;
-    }
 }

@@ -14,6 +14,9 @@ SaveLoad::~SaveLoad(){
 
 }
 
+/*
+ *
+ */
 void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Player*>* players, Board* gameBoard, TileBag* tileBag){
     // set up file to be written to
     std::ofstream file;
@@ -41,6 +44,9 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     file.close();
 }
 
+/*
+ *
+ */
 std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
     std::string errorMsg;
@@ -185,6 +191,9 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
     return errorMsg;
 }
 
+/*
+ *
+ */
 LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     std::vector<std::string> tileContainer;
     std::stringstream ss(tiles);
@@ -202,6 +211,9 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     return linkedList;
 }
 
+/*
+ *
+ */
 void SaveLoad::validateName(std::string name) noexcept(false){
     std::regex validInput = std::regex("[A-Z]+");
     if (!std::regex_match(name, validInput)){
@@ -209,6 +221,9 @@ void SaveLoad::validateName(std::string name) noexcept(false){
     }
 }
 
+/*
+ *
+ */
 int SaveLoad::validateScore(std::string score) noexcept(false){
     if (!(score == std::to_string(std::stoi(score)))){
         throw std::ifstream::failure("Error: loaded player score was invalid");
@@ -216,6 +231,9 @@ int SaveLoad::validateScore(std::string score) noexcept(false){
     return std::stoi(score);
 }
 
+/*
+ *
+ */
 void SaveLoad::validateTile(std::string tileString) noexcept(false){
     std::regex validTile = std::regex("[ROYGBP][123456]");
     if (!(std::regex_match(tileString, validTile))){
@@ -224,6 +242,9 @@ void SaveLoad::validateTile(std::string tileString) noexcept(false){
 
 }
 
+/*
+ *
+ */
 std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString) noexcept(false){
     int rowStart = boardRowString.find('|');
     std::vector<Tile*> boardRow;
@@ -250,6 +271,9 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString) noexcept(
     return boardRow;
 }
 
+/*
+ *
+ */
 int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) noexcept(false){
     int currentPlayerIndex = -1;
     for (int i = 0; i < (int) players->size(); i++){
