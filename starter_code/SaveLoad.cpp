@@ -29,7 +29,7 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     }
 
     // get game board and write to file
-    gameBoard->printBoard(file);
+    gameBoard->printBoard(file, false);
 
     // get all tiles in tilebag and write to file
     file << tileBag->getTileBag()->getTiles(false) << std::endl;

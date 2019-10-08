@@ -82,7 +82,7 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
     for (auto i : *players) {
         std::cout << "Score for " << i->getName() << " is: " << i->getScore() << std::endl;
     }
-    gameBoard->printBoard(std::cout);
+    gameBoard->printBoard(std::cout, true);
     std::cout << "Your hand is " << std::endl;
     std::cout << players->at(currentPlayer)->getHand()->getTiles(true) << std::endl;
 }
@@ -98,7 +98,7 @@ void Menu::gameFinish(std::vector<Player *>* players) {
         std::cout << "Score for " << player->getName() << ": " << player->getScore() << std::endl;
     }
 
-    for (int i = 0; i < players->size(); i++) {
+    for (int i = 0; i < (int) players->size(); i++) {
         if (players->at(0)->getScore() > finalScore) {
             finalScore = players->at(0)->getScore();
             index = i;
@@ -207,4 +207,8 @@ void Menu::printHighscores(Highscore * hs)
     }
     
     std::cout << "----------------------------------" << std::endl;
+}
+
+void Menu::printUserInputPrompt(){
+    std::cout << PROMPT;
 }

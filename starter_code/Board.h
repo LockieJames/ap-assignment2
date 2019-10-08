@@ -29,7 +29,7 @@ public:
     Board();
     Board(std::vector<std::vector<Tile*>> loadedGrid, bool firstRowOffset);
     ~Board();
-    bool printBoard(std::ostream &destination);
+    bool printBoard(std::ostream &destination, bool symbols);
     int placeTile(Tile &tile, char row, int col);
 
 private:

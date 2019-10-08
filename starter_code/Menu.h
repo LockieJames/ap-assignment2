@@ -44,6 +44,7 @@ class Menu {
         void printHighscores(Highscore * hs);
         std::string printColour(Colour colour, std::ostream &destination);
         std::string printShape(Shape shape, std::ostream &destination);
+        void printUserInputPrompt();
 
     private:
     void printHand(Player* currentPlayer);

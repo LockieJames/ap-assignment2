@@ -235,7 +235,7 @@ bool Board::isEmpty() {
     return isEmpty;
 }
 
-bool Board::printBoard(std::ostream &destination) {
+bool Board::printBoard(std::ostream &destination, bool symbols) {
     Menu menu;
     char letter = 'A';
     printCoord(destination, 0);
@@ -253,8 +253,12 @@ bool Board::printBoard(std::ostream &destination) {
             } else {
                 destination << PATTERN;
                 if (grid[i][j - 1]) {
-                    destination << menu.printColour(grid[i][j - 1]->getColour(), destination)
-                    << menu.printShape(grid[i][j - 1]->getShape(), destination);
+                    if (symbols){
+                        destination << menu.printColour(grid[i][j - 1]->getColour(), destination)
+                            << menu.printShape(grid[i][j - 1]->getShape(), destination);
+                    } else {
+                        destination << grid.at(i).at(j - 1)->getColour() << grid.at(i).at(j - 1)->getShape();
+                    }
                 } else {
                     destination << "  ";
                 }
