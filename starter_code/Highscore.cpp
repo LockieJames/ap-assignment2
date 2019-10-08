@@ -114,7 +114,7 @@ void Highscore::saveHighscore(std::string filename)
     std::ofstream file;
     file.open(filename);
     
-    for(int i = 0; i < highscores.size(); i++)
+    for(int i = 0; i < (int) highscores.size(); i++)
     {
         file << highscoreNames[i] << " " << highscores[i] << std::endl;
     }

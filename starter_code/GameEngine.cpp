@@ -41,31 +41,25 @@ void GameEngine::mainMenu() {
     bool validChoice;
     bool quit = false;
     std::string strInput;
-    int input;
+    std::regex inputCheck = std::regex("[1-5]");
+    int input = -1;
 
         while (!quit) {
             menu.menuOptions();
             validChoice = false;
 
             while (!validChoice){
-                std::cin >> strInput;
-                std::cin.get();
+                std::getline(std::cin, strInput);
                 
-                if(isdigit(strInput[0]) && strInput.size() == 1)
-                {
-                    std::stringstream ss(strInput);
-                    ss >> input;
-                }
-                
-                if (std::cin.eof()) {
+                if(std::regex_match(strInput, inputCheck)){
+                    input = std::stoi(strInput);
+                    validChoice = true;
+                } else if (std::cin.eof()){
                     quit = true;
                     validChoice = true;
-                } else if (std::cin.fail() || !(input >= 1 && input <= 5)){
-                    std::cin.clear();
-                    menu.invalidInput();
-                    std::cout << "> ";
                 } else {
-                    validChoice = true;
+                    menu.invalidInput();
+                    menu.printUserInputPrompt();
                 }
             }
 
@@ -84,8 +78,7 @@ void GameEngine::mainMenu() {
                 menu.printHighscores(hs);
             } else if (input == 4) {
                 menu.stuInfo();
-            }
-            else if (input == 5) {
+            } else if (input == 5) {
                 quit = true;
             }
         }
@@ -239,7 +232,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
 void GameEngine::gameFinish()
 {
     // checks if each player has broken a highscore or not
-    for(int i = 0; i < players->size(); i++)
+    for(int i = 0; i < (int) players->size(); i++)
     {
         Player* currPlayer = players->at(i);
         hs->addHighscore(currPlayer->getName(), currPlayer->getScore());

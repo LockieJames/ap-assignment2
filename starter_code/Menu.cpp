@@ -82,7 +82,7 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
     for (auto i : *players) {
         std::cout << "Score for " << i->getName() << " is: " << i->getScore() << std::endl;
     }
-    gameBoard->printBoard(std::cout);
+    gameBoard->printBoard(std::cout, true);
     std::cout << "Your hand is " << std::endl;
     std::cout << players->at(currentPlayer)->getHand()->getTiles(true) << std::endl;
 }
@@ -98,7 +98,7 @@ void Menu::gameFinish(std::vector<Player *>* players) {
         std::cout << "Score for " << player->getName() << ": " << player->getScore() << std::endl;
     }
 
-    for (int i = 0; i < players->size(); i++) {
+    for (int i = 0; i < (int) players->size(); i++) {
         if (players->at(0)->getScore() > finalScore) {
             finalScore = players->at(0)->getScore();
             index = i;
@@ -123,6 +123,9 @@ void Menu::getHelp() {
     std::cout << "replace (colour of tile)(shape of tile)" << std::endl;
     std::cout << "\t This will replace the tile you choose and you will get a new one from the bag." << std::endl;
     std::cout << "\t Could look like \033[38;5;126m\"replace Y2\"\033[0m" << std::endl << std::endl;
+    
+    std::cout << "save (filename)" << std::endl;
+    std::cout << "\t Will save the game into the file you provided." << std::endl << std::endl;
 
     std::cout << "quit" << std::endl;
     std::cout << "\t Will quit the game." << std::endl << std::endl;
@@ -207,4 +210,8 @@ void Menu::printHighscores(Highscore * hs)
     }
     
     std::cout << "----------------------------------" << std::endl;
+}
+
+void Menu::printUserInputPrompt(){
+    std::cout << PROMPT;
 }
