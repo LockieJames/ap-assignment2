@@ -104,7 +104,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                         i = 3;
                         players = false;
                     } else if (line[0] == ' ' && i != PLAYER_NAME_POS){
-                        throw std::ifstream::failure("Error: invalid save file");
+                        throw std::ifstream::failure("Error: invalid save file - incorrectly formatted player data");
                     }
                 }
 
