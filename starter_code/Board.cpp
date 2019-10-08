@@ -156,11 +156,11 @@ int Board::validateRow(int colourShape, int row, int col, int rowDirection, bool
         inputColourShape = colourShape;
     }
 
-    if (numberOfCheckedTiles == QWIRKLE - 1) {
+    if (numberOfCheckedTiles == QWIRKLE) {
         std::cout << "QWIRKLE!!!";
     }
 
-    if (numberOfCheckedTiles == QWIRKLE) {
+    if (numberOfCheckedTiles == QWIRKLE + 1) {
         inputColourShape = -10;
     } else {
         scoreTurn += numberOfCheckedTiles;
