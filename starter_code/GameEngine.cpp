@@ -60,6 +60,7 @@ void GameEngine::mainMenu() {
                     check = newGame(numOfPlayers);
                 }
                 if (check != true) {
+                    instantiateHand();
                     gameLoop(0);
                 }
                 quit = true;
@@ -140,12 +141,6 @@ bool GameEngine::newGame(int numPlayers){
             }
         }
     }
-//    menu.newGamePt2();
-//
-//    // Instantiate players' hands
-//    instantiateHand();
-//
-//    gameLoop(0);
     return validCheck;
 }
 
@@ -157,8 +152,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     
     menu.newGamePt2();
     
-    // Instantiate players' hands
-    instantiateHand();
+//    instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players->size(); i++) {
