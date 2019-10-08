@@ -38,7 +38,8 @@ class GameEngine {
         Highscore * hs;
         std::string highscoreFilename;
 
-        void newGame();
+        int newNumPlayers();
+        void newGame(int numPlayers);
         void gameLoop(int firstPlayerIndex);
         void gameFinish();
         bool gameEndCheck();

@@ -18,13 +18,6 @@ GameEngine::GameEngine(){
     
     highscoreFilename = "Highscores.txt";
     hs->loadHighscores(highscoreFilename);
-    
-//    this->numPlayers = numPlayers;
-//
-//    for (int i = 0; i < numPlayers; i++) {
-//        Player* player = new Player();
-//        this->players->push_back(player);
-//    }
 }
 
 GameEngine::~GameEngine(){
@@ -77,7 +70,11 @@ void GameEngine::mainMenu() {
             }
 
             if (input == 1) {
-                newGame();
+                int numOfPlayers = newNumPlayers();
+                if (numOfPlayers != 0) {
+                    newGame(numOfPlayers);
+                    quit = true;
+                }
                 quit = true;
             } else if (input == 2) {
                 if (loadGame()){
@@ -97,8 +94,7 @@ void GameEngine::mainMenu() {
     menu.quit();
 }
 
-// gets player names and makes tilebag, then starts main game loop
-void GameEngine::newGame(){
+int GameEngine::newNumPlayers() {
     int input;
     bool validInt = false;
     
@@ -109,8 +105,13 @@ void GameEngine::newGame(){
         std::cin >> input;
         std::cin.get();
         
-        if (std::cin.fail() || !(input >= 1 && input <= 4)){
+        if (std::cin.eof()) {
+            validInt = true;
+            input = 0;
+        }
+        else if (std::cin.fail() || !(input >= 1 && input <= 4)){
             std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             menu.invalidInput();
             std::cout << "> ";
         } else {
@@ -118,6 +119,13 @@ void GameEngine::newGame(){
             validInt = true;
         }
     }
+    
+    return input;
+}
+
+// gets player names and makes tilebag, then starts main game loop
+void GameEngine::newGame(int numPlayers){
+    this->numPlayers = numPlayers;
     
     // Instantiate players
     for (int i = 0; i < numPlayers; i++) {
@@ -158,12 +166,12 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     while (!gameFinished) {
         for (int i = 0; i < (int) players->size(); i++) {
 
-            if (firstTurn){
+            if (firstTurn) {
                 i = firstPlayerIndex;
                 firstTurn = false;
             }
 
-            if (!gameQuit){
+            if (!gameQuit) {
 
                 // have menu print the current game state
                 this->menu.printGameInfo(players, i, gameBoard);
@@ -198,23 +206,24 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     }  else if (std::regex_match(userInput, field, std::regex(R"(save\s[a-zA-Z0-9]+)"))) {
                         // save game
                         saveGame(field[0].str().substr(5), i);
-
+                        
                     } else if (userInput == "help") {
                         menu.getHelp();
-
+                        
                     } else if (userInput == "quit" || std::cin.eof()) {
                         // quit game
                         turnComplete = true;
                         gameQuit = true;
                         gameFinished = true;
+                        
                     } else if (userInput == "tilebag") {
                         // For debugging
                         tileBag->showBag();
+                        
                     } else {
                         // else print that input is invalid
                         menu.invalidInput();
                     }
-
                 }
             }
         }
@@ -232,7 +241,8 @@ void GameEngine::gameFinish()
     // checks if each player has broken a highscore or not
     for(int i = 0; i < players->size(); i++)
     {
-        hs->addHighscore(players->at(i)->getName(), players->at(i)->getScore());
+        Player* currPlayer = players->at(i);
+        hs->addHighscore(currPlayer->getName(), currPlayer->getScore());
     }
     
     // saves the highscores into the file.
@@ -246,24 +256,24 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
     int newShape = correctRegex(shape);
 
     bool placed = false;
-    Tile* tile = player->getHand()->removeTile(colour, newShape);
+    LinkedList* playerHand = player->getHand();
     
-//    std::cout << "Got to place tile" << std::endl;
+    Tile* tile = playerHand->removeTile(colour, newShape);
+
     if (tile != nullptr) {
         int score = gameBoard->placeTile(*tile, rowInput, col);
-        if (score != 0 && score != -20) {
+        if (score != 0 && score > 0) {
             player->addScore(score);
             drawTile(player);
             placed = true;
         } else {
-            player->getHand()->addFront(tile);
+            playerHand->addFront(tile);
             // IF throw an exception that tile wasnt placed then goes HERE
             /*
              * catch (exception& invalidTilePlacement){
              * if tile cannot be placed on board in given position
              * print appropriate error message
              */
-
         }
     }
     // If throw exeption that tile wasnt found then else statement and goes HERE
@@ -277,36 +287,42 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 }
 
 void GameEngine::drawTile(Player* player) {
+    LinkedList* playerHand = player->getHand();
+    LinkedList* showBag = tileBag->getTileBag();
+    
     if (tileBag->size() != 0) {
-        player->getHand()->addEnd(tileBag->getFront());
+        playerHand->addEnd(tileBag->getFront());
 
-        tileBag->getTileBag()->deleteFront();
+        showBag->deleteFront();
     }
 }
 
 bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
     // TODO: add appropriate menu callbacks to print info to console if need be
     bool placed = false;
-
     int newShape = correctRegex(shape);
+    LinkedList* playerHand = player->getHand();
+    LinkedList* showBag = tileBag->getTileBag();
 
     // remove a tile from players  hand
-    Tile* tile = player->getHand()->removeTile(colour, newShape);
+    Tile* tile = playerHand->removeTile(colour, newShape);
 
     if (tile != nullptr) {
+        Tile* frontTile = tileBag->getFront();
+        
         // draw a tile from bag
-        Colour nColour = tileBag->getFront()->getColour();
-        Shape nShape = tileBag->getFront()->getShape();
+        Colour nColour = frontTile->getColour();
+        Shape nShape = frontTile->getShape();
 
         Tile* nTile = new Tile(nColour, nShape);
 
-        player->getHand()->addEnd(nTile);
+        playerHand->addEnd(nTile);
 
         // add player's tile to the bag
-        tileBag->getTileBag()->addEnd(tile);
+        showBag->addEnd(tile);
 
         // delete drawn node from tile bag
-        tileBag->getTileBag()->deleteFront();
+        showBag->deleteFront();
 
         placed = true;
     }
@@ -315,16 +331,21 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
 }
 
 void GameEngine::instantiateHand() {
+    LinkedList* showBag = tileBag->getTileBag();
+    
     for (auto player : *players) {
+        LinkedList* playerHand = player->getHand();
+        
         for (int j = 0; j < MAX_HAND_SIZE; j++) {
+            Tile* frontTile = tileBag->getFront();
             
-            Colour nColour = tileBag->getFront()->getColour();
-            Shape nShape = tileBag->getFront()->getShape();
+            Colour nColour = frontTile->getColour();
+            Shape nShape = frontTile->getShape();
             
             Tile* tile = new Tile(nColour, nShape);
             
-            player->getHand()->addEnd(tile);
-            tileBag->getTileBag()->deleteFront();
+            playerHand->addEnd(tile);
+            showBag->deleteFront();
         }
     }
 }
