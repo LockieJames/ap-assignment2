@@ -21,17 +21,7 @@ GameEngine::GameEngine(){
 }
 
 GameEngine::~GameEngine(){
-    std::cout << "deleting tilebag" << std::endl;
-    delete tileBag;
-    std::cout << "deleting gameBoard" << std::endl;
-    delete gameBoard;
-    std::cout << "deleting individual players" << std::endl;
-    for (int i = 0; i < (int) players->size(); i++){
-        delete (*players)[i];
-    }
-    std::cout << "deleting players vector" << std::endl;
-    delete players;
-    std::cout << "deletion finished" << std::endl;
+    clear();
 }
 
 // prints main menu using menu.menuOptions(), gets user's choice, and calls appropriate methods
@@ -394,7 +384,7 @@ bool GameEngine::loadGame() {
 void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex){
 
     // delete existing objects on heap 
-    this->~GameEngine();
+    clear();
 
     // load new objects
     this->players = loadedPlayers;
@@ -414,4 +404,18 @@ int GameEngine::correctRegex(int regex) {
     int change = regex - zero;
 
     return change;
+}
+
+void GameEngine::clear(){
+    std::cout << "deleting tilebag" << std::endl;
+    delete tileBag;
+    std::cout << "deleting gameBoard" << std::endl;
+    delete gameBoard;
+    std::cout << "deleting individual players" << std::endl;
+    for (int i = 0; i < (int) players->size(); i++){
+        delete (*players)[i];
+    }
+    std::cout << "deleting players vector" << std::endl;
+    delete players;
+    std::cout << "deletion finished" << std::endl;
 }

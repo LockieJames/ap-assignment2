@@ -50,6 +50,7 @@ class GameEngine {
         void saveGame(std::string fileName, int currentPlayer);
         bool loadGame();
         int correctRegex(int regex);
+        void clear();
 
 };
 
