@@ -123,6 +123,9 @@ void Menu::getHelp() {
     std::cout << "replace (colour of tile)(shape of tile)" << std::endl;
     std::cout << "\t This will replace the tile you choose and you will get a new one from the bag." << std::endl;
     std::cout << "\t Could look like \033[38;5;126m\"replace Y2\"\033[0m" << std::endl << std::endl;
+    
+    std::cout << "save (filename)" << std::endl;
+    std::cout << "\t Will save the game into the file you provided." << std::endl << std::endl;
 
     std::cout << "quit" << std::endl;
     std::cout << "\t Will quit the game." << std::endl << std::endl;
