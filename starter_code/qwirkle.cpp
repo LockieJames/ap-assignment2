@@ -10,7 +10,9 @@ int main(void)
 {
     GameEngine* gameEngine = new GameEngine();
     gameEngine->mainMenu();
+    std::cout << "deleting gameEngine" << std::endl;
     delete gameEngine;
+    std::cout << "deleted gameEngine, exiting" << std::endl;
     
     return EXIT_SUCCESS;
 }
