@@ -84,7 +84,8 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
     }
     gameBoard->printBoard(std::cout, true);
     std::cout << "Your hand is " << std::endl;
-    std::cout << players->at(currentPlayer)->getHand()->getTiles(true) << std::endl;
+    std::cout << "Input values: " << players->at(currentPlayer)->getHand()->getTiles(true, false) << std::endl;
+    std::cout << "Visually are: " << players->at(currentPlayer)->getHand()->getTiles(true, true) << std::endl;
 }
 
 

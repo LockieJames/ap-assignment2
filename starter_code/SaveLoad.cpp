@@ -24,7 +24,7 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     for (auto i : *players){
         file << i->getName() << std::endl;
         file << i->getScore() << std::endl;
-        file << i->getHand()->getTiles(false) << std::endl;
+        file << i->getHand()->getTiles(false, false) << std::endl;
 
     }
 
@@ -32,7 +32,7 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     gameBoard->printBoard(file, false);
 
     // get all tiles in tilebag and write to file
-    file << tileBag->getTileBag()->getTiles(false) << std::endl;
+    file << tileBag->getTileBag()->getTiles(false, false) << std::endl;
 
     // get name of current player and write to file
     file << players->at(currentPlayer)->getName();

@@ -26,7 +26,7 @@ class LinkedList
         void deleteAtIndex(int i);
         bool findNodeByTile(Tile* tile);
         int getIndexByTile(Tile* tile);
-        std::string getTiles(bool colour);
+        std::string getTiles(bool colour, bool shape);
         Tile* removeTile(char colour, int shape);
         void clearTiles();
 

@@ -149,7 +149,7 @@ Tile* LinkedList::removeTile(char colour, int shape)
                 int nShape = curr->tile->getShape();
 
                 requiredTile = new Tile(nColour, nShape);
-                
+
                 if (curr->prev != nullptr) {
                     curr->prev->next = curr->next;
                     
@@ -169,18 +169,27 @@ Tile* LinkedList::removeTile(char colour, int shape)
 }
 
 // If colour prints colourful result
-std::string LinkedList::getTiles(bool colour) {
+std::string LinkedList::getTiles(bool colour, bool shape) {
     Menu menu;
     std::string allTiles = "";
     Node* curr = head;
     while (curr != nullptr) {
+        char getColour = curr->tile->getColour();
+        int getShape = curr->tile->getShape();
+
         if (colour) {
-            allTiles += menu.printColour(curr->tile->getColour(), std::cout);
+            allTiles += menu.printColour(getColour, std::cout);
         } else {
             allTiles += curr->tile->getColour();
         }
 
-        allTiles += std::to_string(curr->tile->getShape());
+        if (shape) {
+            allTiles += menu.printShape(getShape, std::cout);
+        } else {
+            allTiles += std::to_string(curr->tile->getShape());
+        }
+
+
         if (curr->next != nullptr)
             allTiles += ",";
         curr = curr->next;

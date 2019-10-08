@@ -22,7 +22,6 @@
 #define SPACE   "   "
 #define A_VALUE 65
 
-class Tile;
 
 class Board {
 public:

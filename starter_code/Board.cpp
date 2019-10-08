@@ -17,13 +17,11 @@ Board::Board(std::vector<std::vector<Tile*>> loadedGrid, bool firstRowOffset){
 }
 
 Board::~Board() {
-//    std::cout << "Got to start delete board" << std::endl;
     for (int i = 0; i < (int) grid.size(); ++i) {
         for (int j = 0; j < (int) grid.at(i).size(); ++j) {
             delete grid[i][j];
         }
     }
-//    std::cout << "Got to end delete board" << std::endl;
 }
 
 // Returns number of points earned in this turn
@@ -76,7 +74,6 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
                 if (shapesColours[i] != 0) {
                     positions++;
                 }
-                // Invalid value in both shape and colour therefore tile cannot be placed
                 if ((shapesColours[i] == invalidColourAndShape) || isAlreadyInLine) {
                     placeable = false;
                     scoreTurn = 0;
@@ -121,11 +118,9 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
 int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col, int rowDirection, bool right) {
     int inputColourShape = 0;
     Tile* currentTile;
-    //int initialShape = currentTile->getShape();
-    //int initialColour = currentTile->getColour();
 
     bool odd;
-    if (!firstRowOffset){
+    if (!firstRowOffset) {
         odd = row % 2 == 1;
     } else {
         odd = (row + 1) % 2 == 1;
@@ -137,6 +132,7 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
     row = row + rowDirection;
     odd = !odd;
 
+    // Will hold values for different shapes or colour so they do not repeat twice in one line
     int notMatchingColourShape[] = { 0, 0, 0, 0, 0, 0 };
     int i = 0;
 
@@ -170,12 +166,14 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
         i++;
     }
 
+    // Checks if the value of the tile being placed is already in line
     for (int different : notMatchingColourShape) {
         if (accompanyingCS == different && numberOfCheckedTiles > 0) {
             isAlreadyInLine = true;
         }
     }
 
+    // sets the value of input tile if is valis
     if (inputColourShape != 0 && inputColourShape != INVALID_VALUE) {
         inputColourShape = useColourShape;
     }
@@ -223,6 +221,7 @@ std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, in
     return coloursShapes;
 }
 
+// Validating if the board is empty for the first tile
 bool Board::isEmpty() {
     bool isEmpty = true;
     for (int i = 0; i < (int) grid.size(); ++i) {
