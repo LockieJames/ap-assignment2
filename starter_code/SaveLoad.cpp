@@ -14,6 +14,9 @@ SaveLoad::~SaveLoad(){
 
 }
 
+/*
+ *
+ */
 void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Player*>* players, Board* gameBoard, TileBag* tileBag){
     // set up file to be written to
     std::ofstream file;
@@ -41,6 +44,9 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
     file.close();
 }
 
+/*
+ *
+ */
 std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
     std::string errorMsg;
@@ -52,7 +58,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
     std::string playerName;
     bool firstRowOffset = false;
     int currPlayerIndex = -1;
-    
+
     // read from file. the end of each step gets the first line of the next in
     // order to check if current step is finished
     // open file
@@ -74,7 +80,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
             LinkedList* hand = nullptr;
 
             while(players){
-                // iterate through cycles of 3 lines and get relevant data from each 
+                // iterate through cycles of 3 lines and get relevant data from each
                 bool makeNewPlayer = false;
                 for (int i = PLAYER_NAME_POS; i <= PLAYER_HANDS_POS; i++){
                     getline(file, line);
@@ -108,7 +114,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                 }
 
             }
-            
+
             // loading board data
             // validate upper column coord line
             int columnCount = validateColCoords(line, true);
@@ -116,7 +122,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
             // validate upper board border line
             getline(file, line);
             validateBorder(line, columnCount);
-            
+
 
             // validate and load tile placement data
             bool board = true;
@@ -147,7 +153,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                     board = false;
                 }
             }
-            
+
             // check that loaded row count does not exceed max
             if (grid.size() > MAX_ROWS){
                 throw std::ifstream::failure("Error: invalid save file - loaded board has more than the maximum number of rows");
@@ -209,6 +215,9 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
     return errorMsg;
 }
 
+/*
+ *
+ */
 LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     std::vector<std::string> tileContainer;
     std::stringstream ss(tiles);
@@ -226,6 +235,9 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
     return linkedList;
 }
 
+/*
+ *
+ */
 void SaveLoad::validateName(std::string name) noexcept(false){
     std::regex validInput = std::regex("[A-Z]+");
     if (!std::regex_match(name, validInput)){
@@ -233,6 +245,9 @@ void SaveLoad::validateName(std::string name) noexcept(false){
     }
 }
 
+/*
+ *
+ */
 int SaveLoad::validateScore(std::string score) noexcept(false){
     if (!(score == std::to_string(std::stoi(score)))){
         throw std::ifstream::failure("Error: invalid save file - loaded player score was invalid");
@@ -240,6 +255,9 @@ int SaveLoad::validateScore(std::string score) noexcept(false){
     return std::stoi(score);
 }
 
+/*
+ *
+ */
 void SaveLoad::validateTile(std::string tileString) noexcept(false){
     std::regex validTile = std::regex("[ROYGBP][123456]");
     if (!(std::regex_match(tileString, validTile))){
@@ -277,6 +295,9 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int colum
     return boardRow;
 }
 
+/*
+ *
+ */
 int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) noexcept(false){
     int currentPlayerIndex = -1;
     for (int i = 0; i < (int) players->size(); i++){
@@ -314,9 +335,9 @@ int SaveLoad::validateColCoords(std::string line, bool firstColCoordLine){
             columnCount += 2;
             std::string colCountString = std::to_string(columnCount);
             if (
-                (colCountString.length() != 1 
-                    || line.substr(0, 5) != "    " + colCountString) 
-                && (colCountString.length() != 2 
+                (colCountString.length() != 1
+                    || line.substr(0, 5) != "    " + colCountString)
+                && (colCountString.length() != 2
                     || line.substr(0, 5) != "   " + colCountString)){
                 throw std::ifstream::failure("Error: invalid save file - column coordinates bounding the board were incorrect");
             }
@@ -334,7 +355,7 @@ int SaveLoad::validateColCoords(std::string line, bool firstColCoordLine){
     } else {
         throw std::ifstream::failure("Error: invalid save file - column coordinates bounding the board were incorrect");
     }
-    
+
     // get total column count by processing iterator used to validate column coords
     if (firstColCoordLine){
         columnCount = (columnCount / 2) + 1;

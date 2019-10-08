@@ -17,31 +17,49 @@ Player::~Player()
     delete hand;
 }
 
+/*
+ *
+ */
 std::string Player::getName()
 {
     return name;
 }
 
+/*
+ *
+ */
 void Player::setName(std::string name)
 {
     this->name = name;
 }
 
+/*
+ *
+ */
 int Player::getScore()
 {
     return score;
 }
 
+/*
+ *
+ */
 void Player::addScore(int num)
 {
     score += num;
 }
 
+/*
+ *
+ */
 LinkedList* Player::getHand()
 {
     return hand;
 }
 
+/*
+ *
+ */
 int Player::getHandSize()
 {
     return hand->size();

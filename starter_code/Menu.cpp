@@ -15,12 +15,17 @@ Menu::~Menu() {
 
 }
 
+/*
+ * Beginning message welcoming players to Qwirkle.
+ */
 void Menu::startMessage() {
     std::cout << "\n" << "Welcome to Qwirkle!" << std::endl;
     std::cout << "-------------------" << std::endl;
 }
 
-// Input must be an int
+/*
+ * Shows list of options available to user.
+ */
 void Menu::menuOptions() {
     std::cout << "Menu" << std::endl;
     std::cout << "----" << std::endl;
@@ -33,33 +38,54 @@ void Menu::menuOptions() {
     std::cout << PROMPT;
 }
 
+/*
+ * First part of output for starting a new game.
+ */
 void Menu::newGamePt1() {
     std::cout << "----------------------------------" << std::endl;
     std::cout << "Starting a New Game" << std::endl;
 }
 
+/*
+ * Output for asking how many players are willing to player (up to 4).
+ */
 void Menu::numOfPlayers() {
     std::cout << "Number of players(MAX 4): " << std::endl << PROMPT;
 }
 
+/*
+ * Output for user to input names of players who are playing.
+ */
 void Menu::newGameNames(int playerNo) {
     std::cout << "Enter a name for player " << playerNo << " (uppercase characters only)" << std::endl << PROMPT;
 }
 
+/*
+ * Second part of output ending player set name selection.
+ */
 void Menu::newGamePt2() {
     std::cout << "Let's Play!" << std::endl;
     std::cout << "----------------------------------" << std::endl;
 }
 
+/*
+ * Output for asking user for the save file of the game they want to play.
+ */
 void Menu::loadGame() {
-    std::cout << "Enter the filename from which to load the a game" << std::endl;
+    std::cout << "Enter the filename from which to load the game" << std::endl;
     std::cout << PROMPT;
 }
 
+/*
+ * Output to indicate that saving file was successful.
+ */
 void Menu::loadGameSuccess() {
     std::cout << "Qwirkle game successfully loaded" << std::endl;
 }
 
+/*
+ * Shows list of output of the students involved in developing this software.
+ */
 void Menu::stuInfo() {
     std::cout << "----------------------------------" << std::endl;
     for (int i = 0; i < NUM_STUDENTS; i++) {
@@ -73,10 +99,17 @@ void Menu::stuInfo() {
     std::cout << "----------------------------------" << std::endl;
 }
 
+/*
+ * Simple output for displaying a goodbye message.
+ */
 void Menu::quit() {
     std::cout << "Goodbye" << std::endl;
 }
 
+/*
+ * Shows current board state, score of the player, and the hand of the player
+ * with helpful, visual output of the tiles in the player's hand.
+ */
 void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Board* gameBoard) {
     std::cout << players->at(currentPlayer)->getName() << ", it's your turn" << std::endl;
     for (auto i : *players) {
@@ -85,13 +118,14 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
     gameBoard->printBoard(std::cout, true);
     std::cout << "Your hand is " << std::endl;
     
-    
     std::cout << "Input values: " << players->at(currentPlayer)->getHand()->getTiles(true, false) << std::endl;
     std::cout << "Visually are: " << players->at(currentPlayer)->getHand()->getTiles(true, true) << std::endl;
 }
 
-
-
+/*
+ * Function checks the score of each player once game finishes, displaying the player
+ * who had the highest score.
+ */
 void Menu::gameFinish(std::vector<Player *>* players) {
     int finalScore = 0;
     int index = 0;
@@ -102,17 +136,19 @@ void Menu::gameFinish(std::vector<Player *>* players) {
     }
 
     for (int i = 0; i < (int) players->size(); i++) {
-        if (players->at(0)->getScore() > finalScore) {
-            finalScore = players->at(0)->getScore();
+        if (players->at(i)->getScore() > finalScore) {
+            finalScore = players->at(i)->getScore();
             index = i;
         }
     }
     
-    std::cout << "Player " << players->at(index)->getName() << "won!" << std::endl;
-        
-    quit();
+    std::cout << "Player " << players->at(index)->getName() << " won!" << std::endl;
 }
 
+/*
+ * List of commands that may aid the player in proceeding with their turn or do other
+ * various tasks, such as saving the current state of the game.
+ */
 void Menu::getHelp() {
     std::cout << "HELP!" << std::endl;
     std::cout << "Feeling a little stuck? Here are your options: " << std::endl;
@@ -140,6 +176,10 @@ void Menu::getHelp() {
     std::cout << "\t Opens this." << std::endl << std::endl;
 }
 
+/*
+ * Function is responsible for changing the colour of the respective tile
+ * from white text to their respective colour text.
+ */
 std::string Menu::printColour(Colour colour, std::ostream &destination) {
     std::string finalColour;
 
@@ -163,6 +203,10 @@ std::string Menu::printColour(Colour colour, std::ostream &destination) {
     return finalColour;
 }
 
+/*
+ * Function is responsible for changing the shape of the respective tile
+ * from a white symbol to their respective unicode symbol.
+ */
 std::string Menu::printShape(Shape shape, std::ostream &destination) {
     std::string finalColour;
 
@@ -186,22 +230,38 @@ std::string Menu::printShape(Shape shape, std::ostream &destination) {
     return finalColour;
 }
 
+/*
+ * If invalid input has been parsed, error message is displayed instead.
+ */
 void Menu::invalidInput() {
     std::cout << "Invalid input!" << std::endl;
 }
 
+/*
+ * If a invalid play has been made, error message is displayed instead.
+ */
 void Menu::invalidPlay() {
     std::cout << "Invalid play!" << std::endl;
 }
 
+/*
+ * Output that indicates that a save file has been successfully made.
+ */
 void Menu::gameSaved(){
     std::cout << "Game saved successfully saved" << std::endl;
 }
 
+/*
+ * Function responsible for printing out string.
+ */
 void Menu::printString(std::string strToPrint){
     std::cout << strToPrint << std::endl;
 }
 
+/*
+ * Function is reponsible for printing out the highscore of each player
+ * that has ever made a highscore.
+ */
 void Menu::printHighscores(Highscore * hs)
 {
     std::cout << "Highscores!" << std::endl;
@@ -215,6 +275,9 @@ void Menu::printHighscores(Highscore * hs)
     std::cout << "----------------------------------" << std::endl;
 }
 
+/*
+ * Visual function that displays the prompt per assignment specification
+ */
 void Menu::printUserInputPrompt(){
     std::cout << PROMPT;
 }
