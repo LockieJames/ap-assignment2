@@ -289,7 +289,6 @@ void GameEngine::drawTile(Player* player) {
 }
 
 bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
-    // TODO: add appropriate menu callbacks to print info to console if need be
     bool placed = false;
     int newShape = correctRegex(shape);
     LinkedList* playerHand = player->getHand();

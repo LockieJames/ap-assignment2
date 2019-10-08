@@ -19,7 +19,8 @@
 #define PATTERN " | "
 #define BORDER_PATTERN  "-----"
 #define BORDER_PATTERN_END  "----"
-#define SPACE   "   "
+#define SPACE   "  "
+#define BOARD_PADDING "   "
 #define A_VALUE 65
 
 

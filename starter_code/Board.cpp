@@ -246,7 +246,7 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
             if (j == 0) {
                 destination << letter << " ";
                 if (odd) {
-                    destination << SPACE;
+                    destination << BOARD_PADDING;
                 }
                 letter++;
             } else {
@@ -274,7 +274,7 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
 }
 
 void Board::printBorder(std::ostream &destination) {
-    destination << SPACE;
+    destination << BOARD_PADDING;
     for (int k = 0; k < (int) grid.at(0).size(); ++k) {
         destination << BORDER_PATTERN;
     }
@@ -283,15 +283,15 @@ void Board::printBorder(std::ostream &destination) {
 }
 
 void Board::printCoord(std::ostream &destination, int startNumber) {
-    destination << " " << SPACE;
+    destination << SPACE;
     if(startNumber % 2 == 1) {
-        destination << SPACE;
+        destination << BOARD_PADDING;
     }
     for (int i = 0; i < (int) grid.at(0).size(); ++i) {
         if (std::to_string(startNumber).length() == 2){
-            destination << " " << startNumber << "  ";
+            destination << "   " << startNumber;
         } else {
-            destination << "  " << startNumber << "  ";
+            destination << "    " << startNumber;
         }
         startNumber += 2;
     }
