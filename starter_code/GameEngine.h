@@ -39,7 +39,7 @@ class GameEngine {
         std::string highscoreFilename;
 
         int newNumPlayers();
-        void newGame(int numPlayers);
+        bool newGame(int numPlayers);
         void gameLoop(int firstPlayerIndex);
         void gameFinish();
         bool gameEndCheck();

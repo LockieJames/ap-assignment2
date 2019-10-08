@@ -40,6 +40,7 @@ void GameEngine::mainMenu() {
 
     bool validChoice;
     bool quit = false;
+    bool check = false;
     std::string strInput;
     std::regex inputCheck = std::regex("[1-5]");
     int input = -1;
@@ -66,8 +67,10 @@ void GameEngine::mainMenu() {
             if (input == 1) {
                 int numOfPlayers = newNumPlayers();
                 if (numOfPlayers != 0) {
-                    newGame(numOfPlayers);
-                    quit = true;
+                    check = newGame(numOfPlayers);
+                }
+                if (check != true) {
+                    gameLoop(0);
                 }
                 quit = true;
             } else if (input == 2) {
@@ -117,7 +120,9 @@ int GameEngine::newNumPlayers() {
 }
 
 // gets player names and makes tilebag, then starts main game loop
-void GameEngine::newGame(int numPlayers){
+bool GameEngine::newGame(int numPlayers){
+    bool validCheck = false;
+    
     this->numPlayers = numPlayers;
     
     // Instantiate players
@@ -133,7 +138,10 @@ void GameEngine::newGame(int numPlayers){
         std::regex validInput = std::regex("[A-Z]+");
         while (!validName){
             std::getline(std::cin, name);
-            if (std::regex_match(name, validInput)){
+            if (std::cin.eof()) {
+                validName = true;
+                validCheck = true;
+            } else if (std::regex_match(name, validInput)){
                 players->at(i)->setName(name);
                 validName = true;
             } else {
@@ -142,12 +150,13 @@ void GameEngine::newGame(int numPlayers){
             }
         }
     }
-    menu.newGamePt2();
-    
-    // Instantiate players' hands
-    instantiateHand();
-
-    gameLoop(0);
+//    menu.newGamePt2();
+//
+//    // Instantiate players' hands
+//    instantiateHand();
+//
+//    gameLoop(0);
+    return validCheck;
 }
 
 // main game loop, begins on turn of player passed to method
@@ -155,6 +164,11 @@ void GameEngine::gameLoop(int firstPlayerIndex){
     bool gameFinished = false;
     bool gameQuit = false;
     bool firstTurn = true;
+    
+    menu.newGamePt2();
+    
+    // Instantiate players' hands
+    instantiateHand();
 
     while (!gameFinished) {
         for (int i = 0; i < (int) players->size(); i++) {
@@ -364,6 +378,10 @@ bool GameEngine::loadGame() {
     std::string errorMsg = saveLoader.loadGame(fileName, this);
 
     // if there was an error, print the error, otherwise indicate that the load was successful
+    if (std::cin.eof()) {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.clear();
+    }
     if (!errorMsg.empty()) {
         menu.printString(errorMsg);
     } else {
