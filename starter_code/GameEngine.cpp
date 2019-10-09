@@ -497,8 +497,8 @@ void GameEngine::loadGameState(
 }
 
 /*
- * Function is created to ensure the regex's numeral is converted from char to
- * int to be used in other functions.
+ * Helper function is created to ensure the regex's numeral is converted
+ * from char to int to be used in other functions.
  */
 int GameEngine::correctRegex(int regex) {
     char zero = '0';

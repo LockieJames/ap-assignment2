@@ -223,7 +223,7 @@ int Board::validateRow(
 }
 
 /*
- *
+ * Returns true if the edge of the row is known/reached.
  */
 bool Board::edgeRow(int row, int rowDirection) {
     return (row == 0 && rowDirection == -1)
@@ -231,7 +231,7 @@ bool Board::edgeRow(int row, int rowDirection) {
 }
 
 /*
- *
+ * Returns true if the edge of the column is known/reached.
  */
 bool Board::edgeCol(int col, bool odd, bool right) {
     return (col == 0 && !odd && !right)
@@ -239,7 +239,7 @@ bool Board::edgeCol(int col, bool odd, bool right) {
 }
 
 /*
- *
+ * Returns the column, depending if it is on the right or left.
  */
 int Board::calculateCol(bool odd, bool right, int col) {
     if (odd) {
@@ -255,7 +255,7 @@ int Board::calculateCol(bool odd, bool right, int col) {
 }
 
 /*
- * returns map of neighbouring rows
+ * Returns the map of the neighbouring rows.
  */
 std::map<std::string, int> Board::getMap(
     int shapeColour,
@@ -307,7 +307,8 @@ bool Board::isEmpty() {
 }
 
 /*
- *
+ * Prints the entire board to output, so the players can tell
+ * where the tiles are placed currently.
  */
 bool Board::printBoard(std::ostream &destination, bool symbols) {
     Menu menu;
@@ -356,7 +357,7 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
 }
 
 /*
- *
+ * Ensures boarders are printed correctly.
  */
 void Board::printBorder(std::ostream &destination) {
     destination << BOARD_PADDING;
@@ -368,7 +369,7 @@ void Board::printBorder(std::ostream &destination) {
 }
 
 /*
- *
+ * Function prints the assigned coordinate to the destination.
  */
 void Board::printCoord(std::ostream &destination, int startNumber) {
     destination << SPACE;
@@ -387,7 +388,8 @@ void Board::printCoord(std::ostream &destination, int startNumber) {
 }
 
 /*
- *
+ * Function is responsible for expanding the board, which is dependent
+ * on how many tiles are placed currently
  */
 void Board::expandBoard(){
 

@@ -96,8 +96,9 @@ void LinkedList::addFront(Tile* tile) {
 /*
  * Adds a tile to the end of the list through the creation of a new
  * node and passing the attributes necessary to create a new node.
- * Another node is used to travel through the list to the tail, where
- * the new node is added to the end.
+ * If either the head or tail is a nullptr, the new node is applied
+ * to them accodingly. If otherwise, the tail is applied to the new
+ * node, and connections are made accordingly between nodes.
  */
 void LinkedList::addEnd(Tile* tile) {
     Node* nNode = new Node(tile, nullptr, tail);
@@ -164,9 +165,6 @@ void LinkedList::deleteFront() {
         }
         delete curr;
     }
-//    if (head == nullptr) {
-//        tail = nullptr;
-//    }
 }
 
 /*
