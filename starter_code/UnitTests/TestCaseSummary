@@ -1,0 +1,221 @@
+Tests
+
+Test command: ./qwirkle < UnitTests/<test name>.in
+
+Test 1: Create game with one player
+Runs new game
+Chooses 1 player
+Enters 1st players name
+Quits game
+
+Test 2: Create game with two players
+Runs new game
+Chooses 2 players
+Enters 1st players name
+Enters 2nd players name
+Quits game
+
+Test 3: Create game with three players
+Runs new game
+Chooses 3 players
+Enters 1st players name
+Enters 2nd players name
+Enters 3rd players name
+Quits game
+
+Test 4: Create game with four players
+Runs new game
+Chooses 4 player
+Enters 1st players name
+Enters 2nd players name
+Enters 3rd players name
+Enters 4th players name
+Quits game
+
+Test 5: Ask for help in game with one player
+Runs new game
+Chooses 1 player
+Enters 1st players name
+Asks for help
+Quits game
+
+Test 6: Ask for help in game with two players
+Runs new game
+Chooses 2 players
+Enters 1st players name
+Enters 2nd players name
+Asks for help
+Quits game
+
+Test 7: Ask for help in game with three players
+Runs new game
+Chooses 3 players
+Enters 1st players name
+Enters 2nd players name
+Enters 3rd players name
+Asks for help
+Quits game
+
+Test 8: Ask for help in game with four players
+Runs new game
+Chooses 4 player
+Enters 1st players name
+Enters 2nd players name
+Enters 3rd players name
+Enters 4th players name
+Asks for help
+Quits game
+
+Test 9: loads 1 player game
+Loads game
+Loads file "test9.txt"
+Quits game
+
+Test 10: loads 2 player game
+Loads game
+Loads file "test10.txt"
+Quits game
+
+Test 11: loads 3 player game
+Loads game
+Loads file "test10.txt"
+Quits game
+
+Test 12: loads 4 player game
+Loads game
+Loads file "test10.txt"
+Quits game
+
+Test 13: view highscores
+Views high scores
+Quits game
+
+Test 14: view student information
+Views students information
+Quits game
+
+Test 15: open and quit program
+Quits game
+
+Test 16: invalid choice in menu (1 greater than options)
+Invalid choice (6)
+Quit game
+
+Test 17: invalid choice in menu (1 less than options)
+Invalid choice (0)
+Quit game
+
+Test 18: invalid choice in menu (much greater than options)
+Invalid choice (432)
+Quit game
+
+Test 19: invalid choice in menu (much less then options)
+Invalid choice (-124)
+Quit game
+
+Test 20: invalid choice in menu (enter character)
+Invalid choice ('r')
+Quit game
+
+Test 21: invalid choice in menu (enter string)
+Invalid choice ("string")
+Quit game
+
+Test 22: invalid choice in menu (mixture of ints and characters)
+Invalid choice ("4t#3")
+Quit game
+
+Test 23: place valid tile
+Load game
+Loads file "test23.txt"
+Places O5 at D3
+Quits game
+
+Test 24: place a tile not in hand
+Load game
+Loads file "test23.txt"
+Places Y3 at D3
+Quits game
+
+Test 25: place tile with same colour
+Load game
+Loads file "test23.txt"
+Places B4 at C2
+Places B3 at D3
+Quits game
+
+Test 26: place tile with same shape
+Load game
+Loads file "test23.txt"
+Places O5 at C2
+Places G5 at D3
+Places P5 at E4
+Quits game
+
+Test 27: qwirkle
+Load game
+Loads file "test27.txt"
+Places G1 at B1
+Places G2 at C4
+Places G3 at D5
+Places G4 at E6
+Places G5 at F7
+Places G6 at G8
+Quit game
+
+Test 28: game end with one player
+Load game
+Loads file "test28.txt"
+Places G1 at B1
+Places G2 at C4
+Places G3 at D5
+Places G4 at E6
+Places G5 at F7
+Places G6 at G8
+Places Y2 at B5
+Games ends due to player winning
+
+Test 29: game end with two player
+Load game
+Loads file "test29.txt"
+Places G1 at B1
+Places B1 at C2
+Places G2 at C4
+Places Y1 at D1
+Places G3 at D7
+Places R1 at E2
+Places G4 at E8
+Places O1 at F1
+Places G5 at F11
+Places P1 at G2
+Games ends due to player winning
+
+Test 30: replace a tile
+Load game
+Loads file "test30.txt"
+Replace B1
+Quit game
+
+Test 31: save game with one player
+Load game
+Loads file "test31.txt"
+Save test31
+Quit game
+
+Test 32: save game with two players
+Load game
+Loads file "test32.txt"
+Save test32
+Quit game
+
+Test 33: save game with three players
+Load game
+Loads file "test33.txt"
+Save test33
+Quit game
+
+Test 34: save game with four players
+Load game
+Loads file "test34.txt"
+Save test34
+Quit game

@@ -1,0 +1,60 @@
+
+Welcome to Qwirkle!
+-------------------
+Menu
+----
+1. New Game
+2. Load Game
+3. Highscores
+4. Show Student Information
+5. Quit
+
+> ----------------------------------
+Starting a New Game
+Number of players(MAX 4): 
+> Enter a name for player 1 (uppercase characters only)
+> Enter a name for player 2 (uppercase characters only)
+> Let's Play!
+----------------------------------
+LOCKIE, it's your turn
+Score for LOCKIE is: 0
+Score for LOUIS is: 0
+      0    2    4    6
+   ------------------------
+A  |    |    |    |    |
+B     |    |    |    |    |
+C  |    |    |    |    |
+D     |    |    |    |    |
+E  |    |    |    |    |
+F     |    |    |    |    |
+   ------------------------
+         1    3    5    7
+Your hand is 
+Input values: [38;5;202mO[0m5,[38;5;33mB[0m6,[38;5;33mB[0m5,[38;5;33mB[0m3,[38;5;55mP[0m4,[38;5;160mR[0m4
+Visually are: [38;5;202mO[0m✶,[38;5;33mB[0m✤,[38;5;33mB[0m✶,[38;5;33mB[0m◆,[38;5;55mP[0m■,[38;5;160mR[0m■
+> HELP!
+Feeling a little stuck? Here are your options: 
+Write: 
+place (colour of the tile you want to place)(shape you want to place) at (selected row)(selected column) 
+	 This could for instance look like [38;5;126m"place P4 at D5"[0m
+	 Be careful however, you are allowed to place tiles only next to one that already exists
+	 and has the same shape or colour!
+	 Additionally, you can place only the tiles that are in you hand!
+
+replace (colour of tile)(shape of tile)
+	 This will replace the tile you choose and you will get a new one from the bag.
+	 Could look like [38;5;126m"replace Y2"[0m
+
+save (filename)
+	 Will save the game into the file you provided.
+
+quit
+	 Will quit the game.
+
+^D
+	 Will quit the game as well.
+
+help
+	 Opens this.
+
+> Goodbye
