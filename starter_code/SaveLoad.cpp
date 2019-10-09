@@ -356,7 +356,7 @@ std::vector<Tile*> SaveLoad::parseBoardRow(
         // remove whitespace from given tile space on board
         tile.erase(remove(tile.begin(), tile.end(), ' '), tile.end());
 
-        // if tile space has a tile in it, add tile to board row vector 
+        // if tile space has a tile in it, add tile to board row vector
         if (!tile.empty()){
             validateTile(tile);
             boardRow[i] = new Tile(tile[0], tile[1] - '0');
@@ -398,7 +398,7 @@ int SaveLoad::getCurrPlayer(
 }
 
 /*
- * Helper method that validates the bounding borders of the board based on 
+ * Helper method that validates the bounding borders of the board based on
  * the columnCount int passed to it.
  */
 void SaveLoad::validateBorder(std::string line, int columnCount) {
@@ -438,14 +438,14 @@ int SaveLoad::validateColCoords(std::string line, bool firstColCoordLine){
     if (!firstColCoordLine){
         columnCount = -1;
     }
-    
+
     // check for initial line padding, otherwise throw exception
     if (line.substr(0, 2) == "  "){
 
         // remove padding from line
         line = line.substr(2);
 
-        // check whether each token (i.e. 4-5 spaces followed by an int) 
+        // check whether each token (i.e. 4-5 spaces followed by an int)
         // in the line is valid
         while (!line.empty()){
 
