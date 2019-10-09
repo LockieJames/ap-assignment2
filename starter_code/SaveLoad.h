@@ -36,14 +36,14 @@ class SaveLoad {
 
 
     private:
-        LinkedList* makeLinkedList(std::string tiles) noexcept(false);
-        void validateName(std::string name) noexcept(false);
-        int validateScore(std::string score) noexcept(false);
-        void validateTile(std::string tileString) noexcept(false);
-        std::vector<Tile*> parseBoardRow(std::string boardRowString, int columnCount) noexcept(false);
-        int getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) noexcept(false);
-        void validateBorder(std::string line, int columnCount) noexcept(false);
-        int validateColCoords(std::string line, bool firstColCoordLine) noexcept(false);
+        LinkedList* makeLinkedList(std::string tiles) ;
+        void validateName(std::string name) ;
+        int validateScore(std::string score) ;
+        void validateTile(std::string tileString) ;
+        std::vector<Tile*> parseBoardRow(std::string boardRowString, int columnCount) ;
+        int getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) ;
+        void validateBorder(std::string line, int columnCount) ;
+        int validateColCoords(std::string line, bool firstColCoordLine) ;
 
 };
 

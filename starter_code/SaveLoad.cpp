@@ -15,7 +15,8 @@ SaveLoad::~SaveLoad(){
 }
 
 /*
- *
+ * Main saving method. Takes a filename and various data from the GameEngine,
+ * and writes the data to the file with the given filename.
  */
 void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Player*>* players, Board* gameBoard, TileBag* tileBag){
     // set up file to be written to
@@ -45,7 +46,11 @@ void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Pla
 }
 
 /*
- *
+ * Main loading method. Takes a filename and a pointer to the current
+ * GameEngine object, opens and loads data from the file with the given
+ * filename, and passes the loaded data to the pointed-to GameEngine object.
+ * Returns an error message; if the error message if empty, then there was no
+ * error.
  */
 std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
@@ -191,10 +196,11 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
         errorMsg= e.what();
     }
 
+    // if there is no error, load game with loaded data
     if (errorMsg.empty()){
         gameEngine->loadGameState(playersVector, grid, firstRowOffset, tileBag, currPlayerIndex);
-    } else {
 
+    } else {
         // if error, delete memory on heap
         // delete players
         for (auto i : *playersVector){
@@ -216,9 +222,11 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 }
 
 /*
- *
+ * Helper method that take a string representing a row on the game board, and
+ * processes the string into individual tiles, which are added to a LinkedList
+ * and returned.
  */
-LinkedList* SaveLoad::makeLinkedList(std::string tiles){
+LinkedList* SaveLoad::makeLinkedList(std::string tiles) {
     std::vector<std::string> tileContainer;
     std::stringstream ss(tiles);
     std::string tile;
@@ -236,9 +244,10 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles){
 }
 
 /*
- *
+ * Helper method that validates a given player name. Throws exception if name
+ * does not match game's player name format.
  */
-void SaveLoad::validateName(std::string name) noexcept(false){
+void SaveLoad::validateName(std::string name) {
     std::regex validInput = std::regex("[A-Z]+");
     if (!std::regex_match(name, validInput)){
         throw std::ifstream::failure("Error: invalid save file - loaded player name was invalid");
@@ -246,9 +255,10 @@ void SaveLoad::validateName(std::string name) noexcept(false){
 }
 
 /*
- *
+ * Helper method that validates a given score in string format and returns
+ * the score as an integer. Throws an exception if score is not valid.
  */
-int SaveLoad::validateScore(std::string score) noexcept(false){
+int SaveLoad::validateScore(std::string score) {
     if (!(score == std::to_string(std::stoi(score)))){
         throw std::ifstream::failure("Error: invalid save file - loaded player score was invalid");
     }
@@ -256,9 +266,10 @@ int SaveLoad::validateScore(std::string score) noexcept(false){
 }
 
 /*
- *
+ * Helper method that validates a given tile in string format, and throws
+ * an exception if the tile doesn't match the game's format
  */
-void SaveLoad::validateTile(std::string tileString) noexcept(false){
+void SaveLoad::validateTile(std::string tileString) {
     std::regex validTile = std::regex("[ROYGBP][123456]");
     if (!(std::regex_match(tileString, validTile))){
         throw std::ifstream::failure("Error: invalid save file - loaded tile was invalid");
@@ -266,7 +277,10 @@ void SaveLoad::validateTile(std::string tileString) noexcept(false){
 
 }
 
-std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int columnCount) noexcept(false){
+/*
+ * 
+ */
+std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int columnCount) {
     int rowStart = boardRowString.find('|');
     std::vector<Tile*> boardRow;
     std::stringstream ss(boardRowString.substr(rowStart + 1));
@@ -309,9 +323,10 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int colum
 }
 
 /*
- *
+ * Helper method. Takes a vector of players and the name of the players whose
+ * turn it currently is, and returns the index of that player.
  */
-int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) noexcept(false){
+int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) {
     int currentPlayerIndex = -1;
     for (int i = 0; i < (int) players->size(); i++){
         if (players->at(i)->getName() == currentPlayerName){
@@ -326,7 +341,10 @@ int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPl
     return currentPlayerIndex;
 }
 
-void SaveLoad::validateBorder(std::string line, int columnCount) noexcept(false){
+/*
+ * 
+ */
+void SaveLoad::validateBorder(std::string line, int columnCount) {
     if (line.substr(0, 3) == "   "){
         line = line.substr(3);
         if (line != std::string(columnCount * 5, '-') + "----"){
@@ -337,6 +355,9 @@ void SaveLoad::validateBorder(std::string line, int columnCount) noexcept(false)
     }
 }
 
+/*
+ * 
+ */
 int SaveLoad::validateColCoords(std::string line, bool firstColCoordLine){
     int columnCount = -2;
     if (!firstColCoordLine){
