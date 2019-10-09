@@ -67,8 +67,10 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
                                     colours.at("bottomRight") + shapes.at("bottomRight") };
             int invalidColourAndShape = INVALID_VALUE + INVALID_VALUE;
 
-            bool offDiagonal = (colours["topRight"] == colours["bottomLeft"]) || (shapes["topRight"] == shapes["bottomLeft"]);
-            bool mainDiagonal = (colours["topLeft"] == colours["bottomRight"]) || (shapes["topLeft"] == shapes["bottomRight"]);
+            bool offDiagonal =  (colours["topRight"] == colours["bottomLeft"])
+                              || (shapes["topRight"] == shapes["bottomLeft"]);
+            bool mainDiagonal = (colours["topLeft"] == colours["bottomRight"])
+                              || (shapes["topLeft"] == shapes["bottomRight"]);
 
             int positions = 0;
 
@@ -119,7 +121,7 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
 }
 
 /*
- *
+ * Returns the value of the row if valid row, or an invalid value if not allowed to place tile
  */
 int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col, int rowDirection, bool right) {
     int inputColourShape = 0;
@@ -224,7 +226,7 @@ int Board::calculateCol(bool odd, bool right, int col) {
 }
 
 /*
- *
+ * returns map of neighbouring rows
  */
 std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, int row, int col) {
     std::map<std::string, int> coloursShapes;
@@ -240,7 +242,7 @@ std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, in
 }
 
 /*
- * Function validates if the board is empty or not for the first tile placed
+ * Validating if the board is empty for the first tile
  */
 bool Board::isEmpty() {
     bool isEmpty = true;
@@ -269,7 +271,7 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
             if (j == 0) {
                 destination << letter << " ";
                 if (odd) {
-                    destination << SPACE;
+                    destination << BOARD_PADDING;
                 }
                 letter++;
             } else {
@@ -300,7 +302,7 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
  *
  */
 void Board::printBorder(std::ostream &destination) {
-    destination << SPACE;
+    destination << BOARD_PADDING;
     for (int k = 0; k < (int) grid.at(0).size(); ++k) {
         destination << BORDER_PATTERN;
     }
@@ -312,15 +314,15 @@ void Board::printBorder(std::ostream &destination) {
  *
  */
 void Board::printCoord(std::ostream &destination, int startNumber) {
-    destination << " " << SPACE;
+    destination << SPACE;
     if(startNumber % 2 == 1) {
-        destination << SPACE;
+        destination << BOARD_PADDING;
     }
     for (int i = 0; i < (int) grid.at(0).size(); ++i) {
         if (std::to_string(startNumber).length() == 2){
-            destination << " " << startNumber << "  ";
+            destination << "   " << startNumber;
         } else {
-            destination << "  " << startNumber << "  ";
+            destination << "    " << startNumber;
         }
         startNumber += 2;
     }

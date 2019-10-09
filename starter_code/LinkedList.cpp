@@ -185,7 +185,7 @@ Tile* LinkedList::removeTile(char colour, int shape)
 {
     Tile* requiredTile = nullptr;
     Node* curr = head;
-    
+
     if(head != nullptr)
     {
         while(curr != nullptr && requiredTile == nullptr)
@@ -215,9 +215,7 @@ Tile* LinkedList::removeTile(char colour, int shape)
                     deleteFront();
                 }
             }
-            if (curr->next != nullptr) {
-                curr = curr->next;
-            }
+            curr = curr->next;
         }
     }
     return requiredTile;
