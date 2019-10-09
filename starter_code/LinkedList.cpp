@@ -110,13 +110,6 @@ void LinkedList::addEnd(Tile* tile) {
         head->next = tail;
         tail->prev = head;
     } else {
-//        Node* travel = head;
-//        while (travel->next != nullptr) {
-//            travel = travel->next;
-//        }
-//        travel->next = nNode;
-//        nNode->prev = travel;
-//        tail = nNode;
         tail->next = nNode;
         nNode->prev = tail;
         tail = nNode;
@@ -206,10 +199,6 @@ Tile* LinkedList::removeTile(char colour, int shape)
                     } else {
                         tail = curr->prev;
                     }
-//                    if (curr->next == nullptr) {
-//                        tail = curr->prev;
-//                    }
-                    
                     delete curr;
                     
                 } else {

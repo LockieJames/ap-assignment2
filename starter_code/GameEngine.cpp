@@ -126,6 +126,7 @@ bool GameEngine::newGame(int numPlayers){
         this->players->push_back(player);
     }
 
+    // get names for each player
     for (int i = 0; i < (int) players->size(); i++) {
         menu.newGameNames(i + 1);
         bool validName = false;
@@ -160,9 +161,11 @@ void GameEngine::gameLoop(int firstPlayerIndex){
 
     menu.newGamePt2();
 
+    // main game loop
     while (!gameFinished) {
         for (int i = 0; i < (int) players->size(); i++) {
 
+            // set the player whose turn it is upon loading
             if (firstTurn) {
                 i = firstPlayerIndex;
                 firstTurn = false;
@@ -176,12 +179,13 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                 bool turnComplete = false;
                 while (!turnComplete) {
 
-                    // TODO: Ask for input in menu and pass string userInput
+                    // get input from user 
                     std::string userInput;
                     std::smatch field;
                     menu.printUserInputPrompt();
                     std::getline(std::cin, userInput);
 
+                    // validate input for placing tile
                     if (
                         std::regex_match(
                             userInput,
@@ -209,7 +213,8 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         if (!turnComplete) {
                             menu.invalidPlay();
                         }
-
+                    
+                    // validate input for replacing tile
                     } else if (
                         std::regex_match(
                             userInput,
@@ -224,6 +229,7 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                             field[0].str()[9]
                         );
 
+                    // validate input for saving game
                     } else if (
                         std::regex_match(
                             userInput,
