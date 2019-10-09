@@ -143,8 +143,7 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
                     // if first row of board, check if first row is offset
                     if (firstRow){
-                        std::regex rowOffsetCheck = std::regex("A\\s\\s\\s\\s\\s|");
-                        if (std::regex_match(line.substr(0, 7), rowOffsetCheck)){
+                        if (line.substr(0, 7) == "A     |"){
                             // if true, load first row at offset
                             firstRowOffset = true;
                         }
