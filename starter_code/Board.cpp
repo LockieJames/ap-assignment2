@@ -11,9 +11,6 @@ Board::Board() {
     firstRowOffset = false;
 }
 
-/*
- *
- */
 Board::Board(std::vector<std::vector<Tile*>> loadedGrid, bool firstRowOffset){
     this->grid = loadedGrid;
     this->firstRowOffset = firstRowOffset;
@@ -28,7 +25,8 @@ Board::~Board() {
 }
 
 /*
- * Returns number of points earned in this turn depending on tile placement
+ * Returns number of points earned in this turn depending on tile placement,
+ * which is determined through other functions within this class.
  */
 int Board::placeTile(Tile &tile, char rowInput, int col) {
     scoreTurn = 0;
@@ -181,7 +179,7 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
         }
     }
 
-    // sets the value of input tile if is valis
+    // sets the value of input tile if is valid
     if (inputColourShape != 0 && inputColourShape != INVALID_VALUE) {
         inputColourShape = useColourShape;
     }
@@ -241,9 +239,8 @@ std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, in
     return coloursShapes;
 }
 
-// Validating if the board is empty for the first tile
 /*
- *
+ * Function validates if the board is empty or not for the first tile placed
  */
 bool Board::isEmpty() {
     bool isEmpty = true;

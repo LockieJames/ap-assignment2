@@ -104,13 +104,21 @@ void LinkedList::addEnd(Tile* tile) {
     
     if (head == nullptr) {
         head = nNode;
+        head->next = tail;
+    } else if (tail == nullptr) {
+        tail = nNode;
+        head->next = tail;
+        tail->prev = head;
     } else {
-        Node* travel = head;
-        while (travel->next != nullptr) {
-            travel = travel->next;
-        }
-        travel->next = nNode;
-        nNode->prev = travel;
+//        Node* travel = head;
+//        while (travel->next != nullptr) {
+//            travel = travel->next;
+//        }
+//        travel->next = nNode;
+//        nNode->prev = travel;
+//        tail = nNode;
+        tail->next = nNode;
+        nNode->prev = tail;
         tail = nNode;
     }
 }
@@ -151,7 +159,8 @@ void LinkedList::addMid(Tile* tile) {
 }
 
 /*
- *
+ * Deletes the front node/head node, and making the next node the new
+ * head node.
  */
 void LinkedList::deleteFront() {
     if (head != nullptr) {
@@ -162,13 +171,15 @@ void LinkedList::deleteFront() {
         }
         delete curr;
     }
-    if (head == nullptr) {
-        tail = nullptr;
-    }
+//    if (head == nullptr) {
+//        tail = nullptr;
+//    }
 }
 
 /*
- *
+ * Returns the value of a tile that is required to be removed from the
+ * linked list, based on the parameters of the data. The associated node
+ * is deleted as well. This function is used for the player's linked list.
  */
 Tile* LinkedList::removeTile(char colour, int shape)
 {
@@ -191,7 +202,13 @@ Tile* LinkedList::removeTile(char colour, int shape)
                     
                     if (curr->next != nullptr) {
                         curr->next->prev = curr->prev;
+                    } else {
+                        tail = curr->prev;
                     }
+//                    if (curr->next == nullptr) {
+//                        tail = curr->prev;
+//                    }
+                    
                     delete curr;
                     
                 } else {
@@ -206,9 +223,9 @@ Tile* LinkedList::removeTile(char colour, int shape)
     return requiredTile;
 }
 
-// If colour prints colourful result
 /*
- *
+ * Prints out all the tiles within the linked list as a string return
+ * value, where the Menu class handles most standard output.
  */
 std::string LinkedList::getTiles(bool colour, bool shape) {
     Menu menu;

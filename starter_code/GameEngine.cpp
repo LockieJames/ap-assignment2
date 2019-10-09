@@ -6,6 +6,7 @@
 //
 
 #include "GameEngine.h"
+#include <iostream>
 
 GameEngine::GameEngine(){
     // Tile objects made upon instantiating tilebag
@@ -85,7 +86,8 @@ void GameEngine::mainMenu() {
 }
 
 /*
- *
+ * Takes in a number of players that are willing to play the game, per
+ * the major enhancements of the specifications.
  */
 int GameEngine::newNumPlayers() {
     int input;
@@ -118,7 +120,7 @@ int GameEngine::newNumPlayers() {
 
 /*
  * Gets player name and sets name for each player, before starting main
- * game loop
+ * game loop.
  */
 bool GameEngine::newGame(int numPlayers){
     bool validCheck = false;
@@ -155,7 +157,7 @@ bool GameEngine::newGame(int numPlayers){
 }
 
 /*
- * Main game loop, beings on turn of player passed to method
+ * Main game loop, which starts on the first player within the players collection.
  */
 void GameEngine::gameLoop(int firstPlayerIndex){
     bool gameFinished = false;
@@ -217,10 +219,6 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         gameQuit = true;
                         gameFinished = true;
                         
-                    } else if (userInput == "tilebag") {
-                        // For debugging
-                        tileBag->showBag();
-                        
                     } else {
                         // else print that input is invalid
                         menu.invalidInput();
@@ -232,13 +230,13 @@ void GameEngine::gameLoop(int firstPlayerIndex){
 
     if (!gameQuit){
         // if the game wasn't quit, finish the game normally
-        // i.e. print out end of game info
         gameFinish();
     }
 }
 
 /*
- *
+ * Once game is finished per Qwirkle rules, high scores are checked first, before
+ * displaying all the final scores of the players, before indicating who won.
  */
 void GameEngine::gameFinish()
 {
@@ -256,7 +254,8 @@ void GameEngine::gameFinish()
 }
 
 /*
- *
+ * Checks if a tile can be placed at a specific location, dependent on the
+ * value of the parameters passed through to the function.
  */
 bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowInput, int col) {
     // TODO: add appropriate menu callbacks to print info to console if need be
@@ -266,7 +265,7 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
     LinkedList* playerHand = player->getHand();
     
     Tile* tile = playerHand->removeTile(colour, newShape);
-
+    
     if (tile != nullptr) {
         int score = gameBoard->placeTile(*tile, rowInput, col);
         if (score != 0 && score > 0) {
@@ -282,7 +281,8 @@ bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowI
 }
 
 /*
- *
+ * Takes the front most tile from the tile bag and add it to the
+ * associated player's hand.
  */
 void GameEngine::drawTile(Player* player) {
     std::string errMsg;
@@ -305,7 +305,8 @@ void GameEngine::drawTile(Player* player) {
 }
 
 /*
- *
+ * Replaces a specific tile within the associated player's hand, based on the
+ * colour and shape parameters.
  */
 bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
     std::string errMsg;
@@ -319,7 +320,7 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
     Shape nShape;
     
     try {
-        Tile* frontTile = tileBag->getFront();
+        frontTile = tileBag->getFront();
         
         // draw a tile from bag
         nColour = frontTile->getColour();
@@ -355,7 +356,8 @@ bool GameEngine::replaceTile(Player* player, Colour colour, Shape shape){
 }
 
 /*
- *
+ * Function to add six tiles to all players per Qwirkle rules. Number of tiles
+ * added to a player's hand is not dependent on the amount of players playing.
  */
 void GameEngine::instantiateHand() {
     std::string errMsg;
@@ -388,7 +390,8 @@ void GameEngine::instantiateHand() {
 }
 
 /*
- *
+ * Function that calls the associated SaveLoad functions to save the current state
+ * of a game.
  */
 void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     SaveLoad saveLoader;
@@ -399,7 +402,8 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
 }
 
 /*
- *
+ * Function that calls the associated SaveLoad functions to load a game from a txt
+ * file into memory.
  */
 bool GameEngine::loadGame() {
     bool loadSuccess = false;
@@ -428,7 +432,8 @@ bool GameEngine::loadGame() {
 }
 
 /*
- *
+ * Function that initializes all the variables that are required for a game to
+ * function properly.
  */
 void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex){
 
@@ -456,7 +461,8 @@ int GameEngine::correctRegex(int regex) {
 }
 
 /*
- *
+ * Function that is called by the destructor to clear memory for the associated
+ * variables.
  */
 void GameEngine::clear(){
     delete tileBag;
