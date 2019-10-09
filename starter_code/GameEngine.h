@@ -19,7 +19,12 @@ class GameEngine {
     public:
         GameEngine();
         ~GameEngine();
-        void loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex);
+        void loadGameState(
+            std::vector<Player*>* loadedPlayers,
+            std::vector<std::vector<Tile*>> loadedGameBoard,
+            bool firstRowOffset, LinkedList* loadedTileBag,
+            int currentPlayerIndex
+        );
         void mainMenu();
 
     private:
@@ -36,7 +41,13 @@ class GameEngine {
         void gameLoop(int firstPlayerIndex);
         void gameFinish();
         bool gameEndCheck();
-        bool placeTile(Player* player, Colour colour, Shape shape, char rowInput, int col);
+        bool placeTile(
+            Player* player,
+            Colour colour,
+            Shape shape,
+            char rowInput,
+            int col
+        );
         bool replaceTile(Player* player, Colour colour, Shape shape);
         void instantiateHand();
         void drawTile(Player* player);

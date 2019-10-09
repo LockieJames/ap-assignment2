@@ -182,10 +182,22 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                     menu.printUserInputPrompt();
                     std::getline(std::cin, userInput);
 
-                    if (std::regex_match(userInput, field, std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-Z][0-9]+)"))) {
+                    if (
+                        std::regex_match(
+                            userInput,
+                            field,
+                            std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-Z][0-9]+)")
+                        )
+                    ) {
 
                         // place tile
-                        turnComplete = placeTile(players->at(i), field[0].str()[6], field[0].str()[7], field[0].str()[12], std::stoi(field[0].str().substr(13)));
+                        turnComplete = placeTile(
+                            players->at(i),
+                            field[0].str()[6],
+                            field[0].str()[7],
+                            field[0].str()[12],
+                            std::stoi(field[0].str().substr(13))
+                        );
 
                         // check if game is finished
                         if (players->at(i)->getHand()->size() == 0) {
@@ -196,11 +208,27 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                             menu.invalidPlay();
                         }
 
-                    } else if (std::regex_match(userInput, field, std::regex(R"(replace\s[ROYGBP][1-6])"))) {
+                    } else if (
+                        std::regex_match(
+                            userInput,
+                            field,
+                            std::regex(R"(replace\s[ROYGBP][1-6])")
+                        )
+                    ) {
                         // replace tile
-                        turnComplete = replaceTile(players->at(i), field[0].str()[8], field[0].str()[9]);
+                        turnComplete = replaceTile(
+                            players->at(i),
+                            field[0].str()[8],
+                            field[0].str()[9]
+                        );
 
-                    }  else if (std::regex_match(userInput, field, std::regex(R"(save\s[a-zA-Z0-9]+)"))) {
+                    } else if (
+                        std::regex_match(
+                            userInput,
+                            field,
+                            std::regex(R"(save\s[a-zA-Z0-9]+)")
+                        )
+                    ) {
                         // save game
                         saveGame(field[0].str().substr(5), i);
 
@@ -229,8 +257,9 @@ void GameEngine::gameLoop(int firstPlayerIndex){
 }
 
 /*
- * Once game is finished per Qwirkle rules, high scores are checked first, before
- * displaying all the final scores of the players, before indicating who won.
+ * Once game is finished per Qwirkle rules, high scores are checked first,
+ * before displaying all the final scores of the players, before
+ * indicating who won.
  */
 void GameEngine::gameFinish()
 {
@@ -254,8 +283,13 @@ void GameEngine::gameFinish()
  * Checks if a tile can be placed at a specific location, dependent on the
  * value of the parameters passed through to the function.
  */
-bool GameEngine::placeTile(Player* player, Colour colour, Shape shape, char rowInput, int col) {
-    // TODO: add appropriate menu callbacks to print info to console if need be
+bool GameEngine::placeTile(
+    Player* player,
+    Colour colour,
+    Shape shape,
+    char rowInput,
+    int col
+) {
     int newShape = correctRegex(shape);
 
     bool placed = false;
@@ -387,8 +421,8 @@ void GameEngine::instantiateHand() {
 }
 
 /*
- * Function that calls the associated SaveLoad functions to save the current state
- * of a game.
+ * Function that calls the associated SaveLoad functions to save the current
+ * state of a game.
  */
 void GameEngine::saveGame(std::string fileName, int currentPlayer) {
     SaveLoad saveLoader;
@@ -399,8 +433,8 @@ void GameEngine::saveGame(std::string fileName, int currentPlayer) {
 }
 
 /*
- * Function that calls the associated SaveLoad functions to load a game from a txt
- * file into memory.
+ * Function that calls the associated SaveLoad functions to load a game from a
+ * txt file into memory.
  */
 bool GameEngine::loadGame() {
     bool loadSuccess = false;
@@ -414,7 +448,8 @@ bool GameEngine::loadGame() {
     SaveLoad saveLoader = SaveLoad();
     std::string errorMsg = saveLoader.loadGame(fileName, this);
 
-    // if there was an error, print the error, otherwise indicate that the load was successful
+    // if there was an error, print the error, otherwise indicate that the 
+    // load was successful
     if (std::cin.eof()) {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cin.clear();
@@ -432,7 +467,13 @@ bool GameEngine::loadGame() {
  * Function that initializes all the variables that are required for a game to
  * function properly.
  */
-void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<std::vector<Tile*>> loadedGameBoard, bool firstRowOffset, LinkedList* loadedTileBag, int currentPlayerIndex){
+void GameEngine::loadGameState(
+    std::vector<Player*>* loadedPlayers,
+    std::vector<std::vector<Tile*>> loadedGameBoard,
+    bool firstRowOffset,
+    LinkedList* loadedTileBag,
+    int currentPlayerIndex
+) {
 
     // delete existing objects on heap
     clear();
@@ -442,13 +483,14 @@ void GameEngine::loadGameState(std::vector<Player*>* loadedPlayers, std::vector<
     this->gameBoard = new Board(loadedGameBoard, firstRowOffset);
     this->tileBag = new TileBag(loadedTileBag);
 
-    // proceed into main game loop starting with the player whose turn it currently is
+    // proceed into main game loop starting with the player whose turn it
+    // currently is
     gameLoop(currentPlayerIndex);
 }
 
 /*
- * Function is created to ensure the regex's numeral is converted from char to int
- * to be used in other functions.
+ * Function is created to ensure the regex's numeral is converted from char to
+ * int to be used in other functions.
  */
 int GameEngine::correctRegex(int regex) {
     char zero = '0';

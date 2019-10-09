@@ -51,20 +51,35 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
     }
 
 
-    if (row <= (int) grid.size() - 1 && col <= (int) grid.at(0).size() - 1 && validInput) {
+    if (
+        row <= (int) grid.size() - 1
+        && col <= (int) grid.at(0).size() - 1 && validInput
+    ) {
         emptyBoard = isEmpty();
         if (emptyBoard) {
             grid[row][col] = &tile;
             emptyBoard = isEmpty();
             scoreTurn = 1;
         } else {
-            std::map<std::string, int> colours = getMap(tile.getColour(), tile.getShape(), row, col);
-            std::map<std::string, int> shapes = getMap(tile.getShape(), tile.getColour(), row, col);
+            std::map<std::string, int> colours = getMap(
+                                                        tile.getColour(),
+                                                        tile.getShape(),
+                                                        row,
+                                                        col
+                                                    );
+            std::map<std::string, int> shapes = getMap(
+                                                        tile.getShape(),
+                                                        tile.getColour(),
+                                                        row,
+                                                        col
+                                                    );
 
-            int shapesColours[] = { colours.at("topRight") + shapes.at("topRight"),
-                                    colours.at("topLeft") + shapes.at("topLeft"),
-                                    colours.at("bottomLeft") + shapes.at("bottomLeft"),
-                                    colours.at("bottomRight") + shapes.at("bottomRight") };
+            int shapesColours[] = {
+                        colours.at("topRight") + shapes.at("topRight"),
+                        colours.at("topLeft") + shapes.at("topLeft"),
+                        colours.at("bottomLeft") + shapes.at("bottomLeft"),
+                        colours.at("bottomRight") + shapes.at("bottomRight")
+                        };
             int invalidColourAndShape = INVALID_VALUE + INVALID_VALUE;
 
             bool offDiagonal =  (colours["topRight"] == colours["bottomLeft"])
@@ -336,7 +351,7 @@ void Board::expandBoard(){
 
     // expland front row
     for (auto i : grid.at(0)){
-        if (i && (int) grid.size() <= MAX_ROWS){
+        if (i && (int) grid.size() < MAX_ROWS){
             grid.insert(grid.begin(), std::vector<Tile *>(grid.at(grid.size() - 1).size()));
             firstRowOffset = !firstRowOffset;
         }
@@ -344,14 +359,14 @@ void Board::expandBoard(){
 
     // expand back row
     for (auto i : grid.at(grid.size() - 1)){
-        if (i && (int) grid.size() <= MAX_ROWS){
+        if (i && (int) grid.size() < MAX_ROWS){
             grid.insert(grid.end(), std::vector<Tile *>(grid.at(0).size()));
         }
     }
 
     // expand front col
     for (int i = 0; i < (int) grid.size(); i++){
-        if (grid.at(i).at(0) && grid.at(i).size() <= MAX_COLS){
+        if (grid.at(i).at(0) && grid.at(i).size() < MAX_COLS){
             for (int j = 0; j < (int) grid.size(); j++){
                 grid.at(j).insert(grid.at(j).begin(), nullptr);
             }
@@ -360,7 +375,7 @@ void Board::expandBoard(){
 
     // expand back col
     for (int i = 0; i < (int) grid.size(); i++){
-        if (grid.at(i).at(grid.at(i).size() - 1) && (int) grid.at(i).size() <= MAX_COLS){
+        if (grid.at(i).at(grid.at(i).size() - 1) && (int) grid.at(i).size() < MAX_COLS){
             for (int j = 0; j < (int) grid.size(); j++){
                 grid.at(j).insert(grid.at(j).end(), nullptr);
             }
