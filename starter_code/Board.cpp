@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Board.h"
+#include "Menu.h"
 
 Board::Board() {
     grid = std::vector<std::vector<Tile*>> (ROWS);

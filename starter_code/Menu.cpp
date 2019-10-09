@@ -112,13 +112,17 @@ void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Boar
     gameBoard->printBoard(std::cout, true);
     std::cout << "Your hand is " << std::endl;
     
-    std::cout << "Input values: " << players->at(currentPlayer)->getHand()->getTiles(true, false) << std::endl;
-    std::cout << "Visually are: " << players->at(currentPlayer)->getHand()->getTiles(true, true) << std::endl;
+    std::cout << "Input values: ";
+    std::cout << players->at(currentPlayer)->getHand()->getTiles(true, false);
+    std::cout << std::endl;
+    std::cout << "Visually are: ";
+    std::cout << players->at(currentPlayer)->getHand()->getTiles(true, true);
+    std::cout << std::endl;
 }
 
 /*
- * Function checks the score of each player once game finishes, displaying the player
- * who had the highest score.
+ * Function checks the score of each player once game finishes, displaying
+ * the player who had the highest score.
  */
 void Menu::gameFinish(std::vector<Player *>* players) {
     int finalScore = 0;
@@ -126,7 +130,8 @@ void Menu::gameFinish(std::vector<Player *>* players) {
     
     std::cout << "Game Over" << std::endl;
     for (auto player : *players) {
-        std::cout << "Score for " << player->getName() << ": " << player->getScore() << std::endl;
+        std::cout << "Score for " << player->getName() << ": ";
+        std::cout << player->getScore() << std::endl;
     }
 
     for (int i = 0; i < (int) players->size(); i++) {
@@ -136,29 +141,39 @@ void Menu::gameFinish(std::vector<Player *>* players) {
         }
     }
     
-    std::cout << "Player " << players->at(index)->getName() << " won!" << std::endl;
+    std::cout << "Player " << players->at(index)->getName();
+    std::cout << " won!" << std::endl;
 }
 
 /*
- * List of commands that may aid the player in proceeding with their turn or do other
- * various tasks, such as saving the current state of the game.
+ * List of commands that may aid the player in proceeding with their turn or do
+ * other arious tasks, such as saving the current state of the game.
  */
 void Menu::getHelp() {
     std::cout << "HELP!" << std::endl;
     std::cout << "Feeling a little stuck? Here are your options: " << std::endl;
     std::cout << "Write: " << std::endl;
-    std::cout << "place (colour of the tile you want to place)(shape you want to place) at (selected row)(selected column) " << std::endl;
-    std::cout << "\t This could for instance look like \033[38;5;126m\"place P4 at D5\"\033[0m" << std::endl;
-    std::cout << "\t Be careful however, you are allowed to place tiles only next to one that already exists" << std::endl;
+    std::cout << "place (colour of the tile you want to place)";
+    std::cout << "(shape you want to place) at (selected row)(selected column)";
+    std::cout << std::endl;
+    std::cout << "\t This could for instance look like";
+    std::cout << " \033[38;5;126m\"place P4 at D5\"\033[0m" << std::endl;
+    std::cout << "\t Be careful however, you are allowed to place tiles only";
+    std::cout << " next to one that already exists" << std::endl;
     std::cout << "\t and has the same shape or colour!" << std::endl;
-    std::cout << "\t Additionally, you can place only the tiles that are in you hand!" << std::endl << std::endl;
+    std::cout << "\t Additionally, you can place only the tiles that are in";
+    std::cout << " you hand!" << std::endl << std::endl;
 
     std::cout << "replace (colour of tile)(shape of tile)" << std::endl;
-    std::cout << "\t This will replace the tile you choose and you will get a new one from the bag." << std::endl;
-    std::cout << "\t Could look like \033[38;5;126m\"replace Y2\"\033[0m" << std::endl << std::endl;
+    std::cout << "\t This will replace the tile you choose and you will get a";
+    std::cout << " new one from the bag." << std::endl;
+    std::cout << "\t Could look like \033[38;5;126m\"replace Y2\"\033[0m";
+    std::cout << std::endl << std::endl;
+
     
     std::cout << "save (filename)" << std::endl;
-    std::cout << "\t Will save the game into the file you provided." << std::endl << std::endl;
+    std::cout << "\t Will save the game into the file you provided.";
+    std::cout << std::endl << std::endl;
 
     std::cout << "quit" << std::endl;
     std::cout << "\t Will quit the game." << std::endl << std::endl;
@@ -263,7 +278,8 @@ void Menu::printHighscores(Highscore * hs)
     
     for(int i = 0; i < hs->getSize(); i++)
     {
-        std::cout << i + 1 << ". " << hs->getHighscoreName(i) << "  " << hs->getHighscore(i) << std::endl;
+        std::cout << i + 1 << ". " << hs->getHighscoreName(i) << "  ";
+        std::cout << hs->getHighscore(i) << std::endl;
     }
     
     std::cout << "----------------------------------" << std::endl;
