@@ -12,7 +12,13 @@ SaveLoad::~SaveLoad(){
  * Main saving method. Takes a filename and various data from the GameEngine,
  * and writes the data to the file with the given filename.
  */
-void SaveLoad::saveGame(std::string fileName, int currentPlayer, std::vector<Player*>* players, Board* gameBoard, TileBag* tileBag){
+void SaveLoad::saveGame(
+    std::string fileName,
+    int currentPlayer,
+    std::vector<Player*>* players,
+    Board* gameBoard,
+    TileBag* tileBag
+){
     // set up file to be written to
     std::ofstream file;
     fileName.append(".txt");
@@ -67,7 +73,9 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
         file.open(fileName);
         if (!file){
-            throw std::ifstream::failure("Error: file with inputted filename was not found");
+            throw std::ifstream::failure(
+                "Error: file with inputted filename was not found"
+            );
         }
 
         std::string line;
@@ -78,7 +86,8 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
         LinkedList* hand = nullptr;
 
         while(players){
-            // iterate through cycles of 3 lines and get relevant data from each
+            // iterate through cycles of 3 lines and get relevant data from
+            // each
             bool makeNewPlayer = false;
             for (int i = PLAYER_NAME_POS; i <= PLAYER_HANDS_POS; i++){
                 getNextLine(file, line, false);
@@ -100,14 +109,18 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                     }
 
                 } else if (line[0] == ' ' && i == PLAYER_NAME_POS){
-                    // if this line is the game board, and the program is
-                    // checking for player's name, stop checking for player data
+                    // if this line is the game board and the program is
+                    // checking for player's name, stop checking for player
+                    // data
                     i = 3;
                     players = false;
 
                 } else if (line[0] == ' ' && i != PLAYER_NAME_POS){
                     // if a line is unexpected, throw an exception
-                    throw std::ifstream::failure("Error: invalid save file - incorrectly formatted player data");
+                    throw std::ifstream::failure(
+                        "Error: invalid save file - incorrectly formatted "
+                        "player data"
+                    );
                 }
             }
 
@@ -158,7 +171,10 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
         // check that loaded row count does not exceed max
         if (grid.size() > MAX_ROWS){
-            throw std::ifstream::failure("Error: invalid save file - loaded board has more than the maximum number of rows");
+            throw std::ifstream::failure(
+                "Error: invalid save file - loaded board has more than "
+                "the maximum number of rows"
+            );
         }
 
         // validate lower board border line
@@ -168,10 +184,16 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
         getNextLine(file, line, false);
         if (line.substr(0, 3) == "   "){
             if (columnCount != validateColCoords(line.substr(3), false)){
-                throw std::ifstream::failure("Error: invalid save file - loaded board has an inconsistent number of columns");
+                throw std::ifstream::failure(
+                    "Error: invalid save file - loaded board has an "
+                    "inconsistent number of columns"
+                );
             }
         } else {
-            throw std::ifstream::failure("Error: invalid save file - column coordinates bounding the board were incorrect");
+            throw std::ifstream::failure(
+                "Error: invalid save file - column coordinates bounding the "
+                "board were incorrect"
+            );
         }
 
         // load tiles in tile bag
@@ -195,7 +217,13 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
     // if there is no error, load game with loaded data
     if (errorMsg.empty()){
-        gameEngine->loadGameState(playersVector, grid, firstRowOffset, tileBag, currPlayerIndex);
+        gameEngine->loadGameState(
+            playersVector,
+            grid,
+            firstRowOffset,
+            tileBag,
+            currPlayerIndex
+        );
 
     } else {
         // if error, delete memory on heap
@@ -247,7 +275,9 @@ LinkedList* SaveLoad::makeLinkedList(std::string tiles) {
 void SaveLoad::validateName(std::string name) {
     std::regex validInput = std::regex("[A-Z]+");
     if (!std::regex_match(name, validInput)){
-        throw std::ifstream::failure("Error: invalid save file - loaded player name was invalid");
+        throw std::ifstream::failure(
+            "Error: invalid save file - loaded player name was invalid"
+        );
     }
 }
 
@@ -257,7 +287,9 @@ void SaveLoad::validateName(std::string name) {
  */
 int SaveLoad::validateScore(std::string score) {
     if (!(score == std::to_string(std::stoi(score)))){
-        throw std::ifstream::failure("Error: invalid save file - loaded player score was invalid");
+        throw std::ifstream::failure(
+            "Error: invalid save file - loaded player score was invalid"
+        );
     }
     return std::stoi(score);
 }
@@ -269,7 +301,9 @@ int SaveLoad::validateScore(std::string score) {
 void SaveLoad::validateTile(std::string tileString) {
     std::regex validTile = std::regex("[ROYGBP][123456]");
     if (!(std::regex_match(tileString, validTile))){
-        throw std::ifstream::failure("Error: invalid save file - loaded tile was invalid");
+        throw std::ifstream::failure(
+            "Error: invalid save file - loaded tile was invalid"
+        );
     }
 
 }
@@ -279,7 +313,10 @@ void SaveLoad::validateTile(std::string tileString) {
  * validates the row, and returns the row as a vector of pointers to tile
  * objects.
  */
-std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int columnCount) {
+std::vector<Tile*> SaveLoad::parseBoardRow(
+    std::string boardRowString,
+    int columnCount
+) {
     int rowStart = boardRowString.find('|');
     std::vector<Tile*> boardRow;
     std::stringstream ss(boardRowString.substr(rowStart + 1));
@@ -290,16 +327,27 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int colum
         // check that the number of tile spaces in the the board row
         // is not inconsistent or in excess of the max
         if (i > MAX_COLS){
-            throw std::ifstream::failure("Error: invalid save file - loaded board has more than the maximum number of columns");
+            throw std::ifstream::failure(
+                "Error: invalid save file - loaded board has more than the "
+                "maximum number of columns"
+            );
         }
         if (i > columnCount){
-            throw std::ifstream::failure("Error: invalid save file - loaded board has an inconsistent number of columns");
+            throw std::ifstream::failure(
+                "Error: invalid save file - loaded board has an inconsistent "
+                "number of columns"
+            );
         }
 
         // check that token representing a given tile space matches the
         // correct format
-        if (tile != "    " && !std::regex_match(tile, std::regex(" [ROYGBP][123456] "))){
-            throw std::ifstream::failure("Error: invalid save file - board was formatted incorrectly");
+        if (
+            tile != "    "
+            && !std::regex_match(tile, std::regex(" [ROYGBP][123456] "))
+        ){
+            throw std::ifstream::failure(
+                "Error: invalid save file - board was formatted incorrectly"
+            );
         }
 
         // resize the board row vector to accommodate the new tile
@@ -325,7 +373,10 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int colum
  * Helper method. Takes a vector of players and the name of the players whose
  * turn it currently is, and returns the index of that player.
  */
-int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) {
+int SaveLoad::getCurrPlayer(
+    std::vector<Player*>* players,
+    std::string currentPlayerName
+) {
     int currentPlayerIndex = -1;
 
     // search for current player's name
@@ -337,7 +388,10 @@ int SaveLoad::getCurrPlayer(std::vector<Player*>* players, std::string currentPl
 
     // throw exception if player with name wasn't found
     if (currentPlayerIndex == -1){
-        throw std::ifstream::failure("Error: invalid save file - player whose turn it currently is does not exist in loaded players");
+        throw std::ifstream::failure(
+            "Error: invalid save file - player whose "
+            "turn it currently is does not exist in loaded players"
+        );
     }
 
     return currentPlayerIndex;
@@ -358,11 +412,16 @@ void SaveLoad::validateBorder(std::string line, int columnCount) {
         // throw exception if border does not contain correct amount of
         // hyphens i.e. '-'
         if (line != std::string(columnCount * 5, '-') + "----"){
-            throw std::ifstream::failure("Error: invalid save file - number of column coords in board exceeds max");
+            throw std::ifstream::failure(
+                "Error: invalid save file - number of column coords in board "
+                "exceeds max"
+            );
         }
 
     } else {
-        throw std::ifstream::failure("Error: invalid save file - board was not formatted correctly");
+        throw std::ifstream::failure(
+            "Error: invalid save file - board was not formatted correctly"
+        );
     }
 }
 
@@ -402,7 +461,10 @@ int SaveLoad::validateColCoords(std::string line, bool firstColCoordLine){
                     || line.substr(0, 5) != "    " + colCountString)
                 && (colCountString.length() != 2
                     || line.substr(0, 5) != "   " + colCountString)){
-                throw std::ifstream::failure("Error: invalid save file - column coordinates bounding the board were incorrect");
+                throw std::ifstream::failure(
+                    "Error: invalid save file - column coordinates bounding "
+                    "the board were incorrect"
+                );
             }
 
             // if the token is in the correct format, remove the token from
@@ -412,17 +474,26 @@ int SaveLoad::validateColCoords(std::string line, bool firstColCoordLine){
             // throw error if column count exceeds max
             if (firstColCoordLine){
                 if ((columnCount / 2) + 1 > MAX_COLS){
-                    throw std::ifstream::failure("Error: invalid save file - number of column coords in board exceeds max");
+                    throw std::ifstream::failure(
+                        "Error: invalid save file - number of column coords in"
+                        " board exceeds max"
+                    );
                 }
             } else {
                 if ((columnCount + 1) / 2 > MAX_COLS){
-                    throw std::ifstream::failure("Error: invalid save file - number of column coords in board exceeds max");
+                    throw std::ifstream::failure(
+                        "Error: invalid save file - number of column coords in"
+                        " board exceeds max"
+                    );
                 }
             }
         }
 
     } else {
-        throw std::ifstream::failure("Error: invalid save file - column coordinates bounding the board were incorrect");
+        throw std::ifstream::failure(
+            "Error: invalid save file - column coordinates bounding the "
+            "board were incorrect"
+        );
     }
 
     // get total column count by processing iterator used to validate column coords
@@ -445,11 +516,15 @@ void SaveLoad::getNextLine(std::ifstream& file, std::string& line, bool lastLine
         if (!lastLine){
             getline(file, line);
         } else {
-            throw std::ifstream::failure("Error: invalid save file - file didn't end when expected");
+            throw std::ifstream::failure(
+                "Error: invalid save file - file didn't end when expected"
+            );
         }
     } else if (file.eof()){
         if (!lastLine){
-            throw std::ifstream::failure("Error: invalid save file - file ended earlier than expected");
+            throw std::ifstream::failure(
+                "Error: invalid save file - file ended earlier than expected"
+            );
         } else {
             file.close();
         }

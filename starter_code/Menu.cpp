@@ -105,7 +105,10 @@ void Menu::quit() {
  * Shows current board state, score of the player, and the hand of the player
  * with helpful, visual output of the tiles in the player's hand.
  */
-void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Board* gameBoard) {
+void Menu::printGameInfo(
+        std::vector<Player *>* players,
+        int currentPlayer, Board* gameBoard
+) {
     std::cout << players->at(currentPlayer)->getName() << ", it's your turn";
     std::cout << std::endl;
     for (auto i : *players) {

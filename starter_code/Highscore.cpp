@@ -36,7 +36,9 @@ void Highscore::loadHighscores(std::string filename)
         
         if(!file)
         {
-            throw std::ifstream::failure("Error: file with inputted filename was not found");
+            throw std::ifstream::failure(
+                "Error: file with inputted filename was not found"
+            );
         }
         
         std::string line;
