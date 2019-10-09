@@ -1,14 +1,7 @@
-//
-//  GameEngine.h
-//
-//
-//  Created by Louis Baudinette on 24/09/2019
-//
 
 #ifndef GameEngine_h
 #define GameEngine_h
 
-// #includes decide later
 #include <iostream>
 #include <regex>
 #include "Board.h"
@@ -54,4 +47,4 @@ class GameEngine {
 
 };
 
-#endif /* GameEngine_h */
+#endif //GameEngine_h

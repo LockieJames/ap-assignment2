@@ -1,9 +1,3 @@
-//
-//  Menu.cpp
-//
-//
-//  Created by Peter Bui on 22/9/19.
-//
 
 #include "Menu.h"
 
@@ -248,11 +242,11 @@ void Menu::invalidPlay() {
  * Output that indicates that a save file has been successfully made.
  */
 void Menu::gameSaved(){
-    std::cout << "Game saved successfully saved" << std::endl;
+    std::cout << "Game successfully saved" << std::endl;
 }
 
 /*
- * Function responsible for printing out string.
+ * Function responsible for printing out a given string.
  */
 void Menu::printString(std::string strToPrint){
     std::cout << strToPrint << std::endl;

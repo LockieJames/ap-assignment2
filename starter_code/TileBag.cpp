@@ -1,9 +1,3 @@
-//
-//  TileBag.cpp
-//
-//
-//  Created by Peter Bui on 22/9/19.
-//
 
 #include "TileBag.h"
 #include <iostream>

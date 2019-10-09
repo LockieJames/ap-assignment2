@@ -1,12 +1,5 @@
-//
-//  GameEngine.cpp
-//
-//
-//  Created by Louis Baudinette on 24/09/2019
-//
 
 #include "GameEngine.h"
-#include <iostream>
 
 GameEngine::GameEngine(){
     // Tile objects made upon instantiating tilebag
@@ -157,7 +150,8 @@ bool GameEngine::newGame(int numPlayers){
 }
 
 /*
- * Main game loop, which starts on the first player within the players collection.
+ * Main game loop. First player is decided by the int firstPlayerIndex which
+ * indicated an index in the collection of players.
  */
 void GameEngine::gameLoop(int firstPlayerIndex){
     bool gameFinished = false;

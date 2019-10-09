@@ -1,14 +1,7 @@
-//
-//  SaveLoad.h
-//
-//
-//  Created by Louis Baudinette on 4/10/2019
-//
 
 #ifndef SaveLoad_h
 #define SaveLoad_h
 
-// #includes decide later
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -48,4 +41,4 @@ class SaveLoad {
 
 };
 
-#endif /* SaveLoad_h */
+#endif //SaveLoad_h

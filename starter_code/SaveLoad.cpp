@@ -1,9 +1,3 @@
-//
-//  SaveLoad.cpp
-//
-//
-//  Created by Louis Baudinette on 4/10/2019
-//
 
 #include "SaveLoad.h"
 
@@ -91,13 +85,16 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
 
                 if (line[0] != ' '){
                     if (i == PLAYER_NAME_POS){
+                        // player name
                         validateName(line);
                         name = line;
 
                     } else if (i == PLAYER_SCORE_POS){
+                        // player score
                         score = validateScore(line);
 
                     } else if (i == PLAYER_HANDS_POS){
+                        // player hand
                         hand = makeLinkedList(line);
                         makeNewPlayer = true;
                     }
@@ -107,7 +104,9 @@ std::string SaveLoad::loadGame(std::string fileName, GameEngine* gameEngine){
                     // checking for player's name, stop checking for player data
                     i = 3;
                     players = false;
+
                 } else if (line[0] == ' ' && i != PLAYER_NAME_POS){
+                    // if a line is unexpected, throw an exception
                     throw std::ifstream::failure("Error: invalid save file - incorrectly formatted player data");
                 }
             }

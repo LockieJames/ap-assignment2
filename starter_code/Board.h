@@ -7,6 +7,7 @@
 #include <string>
 #include "TileCodes.h"
 #include "Tile.h"
+#include "Menu.h"
 
 #define ONE_ROW 1
 #define TWO_ROWS 2

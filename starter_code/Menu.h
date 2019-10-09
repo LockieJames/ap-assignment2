@@ -1,14 +1,7 @@
-//
-//  Menu.hpp
-//
-//
-//  Created by Peter Bui on 22/9/19.
-//
 
 #ifndef Menu_h
 #define Menu_h
 
-// #includes decide later
 #include <iostream>
 #include <vector>
 #include "Player.h"

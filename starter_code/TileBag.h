@@ -1,9 +1,3 @@
-//
-//  TileBag.hpp
-//  
-//
-//  Created by Peter Bui on 22/9/19.
-//
 
 #ifndef TileBag_h
 #define TileBag_h
