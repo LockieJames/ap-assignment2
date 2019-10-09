@@ -186,7 +186,7 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
         inputColourShape = useColourShape;
     }
 
-    if (numberOfCheckedTiles == QWIRKLE) {
+    if (!isAlreadyInLine && numberOfCheckedTiles == QWIRKLE) {
         std::cout << "QWIRKLE!!!" << std::endl;
     }
 
