@@ -272,17 +272,30 @@ std::vector<Tile*> SaveLoad::parseBoardRow(std::string boardRowString, int colum
     std::stringstream ss(boardRowString.substr(rowStart + 1));
     std::string tile;
     int i = 0;
-    while (std::getline(ss, tile, '|')){
+    while (getline(ss, tile, '|')){
+
+        // check that the number of tile spaces in the the board row
+        // is not inconsistent or in excess of the max
         if (i > MAX_COLS){
             throw std::ifstream::failure("Error: invalid save file - loaded board has more than the maximum number of columns");
         }
         if (i > columnCount){
             throw std::ifstream::failure("Error: invalid save file - loaded board has an inconsistent number of columns");
         }
+
+        // check that token representing a given tile space matches the
+        // correct format
+        if (tile != "    " && !std::regex_match(tile, std::regex(" [ROYGBP][123456] "))){
+            throw std::ifstream::failure("Error: invalid save file - board was formatted incorrectly");
+        }
+
+        // resize the board row vector to accommodate the new tile
         boardRow.resize(boardRow.size() + 1);
 
+        // remove whitespace from given tile space on board
         tile.erase(remove(tile.begin(), tile.end(), ' '), tile.end());
 
+        // if tile space has a tile in it, add tile to board row vector 
         if (!tile.empty()){
             validateTile(tile);
             boardRow[i] = new Tile(tile[0], tile[1] - '0');
