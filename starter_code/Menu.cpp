@@ -51,7 +51,8 @@ void Menu::numOfPlayers() {
  * Output for user to input names of players who are playing.
  */
 void Menu::newGameNames(int playerNo) {
-    std::cout << "Enter a name for player " << playerNo << " (uppercase characters only)" << std::endl << PROMPT;
+    std::cout << "Enter a name for player " << playerNo;
+    std::cout << " (uppercase characters only)" << std::endl << PROMPT;
 }
 
 /*
@@ -105,9 +106,11 @@ void Menu::quit() {
  * with helpful, visual output of the tiles in the player's hand.
  */
 void Menu::printGameInfo(std::vector<Player *>* players, int currentPlayer, Board* gameBoard) {
-    std::cout << players->at(currentPlayer)->getName() << ", it's your turn" << std::endl;
+    std::cout << players->at(currentPlayer)->getName() << ", it's your turn";
+    std::cout << std::endl;
     for (auto i : *players) {
-        std::cout << "Score for " << i->getName() << " is: " << i->getScore() << std::endl;
+        std::cout << "Score for " << i->getName() << " is: ";
+        std::cout << i->getScore() << std::endl;
     }
     gameBoard->printBoard(std::cout, true);
     std::cout << "Your hand is " << std::endl;
