@@ -186,7 +186,9 @@ void GameEngine::gameLoop(int firstPlayerIndex){
                         std::regex_match(
                             userInput,
                             field,
-                            std::regex(R"(place\s[ROYGBP][1-6]\sat\s[A-Z][0-9]+)")
+                            std::regex(
+                                R"(place\s[ROYGBP][1-6]\sat\s[A-Z][0-9]+)"
+                            )
                         )
                     ) {
 

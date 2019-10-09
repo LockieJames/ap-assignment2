@@ -157,10 +157,12 @@ void Menu::gameFinish(std::vector<Player *>* players) {
  */
 void Menu::getHelp() {
     std::cout << "HELP!" << std::endl;
-    std::cout << "Feeling a little stuck? Here are your options: " << std::endl;
+    std::cout << "Feeling a little stuck? Here are your options: ";
+    std::cout << std::endl;
     std::cout << "Write: " << std::endl;
     std::cout << "place (colour of the tile you want to place)";
-    std::cout << "(shape you want to place) at (selected row)(selected column)";
+    std::cout << "(shape you want to place) at ";
+    std::cout << "(selected row)(selected column)";
     std::cout << std::endl;
     std::cout << "\t This could for instance look like";
     std::cout << " \033[38;5;126m\"place P4 at D5\"\033[0m" << std::endl;

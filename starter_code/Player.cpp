@@ -7,7 +7,11 @@ Player::Player()
     score = 0;
 }
 
-Player::Player(std::string loadedName, int loadedScore, LinkedList* loadedHand){
+Player::Player(
+    std::string loadedName,
+    int loadedScore,
+    LinkedList* loadedHand
+){
     this->name = loadedName;
     this->score = loadedScore;
     this->hand = loadedHand;

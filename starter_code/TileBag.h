@@ -29,8 +29,22 @@ class TileBag {
         LinkedList* getTileBag();
     
     private:
-        Colour colours[PART_LENGTH] = {RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
-        Shape shapes[PART_LENGTH] = {CIRCLE, STAR_4, DIAMOND, SQUARE, STAR_6, CLOVER};
+        Colour colours[PART_LENGTH] = {
+            RED,
+            ORANGE,
+            YELLOW,
+            GREEN,
+            BLUE,
+            PURPLE
+        };
+        Shape shapes[PART_LENGTH] = {
+            CIRCLE,
+            STAR_4, 
+            DIAMOND,
+            SQUARE,
+            STAR_6,
+            CLOVER
+        };
         LinkedList* tileBag;
         int random;
 };

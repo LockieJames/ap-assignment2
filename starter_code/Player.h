@@ -17,7 +17,11 @@ class Player
 
     public:
         Player();
-        Player(std::string loadedName, int loadedScore, LinkedList* loadedHand);
+        Player(
+            std::string loadedName,
+            int loadedScore,
+            LinkedList* loadedHand
+        );
         ~Player();
         std::string getName();
         void setName(std::string name);

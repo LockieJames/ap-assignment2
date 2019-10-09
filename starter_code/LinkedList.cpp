@@ -190,7 +190,8 @@ Tile* LinkedList::removeTile(char colour, int shape)
     {
         while(curr != nullptr && requiredTile == nullptr)
         {
-            if(curr->tile->getShape() == shape && curr->tile->getColour() == colour)
+            if(curr->tile->getShape() == shape
+                && curr->tile->getColour() == colour)
             {
                 char nColour = curr->tile->getColour();
                 int nShape = curr->tile->getShape();

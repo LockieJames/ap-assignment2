@@ -62,30 +62,30 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
             scoreTurn = 1;
         } else {
             std::map<std::string, int> colours = getMap(
-                                                        tile.getColour(),
-                                                        tile.getShape(),
-                                                        row,
-                                                        col
-                                                    );
+                tile.getColour(),
+                tile.getShape(),
+                row,
+                col
+            );
             std::map<std::string, int> shapes = getMap(
-                                                        tile.getShape(),
-                                                        tile.getColour(),
-                                                        row,
-                                                        col
-                                                    );
+                tile.getShape(),
+                tile.getColour(),
+                row,
+                col
+            );
 
             int shapesColours[] = {
-                        colours.at("topRight") + shapes.at("topRight"),
-                        colours.at("topLeft") + shapes.at("topLeft"),
-                        colours.at("bottomLeft") + shapes.at("bottomLeft"),
-                        colours.at("bottomRight") + shapes.at("bottomRight")
-                        };
+                colours.at("topRight") + shapes.at("topRight"),
+                colours.at("topLeft") + shapes.at("topLeft"),
+                colours.at("bottomLeft") + shapes.at("bottomLeft"),
+                colours.at("bottomRight") + shapes.at("bottomRight")
+            };
             int invalidColourAndShape = INVALID_VALUE + INVALID_VALUE;
 
-            bool offDiagonal =  (colours["topRight"] == colours["bottomLeft"])
-                              || (shapes["topRight"] == shapes["bottomLeft"]);
+            bool offDiagonal = (colours["topRight"] == colours["bottomLeft"])
+                || (shapes["topRight"] == shapes["bottomLeft"]);
             bool mainDiagonal = (colours["topLeft"] == colours["bottomRight"])
-                              || (shapes["topLeft"] == shapes["bottomRight"]);
+                || (shapes["topLeft"] == shapes["bottomRight"]);
 
             int positions = 0;
 
@@ -94,7 +94,10 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
                 if (shapesColours[i] != 0) {
                     positions++;
                 }
-                if ((shapesColours[i] == invalidColourAndShape) || isAlreadyInLine) {
+                if (
+                    (shapesColours[i] == invalidColourAndShape)
+                    || isAlreadyInLine
+                ) {
                     placeable = false;
                     scoreTurn = 0;
                 }
@@ -136,9 +139,17 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
 }
 
 /*
- * Returns the value of the row if valid row, or an invalid value if not allowed to place tile
+ * Returns the value of the row if valid row, or an invalid value if not
+ * allowed to place tile
  */
-int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col, int rowDirection, bool right) {
+int Board::validateRow(
+    int useColourShape,
+    int accompanyingCS,
+    int row,
+    int col,
+    int rowDirection,
+    bool right
+) {
     int inputColourShape = 0;
     Tile* currentTile;
 
@@ -155,7 +166,8 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
     row = row + rowDirection;
     odd = !odd;
 
-    // Will hold values for different shapes or colour so they do not repeat twice in one line
+    // Will hold values for different shapes or colour so they do not repeat
+    // twice in one line
     int notMatchingColourShape[] = { 0, 0, 0, 0, 0, 0 };
     int i = 0;
 
@@ -214,14 +226,16 @@ int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col,
  *
  */
 bool Board::edgeRow(int row, int rowDirection) {
-    return (row == 0 && rowDirection == -1) || (row == (int) grid.size() - 1 && rowDirection == 1);
+    return (row == 0 && rowDirection == -1)
+        || (row == (int) grid.size() - 1 && rowDirection == 1);
 }
 
 /*
  *
  */
 bool Board::edgeCol(int col, bool odd, bool right) {
-    return (col == 0 && !odd && !right) || (col == (int) grid.at(0).size() - 1 && odd && right);
+    return (col == 0 && !odd && !right)
+        || (col == (int) grid.at(0).size() - 1 && odd && right);
 }
 
 /*
@@ -243,16 +257,37 @@ int Board::calculateCol(bool odd, bool right, int col) {
 /*
  * returns map of neighbouring rows
  */
-std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, int row, int col) {
+std::map<std::string, int> Board::getMap(
+    int shapeColour,
+    int accompanyingCS,
+    int row,
+    int col
+) {
     std::map<std::string, int> coloursShapes;
-    coloursShapes.insert( std::pair<std::string, int>
-            ("topRight", validateRow(shapeColour, accompanyingCS, row, col, -1, true)));
-    coloursShapes.insert( std::pair<std::string, int>
-            ("bottomRight", validateRow(shapeColour, accompanyingCS, row, col, 1, true)));
-    coloursShapes.insert( std::pair<std::string, int>
-            ("bottomLeft", validateRow(shapeColour, accompanyingCS, row, col, 1, false)));
-    coloursShapes.insert( std::pair<std::string, int>
-            ("topLeft", validateRow(shapeColour, accompanyingCS, row, col, -1, false)));
+    coloursShapes.insert(
+        std::pair<std::string, int>(
+            "topRight",
+            validateRow(shapeColour, accompanyingCS, row, col, -1, true)
+        )
+    );
+    coloursShapes.insert(
+        std::pair<std::string, int>(
+            "bottomRight",
+            validateRow(shapeColour, accompanyingCS, row, col, 1, true)
+        )
+    );
+    coloursShapes.insert(
+        std::pair<std::string, int>(
+            "bottomLeft",
+            validateRow(shapeColour, accompanyingCS, row, col, 1, false)
+        )
+    );
+    coloursShapes.insert(
+        std::pair<std::string, int>(
+            "topLeft",
+            validateRow(shapeColour, accompanyingCS, row, col, -1, false)
+        )
+    );
     return coloursShapes;
 }
 
@@ -293,10 +328,17 @@ bool Board::printBoard(std::ostream &destination, bool symbols) {
                 destination << PATTERN;
                 if (grid[i][j - 1]) {
                     if (symbols){
-                        destination << menu.printColour(grid[i][j - 1]->getColour(), destination)
-                            << menu.printShape(grid[i][j - 1]->getShape(), destination);
+                        destination << menu.printColour(
+                            grid[i][j - 1]->getColour(),
+                            destination
+                        );
+                        destination << menu.printShape(
+                            grid[i][j - 1]->getShape(),
+                            destination
+                        );
                     } else {
-                        destination << grid.at(i).at(j - 1)->getColour() << grid.at(i).at(j - 1)->getShape();
+                        destination << grid.at(i).at(j - 1)->getColour();
+                        destination << grid.at(i).at(j - 1)->getShape();
                     }
                 } else {
                     destination << "  ";
@@ -352,7 +394,10 @@ void Board::expandBoard(){
     // expland front row
     for (auto i : grid.at(0)){
         if (i && (int) grid.size() < MAX_ROWS){
-            grid.insert(grid.begin(), std::vector<Tile *>(grid.at(grid.size() - 1).size()));
+            grid.insert(
+                grid.begin(),
+                std::vector<Tile *>(grid.at(grid.size() - 1).size())
+            );
             firstRowOffset = !firstRowOffset;
         }
     }
@@ -375,7 +420,10 @@ void Board::expandBoard(){
 
     // expand back col
     for (int i = 0; i < (int) grid.size(); i++){
-        if (grid.at(i).at(grid.at(i).size() - 1) && (int) grid.at(i).size() < MAX_COLS){
+        if (
+            grid.at(i).at(grid.at(i).size() - 1)
+            && (int) grid.at(i).size() < MAX_COLS
+        ){
             for (int j = 0; j < (int) grid.size(); j++){
                 grid.at(j).insert(grid.at(j).end(), nullptr);
             }

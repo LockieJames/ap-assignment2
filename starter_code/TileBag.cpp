@@ -61,8 +61,8 @@ void TileBag::sortMethod(Tile* tile) {
 }
 
 /*
- * Function shuffles only first half of the tiles to either the middle or the end
- * of the linked list(implemented through the addRandomTile function).
+ * Function shuffles only first half of the tiles to either the middle or the
+ * end of the linked list(implemented through the addRandomTile function).
  */
 void TileBag::shuffleBag() {
     int counter = 0;
