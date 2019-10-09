@@ -36,14 +36,15 @@ class SaveLoad {
 
 
     private:
-        LinkedList* makeLinkedList(std::string tiles) ;
-        void validateName(std::string name) ;
-        int validateScore(std::string score) ;
-        void validateTile(std::string tileString) ;
-        std::vector<Tile*> parseBoardRow(std::string boardRowString, int columnCount) ;
-        int getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName) ;
-        void validateBorder(std::string line, int columnCount) ;
-        int validateColCoords(std::string line, bool firstColCoordLine) ;
+        LinkedList* makeLinkedList(std::string tiles);
+        void validateName(std::string name);
+        int validateScore(std::string score);
+        void validateTile(std::string tileString);
+        std::vector<Tile*> parseBoardRow(std::string boardRowString, int columnCount);
+        int getCurrPlayer(std::vector<Player*>* players, std::string currentPlayerName);
+        void validateBorder(std::string line, int columnCount);
+        int validateColCoords(std::string line, bool firstColCoordLine);
+        void getNextLine(std::ifstream& file, std::string& line, bool lastLine);
 
 };
 
