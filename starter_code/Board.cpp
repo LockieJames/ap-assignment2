@@ -69,8 +69,10 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
                                     colours.at("bottomRight") + shapes.at("bottomRight") };
             int invalidColourAndShape = INVALID_VALUE + INVALID_VALUE;
 
-            bool offDiagonal = (colours["topRight"] == colours["bottomLeft"]) || (shapes["topRight"] == shapes["bottomLeft"]);
-            bool mainDiagonal = (colours["topLeft"] == colours["bottomRight"]) || (shapes["topLeft"] == shapes["bottomRight"]);
+            bool offDiagonal =  (colours["topRight"] == colours["bottomLeft"])
+                              || (shapes["topRight"] == shapes["bottomLeft"]);
+            bool mainDiagonal = (colours["topLeft"] == colours["bottomRight"])
+                              || (shapes["topLeft"] == shapes["bottomRight"]);
 
             int positions = 0;
 
@@ -121,7 +123,7 @@ int Board::placeTile(Tile &tile, char rowInput, int col) {
 }
 
 /*
- *
+ * Returns the value of the row if valid row, or an invalid value if not allowed to place tile
  */
 int Board::validateRow(int useColourShape, int accompanyingCS, int row, int col, int rowDirection, bool right) {
     int inputColourShape = 0;
@@ -226,7 +228,7 @@ int Board::calculateCol(bool odd, bool right, int col) {
 }
 
 /*
- *
+ * returns map of neighbouring rows
  */
 std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, int row, int col) {
     std::map<std::string, int> coloursShapes;
@@ -241,9 +243,8 @@ std::map<std::string, int> Board::getMap(int shapeColour, int accompanyingCS, in
     return coloursShapes;
 }
 
-// Validating if the board is empty for the first tile
 /*
- *
+ * Validating if the board is empty for the first tile
  */
 bool Board::isEmpty() {
     bool isEmpty = true;
