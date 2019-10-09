@@ -10,22 +10,25 @@ Highscore::~Highscore()
     
 }
 
+// Gets the size of the amount of high scores in the vector
 int Highscore::getSize()
 {
     return highscores.size();
 }
 
+// Returns the highscore at i
 int Highscore::getHighscore(int i)
 {
     return highscores[i];
 }
 
+// Returns the name of the highscore at i
 std::string Highscore::getHighscoreName(int i)
 {
     return highscoreNames[i];
 }
 
-// Loads highscores
+// Loads highscores from the text file into the vectors
 void Highscore::loadHighscores(std::string filename)
 {
     std::ifstream file;
@@ -76,6 +79,7 @@ void Highscore::loadHighscores(std::string filename)
     }
 }
 
+// Adds the name and score of the new highscorer to the list and deletes the 10th highscore
 void Highscore::addHighscore(std::string name, int score)
 {
     if(highscores.size() < 10 && score <= highscores[highscores.size() - 1])
@@ -111,6 +115,7 @@ void Highscore::addHighscore(std::string name, int score)
     }
 }
 
+// Saves the new highscores from the vector to the file passed through
 void Highscore::saveHighscore(std::string filename)
 {
     std::ofstream file;
