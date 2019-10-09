@@ -244,6 +244,9 @@ void GameEngine::gameFinish()
     // saves the highscores into the file.
     hs->saveHighscore(highscoreFilename);
 
+    // print the board one last time, so the players can see it
+    gameBoard->printBoard(std::cout, true);
+
     menu.gameFinish(players);
 }
 
